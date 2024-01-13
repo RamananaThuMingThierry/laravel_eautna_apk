@@ -2,10 +2,22 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Fonctions extends Model
 {
     use HasFactory;
+
+    public $table = "fonctions";
+
+    protected $fillable = [
+        "fonctions",
+        "users_id",
+    ];
+
+    public function users(){
+        return $this->belongsTo(User::class);
+    }
 }

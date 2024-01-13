@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('niveaux', function (Blueprint $table) {
             $table->id();
             $table->strin('niveau');
+            $table->integer('users_id');
             $table->timestamps();
         });
     }

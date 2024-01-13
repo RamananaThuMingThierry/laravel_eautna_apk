@@ -27,6 +27,7 @@ return new class extends Migration
             $table->integer('fonctions_id');
             $table->integer('filieres_id');
             $table->integer('niveau_id');
+            $table->integer('axes_id');
             $table->string('adresse');
             $table->integer('users_id')->comment('Identifiant user authentifier');
             $table->integer('user_membre_id')->nullable();

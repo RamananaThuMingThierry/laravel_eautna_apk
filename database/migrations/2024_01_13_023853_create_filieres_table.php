@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('filieres', function (Blueprint $table) {
             $table->id();
             $table->string('nom_filieres');
+            $table->integer('users_id');
             $table->timestamps();
         });
     }

@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('axes', function (Blueprint $table) {
             $table->id();
             $table->string('nom_axes');
+            $table->integer('users_id');
             $table->timestamps();
         });
     }
