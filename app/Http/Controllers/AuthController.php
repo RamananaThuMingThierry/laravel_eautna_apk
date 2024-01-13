@@ -122,7 +122,23 @@ class AuthController extends Controller
         }
     }
 
-    public function show(){
+    public function index(){
+
+        $user = auth()->user();
+        
+        if($user){
+            $users = User::all();
+            return response()->json([
+                'users' => $users
+            ], 200);
+        }else{
+            return response()->json([
+                'user' => 'Vous n\'êtes pas authentifier'
+            ], 404);
+        }
+    }
+
+    public function profiles(){
         $user = auth()->user();
         if($user){
             return response()->json([
@@ -132,6 +148,33 @@ class AuthController extends Controller
             return response()->json([
                 'user' => 'Vous n\'êtes pas authentifier'
             ], 404);
+        }
+    }
+
+    public function show($users_id){
+        
+        $verifier_auth = auth()->user();
+        if($verifier_auth){
+        
+            $user = User::find($users_id);
+
+            if($user){
+
+                return response()->json([
+                    'users' => $user
+                ], 200);
+
+            }else{
+            
+                return response()->json([
+                    'message' => 'Cet utilisateur n\'existe pas dans la base de données!'
+                ], 403);
+            }
+            
+        }else{
+            return response()->json([
+                    'message' => 'Vous n\'êtes pas authentifier'
+            ], 403);
         }
     }
 
