@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Models\Niveau;
+use App\Models\Level;
 use App\Models\Filieres;
 use App\Models\Fonctions;
 use Illuminate\Database\Eloquent\Model;
@@ -28,7 +28,7 @@ class Membres extends Model
         "sympathisant",
         "fonctions_id",
         "filieres_id",
-        "niveau_id",
+        "levels_id",
         "adresse",
         "users_membre_id",
         "facebook",
@@ -38,22 +38,22 @@ class Membres extends Model
     ];
 
     public function fonctions(){
-        return $this->hasMany(Fonctions::class);
+        return $this->hasOne(Fonctions::class);
     }
 
     public function filieres(){
-        return $this->hasMany(Filieres::class);
+        return $this->hasOne(Filieres::class);
     }
     
     public function niveau(){
-        return $this->hasMany(Niveau::class);
+        return $this->hasOne(Level::class);
     }
 
     public function axes(){
-        return $this->hasMany(Axes::class);
+        return $this->hasOne(Axes::class);
     }
 
     public function users(){
-        return $this->hasMany(User::class);
+        return $this->hasOne(User::class);
     }
 }

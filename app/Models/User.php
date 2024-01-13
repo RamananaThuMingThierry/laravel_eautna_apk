@@ -3,10 +3,16 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\Axes;
+use App\Models\Post;
+use App\Models\Niveau;
+use App\Models\Filieres;
+use App\Models\Messages;
+use App\Models\Fonctions;
+use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
@@ -18,7 +24,7 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     public $table = "users";
-    
+
     protected $fillable = [
         'pseudo',
         "image",
@@ -49,4 +55,36 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function filieres(){
+        return $this->hasMany(Filieres::class);
+    }
+    
+    public function axes(){
+        return $this->hasMany(Axes::class);
+    }
+
+    public function fonctions(){
+        return $this->hasMany(Fonctions::class);
+    }
+    
+    public function niveaux(){
+        return $this->hasMany(Niveau::class);
+    }
+
+
+    public function avis(){
+        return $this->hasMany(Avis::class);
+    }
+
+
+    public function posts(){
+        return $this->hasMany(Post::class);
+    }
+   
+    public function messages(){
+        return $this->hasMany(Messages::class);
+    }
+
+
 }

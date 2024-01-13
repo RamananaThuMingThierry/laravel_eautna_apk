@@ -24,12 +24,12 @@ return new class extends Migration
             $table->string('contact_personnel');
             $table->string('contact_tutaire');
             $table->boolean("sympathisant");
-            $table->integer('fonctions_id');
-            $table->integer('filieres_id');
-            $table->integer('niveau_id');
-            $table->integer('axes_id');
+            $table->foreignId('fonctions_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('filieres_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('levels_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('axes_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->string('adresse');
-            $table->integer('users_id')->comment('Identifiant user authentifier');
+            $table->foreignId('users_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->integer('user_membre_id')->nullable();
             $table->string('facebook')->nullable();
             $table->timestamps();

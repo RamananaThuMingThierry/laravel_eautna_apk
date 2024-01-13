@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('messages', function (Blueprint $table) {
             $table->id();
             $table->text('message');
-            $table->integer('users_id')->comment("Identifiant users send");
+            $table->foreignId('users_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->integer('users_receive');
             $table->timestamps();
         });
