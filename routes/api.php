@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\AxesController;
 use App\Http\Controllers\IndexController;
 use App\Http\Controllers\MoisController;
 use App\Http\Controllers\PortesController;
@@ -21,4 +22,10 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::delete('/users/{id}', [AuthController::class, "delete"]);
     Route::post('/logout', [AuthController::class, "logout"]);
 
+    /** ------------ Axes ------------ */
+    Route::get('/axes', [AxesController::class, "index"]);
+    Route::post('/axes', [AxesController::class, "store"]);
+    Route::get('/axes/{id}', [AxesController::class, "show"]);
+    Route::put('/axes/{id}', [AxesController::class, "update"]);
+    Route::delete('/axes/{id}', [AxesController::class, "delete"]);
 });
