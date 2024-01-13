@@ -5,7 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\Axes;
 use App\Models\Post;
-use App\Models\Niveau;
+use App\Models\Level;
 use App\Models\Filieres;
 use App\Models\Messages;
 use App\Models\Fonctions;
@@ -68,8 +68,8 @@ class User extends Authenticatable
         return $this->hasMany(Fonctions::class);
     }
     
-    public function niveaux(){
-        return $this->hasMany(Niveau::class);
+    public function levels(){
+        return $this->hasMany(Level::class);
     }
 
 
