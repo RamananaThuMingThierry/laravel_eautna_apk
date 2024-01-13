@@ -44,6 +44,30 @@ return [
             'throw' => false,
         ],
 
+        'users' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/users'),
+            'url' => env('APP_URL').'/storage',
+            'visibility' => 'public',
+            'throw' => false,
+        ],
+
+        'membres' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/membres'),
+            'url' => env('APP_URL').'/storage',
+            'visibility' => 'public',
+            'throw' => false,
+        ],
+        
+        'posts' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/posts'),
+            'url' => env('APP_URL').'/storage',
+            'visibility' => 'public',
+            'throw' => false,
+        ],
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),
