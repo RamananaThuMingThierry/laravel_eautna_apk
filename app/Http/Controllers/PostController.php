@@ -36,7 +36,7 @@ class PostController extends Controller
             $verifier_post = Post::find($id);
 
             if($verifier_post){
-                $post = Post::where('id', $id)->with('users:id,name,image')->withCount('commentaires', 'likes')->get();
+                $post = Post::where('id', $id)->with('users:id,pseudo,contact,adresse,image')->withCount('commentaires', 'likes')->get();
     
                 return response()->json([
                     'post' => $post
@@ -147,7 +147,7 @@ class PostController extends Controller
                         
                         $post->update([
                             'description' => $description,
-                            'date' => new Date(),
+                            'date' => Carbon::now(),
                             'user_id' => $users->id,
                         ]);
 
