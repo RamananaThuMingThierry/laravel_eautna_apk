@@ -24,36 +24,46 @@ class AxesController extends Controller
         $nom_axes = $request->nom_axes;
         $users = auth()->user();
 
-        $validator = Validator::make($request->all(), [
-            'nom_axes' => 'required|string|unique:axes',
-        ]);        
+        if($users){
         
-        if($validator->fails()){
-            
-            return response()->json([
-                'validator_errors' => $validator->messages(),
-            ], 403);
+            if($users->roles == "Administrateurs"){
+        
+                $validator = Validator::make($request->all(), [
+                    'nom_axes' => 'required|string|unique:axes',
+                ]);        
+        
+                if($validator->fails()){
+                    
+                    return response()->json([
+                        'validator_errors' => $validator->messages(),
+                    ], 403);
+
+                }else{                
+                    
+                    Axes::create([
+                        'nom_axes' => $nom_axes,
+                        'users_id' => auth()->user()->id
+                    ]);
+        
+                    return response()->json([
+                        'message' => 'Enregistrement effectuée!'
+                    ], 200);
+                
+                }
+            }else{
+
+                return response()->json([
+                    'message' => ' Vous \'êtes pas autorisé à effectuer cet opération!'
+                ], 403);
+                
+            }
 
         }else{
-
-            if($users){
                 
-                Axes::create([
-                    'nom_axes' => $nom_axes,
-                    'users_id' => auth()->user()->id
-                ]);
-    
-                return response()->json([
-                    'message' => 'Enregistrement effectuée!'
-                ], 200);
+            return response()->json([
+                'message' => ' Veuillez vous authentifiez!'
+            ], 403);
 
-            }else{
-                
-                return response()->json([
-                    'message' => ' Veuillez vous authentifiez!'
-                ], 403);
-
-            }
         }
     }
 
