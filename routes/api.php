@@ -80,7 +80,6 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::get('/avis', [AvisController::class, "index"]);
     Route::post('/avis', [AvisController::class, "store"]);
     Route::get('/avis/{id}', [AvisController::class, "show"]);
-    Route::put('/avis/{id}', [AvisController::class, "update"]);
     Route::delete('/avis/{id}', [AvisController::class, "delete"]);
     
     /** ------------ Messages ------------ */

@@ -14,7 +14,7 @@ class Avis extends Model
 
     protected $fillable = [
         "message",
-        "user_id"
+        "users_id"
     ];
 
     public function users(){
