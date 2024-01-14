@@ -14,27 +14,29 @@ class LikesController extends Controller
 
         if($post){
 
-            $like = $post->likes()->where('user_id', auth()->user()->id)->first();
+            $like = $post->likes()->where('users_id', auth()->user()->id)->first();
 
-            // if not liked the like
+                 // if not liked the like
             if(!$like){
 
                 Likes::create([
-                    'post_id' => $id,
-                    'user_id' => auth()->user()->id
+                    'post_id' => $post->id,
+                    'users_id' => auth()->user()->id
                 ]);
 
                 return response()->json([
                     'message' => "J'aime"
                 ], 200);
-            }
+            }else{
 
-            // else dislike it
+                // else dislike it
             $like->delete();
 
             return response()->json([
                 'message' => "Je n'aime pas"
             ], 200);
+
+            }
         }else{
             return response()->json([
                 'message' => 'Post non trouvé!.'

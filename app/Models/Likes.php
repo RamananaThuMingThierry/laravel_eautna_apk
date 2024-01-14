@@ -12,7 +12,7 @@ class Likes extends Model
     public $table = "likes";
 
     protected $fillable = [
-        "posts_id",
+        "post_id",
         "users_id"
     ];
 
