@@ -101,25 +101,7 @@ class AxesController extends Controller
 
                 if($axes){
     
-                    $verification_axes = DB::table('axes')
-                        ->where('nom_axes', $nom_axes)
-                        ->exists();
-    
-                    if($verification_axes){
-    
-                        $get_axes_existe = Axes::where('nom_axes', $nom_axes)->first();
-                        
-                        if($axes->id == $get_axes_existe->id){
-                            $autorisation = true;
-                        }
-    
-                    }else{
-                        $autorisation = true;
-                    }
-    
-                    if($autorisation){
-    
-                        $validator = Validator::make($request->all(), [
+                    $validator = Validator::make($request->all(), [
                             'nom_axes' => 'required|string',
                         ]);        
                         
@@ -130,24 +112,40 @@ class AxesController extends Controller
                             ], 403);
                 
                         }else{
-                            
-                            $axes->update([
-                                'nom_axes' => $nom_axes,
-                                'users_id' => $users->id
-                            ]);
-                            
-                            return response()->json([
-                                'message' => 'Modification réussi!',
-                            ], 200);
+                         
+                            $verification_axes = DB::table('axes')
+                                ->where('nom_axes', $nom_axes)
+                                ->exists();
+            
+                            if($verification_axes){
+            
+                                $get_axes_existe = Axes::where('nom_axes', $nom_axes)->first();
+                                
+                                if($axes->id == $get_axes_existe->id){
+                                    $autorisation = true;
+                                }
+            
+                            }else{
+                                $autorisation = true;
+                            }
 
-                        }                
+                            if($autorisation){
 
-                    }else{
-                        return response()->json([
-                            'message' => 'Cet axes existe déjà dans la base de données!'
-                        ], 403);
-                    }
-    
+                                $axes->update([
+                                    'nom_axes' => $nom_axes,
+                                    'users_id' => $users->id
+                                ]);
+                                
+                                return response()->json([
+                                    'message' => 'Modification réussi!',
+                                ], 200);
+
+                            }else{
+                                return response()->json([
+                                    'message' => 'Cet axes existe déjà dans la base de données!'
+                                ], 403);
+                            }
+                        }
                 }else{
                     return response()->json([
                         'message' => 'Cet axes n\'existe pas dans la base de données!'
