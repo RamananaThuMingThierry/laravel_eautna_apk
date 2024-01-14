@@ -6,6 +6,7 @@ namespace App\Models;
 use App\Models\Axes;
 use App\Models\Post;
 use App\Models\Level;
+use App\Models\Membres;
 use App\Models\Filieres;
 use App\Models\Messages;
 use App\Models\Fonctions;
@@ -42,7 +43,7 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $hidden = [
-        'password',
+        'mot_de_passe',
         'remember_token',
     ];
 
@@ -53,7 +54,7 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'password' => 'hashed',
+        'mot_de_passe' => 'hashed',
     ];
 
     public function filieres(){
@@ -87,4 +88,7 @@ class User extends Authenticatable
     }
 
 
+    public function membres(){
+        return $this->belongsTo(Membres::class);
+    }
 }

@@ -15,7 +15,7 @@ class Commentaires extends Model
     public $table = "commentaires";
 
     protected $fillable = [
-        "posts_id",
+        "post_id",
         "users_id",
         "commentaires"
     ];

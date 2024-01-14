@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Axes;
 use Illuminate\Http\Request;
-use GuzzleHttp\Psr7\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
@@ -22,11 +21,11 @@ class AxesController extends Controller
     public function store(Request $request){
 
         $nom_axes = $request->nom_axes;
-        $users = auth()->user();
+        $user = auth()->user();
 
-        if($users){
+        if($user){
         
-            if($users->roles == "Administrateurs"){
+            if($user->roles == "Administrateurs"){
         
                 $validator = Validator::make($request->all(), [
                     'nom_axes' => 'required|string|unique:axes',
@@ -69,9 +68,9 @@ class AxesController extends Controller
 
     public function show($axes_id){
 
-        $users = auth()->user();
+        $user = auth()->user();
 
-        if($users){
+        if($user){
             
             $axes = Axes::where('id',$axes_id)->with('users:id,pseudo,contact,adresse,image')->first();
 
@@ -101,11 +100,11 @@ class AxesController extends Controller
 
         $nom_axes = $request->nom_axes;
 
-        $users = auth()->user();
+        $user = auth()->user();
 
-        if($users){
+        if($user){
 
-            if($users->roles == "Administrateurs"){
+            if($user->roles == "Administrateurs"){
 
                 $axes = Axes::find($axes_id);
 
@@ -143,7 +142,7 @@ class AxesController extends Controller
 
                                 $axes->update([
                                     'nom_axes' => $nom_axes,
-                                    'users_id' => $users->id
+                                    'user_id' => $user->id
                                 ]);
                                 
                                 return response()->json([

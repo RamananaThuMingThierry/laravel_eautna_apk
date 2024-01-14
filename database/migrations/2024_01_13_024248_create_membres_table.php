@@ -12,6 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('membres', function (Blueprint $table) {
+
             $table->id();
             $table->string("image")->nullable();
             $table->integer('numero_carte');
@@ -24,14 +25,28 @@ return new class extends Migration
             $table->string('contact_personnel');
             $table->string('contact_tutaire');
             $table->boolean("sympathisant");
-            $table->foreignId('fonctions_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
-            $table->foreignId('filieres_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
-            $table->foreignId('levels_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
-            $table->foreignId('axes_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
+
+            $table->unsignedBigInteger('fonctions_id');
+            $table->foreign('fonctions_id')->references('id')->on('fonctions')->onUpdate('cascade')->onDelete('cascade');
+            
+            $table->unsignedBigInteger('filieres_id');
+            $table->foreign('filieres_id')->references('id')->on('filieres')->onUpdate('cascade')->onDelete('cascade');
+            
+            $table->unsignedBigInteger('levels_id');
+            $table->foreign('levels_id')->references('id')->on('levels')->onUpdate('cascade')->onDelete('cascade');
+            
+            $table->unsignedBigInteger('axes_id');
+            $table->foreign('axes_id')->references('id')->on('axes')->onUpdate('cascade')->onDelete('cascade');
+
             $table->string('adresse');
-            $table->foreignId('users_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
+
+            $table->unsignedBigInteger('users_id');
+            $table->foreign('users_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
+            
             $table->integer('user_membre_id')->nullable();
+
             $table->string('facebook')->nullable();
+
             $table->timestamps();
         });
     }

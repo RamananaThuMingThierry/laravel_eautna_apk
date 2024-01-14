@@ -23,7 +23,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('mot_de_passe');
             $table->string('roles')->default('Utilisateurs');
-            $table->string('status')->default(0)->comment('1: valide  & 0 : Non autorisé');
+            $table->boolean('status')->default(false)->comment('1: valide (True)  & 0 : Non autorisé (False)');
             $table->rememberToken();
             $table->timestamps();
         });

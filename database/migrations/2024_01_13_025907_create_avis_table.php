@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('avis', function (Blueprint $table) {
             $table->id();
             $table->string('message');
-            $table->foreignId('users_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
+            $table->unsignedBigInteger('users_id');
+            $table->foreign('users_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });
     }
