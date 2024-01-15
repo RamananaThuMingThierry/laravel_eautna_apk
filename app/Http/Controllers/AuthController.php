@@ -36,13 +36,10 @@ class AuthController extends Controller
                 $token = $user->createToken($user->email.'_Token')->plainTextToken;
             
                 return response()->json([
-                    'pseudo' => $user->pseudo,
+                    'user' => $user,
                     'token' => $token,
-                    'message' => 'Connexion avec succès !',
-                ]);
-            }
-
-            
+                ], 200);
+            }       
         }
     }
 
@@ -64,7 +61,7 @@ class AuthController extends Controller
         if($validator->fails()){
             return response()->json([
                 'Validation_errors' => $validator->messages(),
-            ]);
+            ], 401);
         }else{
 
             $user = User::create([
@@ -78,9 +75,8 @@ class AuthController extends Controller
            $token = $user->createToken($user->email.'_Token')->plainTextToken;
 
             return response()->json([
-               'pseudo' => $user->pseudo,
+               'user' => $user,
                'token' => $token,
-                'message' => 'Inscription avec succès !',
             ], 200);
         }
     }
@@ -129,7 +125,7 @@ class AuthController extends Controller
         if($user){
             $users = User::all();
             return response()->json([
-                'users' => $users
+                'user' => $user
             ], 200);
         }else{
             return response()->json([
@@ -161,7 +157,7 @@ class AuthController extends Controller
             if($user){
 
                 return response()->json([
-                    'users' => $user
+                    'user' => $user
                 ], 200);
 
             }else{
