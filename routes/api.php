@@ -84,7 +84,7 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     
     /** ------------ Messages ------------ */
     Route::get('/messages', [MessagesController::class, "index"]);
-    Route::post('/messages', [MessagesController::class, "store"]);
+    Route::post('/messages/{id}', [MessagesController::class, "store"]);
     Route::get('/messages/{id}', [MessagesController::class, "show"]);
     Route::put('/messages/{id}', [MessagesController::class, "update"]);
     Route::delete('/messages/{id}', [MessagesController::class, "delete"]);
@@ -95,6 +95,4 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::get('/membres/{id}', [MembresController::class, "show"]);
     Route::put('/membres/{id}', [MembresController::class, "update"]);
     Route::delete('/membres/{id}', [MembresController::class, "delete"]);
-
-    
 });
