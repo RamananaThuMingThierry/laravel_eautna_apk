@@ -103,7 +103,7 @@ class AuthController extends Controller
             ]);
         }else{
 
-            $image = $this->saveImage($request->image, 'profiles');
+            $image = $this->saveImage($request->image, 'users');
 
             auth()->user()->update([
                 'pseudo' => $request->pseudo,

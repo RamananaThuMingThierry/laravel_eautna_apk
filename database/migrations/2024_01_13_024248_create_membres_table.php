@@ -25,7 +25,7 @@ return new class extends Migration
             $table->string('contact_personnel');
             $table->string('contact_tutaire');
             $table->boolean("sympathisant");
-
+            $table->date('date_inscription');
             $table->unsignedBigInteger('fonctions_id');
             $table->foreign('fonctions_id')->references('id')->on('fonctions')->onUpdate('cascade')->onDelete('cascade');
             
@@ -43,7 +43,7 @@ return new class extends Migration
             $table->unsignedBigInteger('users_id');
             $table->foreign('users_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
             
-            $table->integer('user_membre_id')->nullable();
+            $table->integer('lien_membre_id')->default(0)->nullable();
 
             $table->string('facebook')->nullable();
 

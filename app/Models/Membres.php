@@ -30,11 +30,11 @@ class Membres extends Model
         "filieres_id",
         "levels_id",
         "adresse",
-        "users_membre_id",
+        "lien_membre_id",
+        "date_inscription",
         "facebook",
         "axes_id",
-        "users_id",
-        "commentaires"
+        "users_id"
     ];
 
     public function fonctions(){
@@ -54,6 +54,6 @@ class Membres extends Model
     }
 
     public function users(){
-        return $this->hasOne(User::class);
+        return $this->belongsTo(User::class);
     }
 }

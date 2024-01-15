@@ -89,6 +89,6 @@ class User extends Authenticatable
 
 
     public function membres(){
-        return $this->belongsTo(Membres::class);
+        return $this->hasOne(Membres::class);
     }
 }
