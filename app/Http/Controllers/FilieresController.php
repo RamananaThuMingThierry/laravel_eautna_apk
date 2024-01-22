@@ -11,7 +11,7 @@ class FilieresController extends Controller
 {
     public function index(){
 
-        $filieres = Filieres::orderBy('nom_filieres')->with('users:id,pseudo,contact,image,adresse')->get();
+        $filieres = Filieres::orderBy('nom_filieres')->with('users:id,pseudo,contact,image')->get();
 
         return Response()->json([
             'filieres' => $filieres
@@ -28,7 +28,7 @@ class FilieresController extends Controller
             if($users->roles == "Administrateurs"){
         
                 $validator = Validator::make($request->all(), [
-                    'nom_filieres' => 'required|string|unique:filieres',
+                    'nom_filieres' => 'required|string',
                 ]);        
         
                 if($validator->fails()){
@@ -39,6 +39,15 @@ class FilieresController extends Controller
 
                 }else{                
                     
+                    // Verifions si le nom du filière existe dans la bade données
+                    $nom_filieres_existes = Filieres::where('nom_filieres', $nom_filieres)->exists();
+
+                    if($nom_filieres_existes){
+                        return response()->json([
+                            'message' => 'Le nom du filière existe déjà dans la base de données!'
+                        ], 403);
+                    }
+
                     Filieres::create([
                         'nom_filieres' => $nom_filieres,
                         'users_id' => auth()->user()->id

@@ -25,7 +25,7 @@ Route::post("/login", [AuthController::class, 'login']);
 Route::group(['middleware' => ['auth:sanctum']], function(){
 
     /** ---------- Users ---------- */
-    Route::get('/users', [AuthController::class, "index"]);
+    Route::get('/users_all', [AuthController::class, "index"]);
     Route::put('/users', [AuthController::class, "update"]);
     Route::get('/users', [AuthController::class, "profiles"]);
     Route::get('/users/{id}', [AuthController::class, "show"]);
@@ -86,7 +86,7 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     /** ------------ Messages ------------ */
     Route::get('/messages', [MessagesController::class, "index"]);
     Route::post('/messages/{id}', [MessagesController::class, "store"]);
-    Route::get('/messages/{id}', [MessagesController::class, "show"]);
+    Route::get('/messages_show/{id}', [MessagesController::class, "show"]);
     Route::put('/messages/{id}', [MessagesController::class, "update"]);
     Route::delete('/messages/{id}', [MessagesController::class, "delete"]);
     

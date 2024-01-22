@@ -17,7 +17,9 @@ class MembresController extends Controller
     
     public function index(){
 
-        $membres = Membres::orderBy('numero_carte')->with('users:id,image,pseudo')->get();
+        $membres = Membres::orderBy('numero_carte')
+        ->with('users:id,image,pseudo')
+        ->get();
 
         return response()->json([
             'membres' => $membres
@@ -68,7 +70,6 @@ class MembresController extends Controller
                             return $query->where('prenom', $request->prenom);
                         }),
                     ],
-                    'prenom' => 'required|string',
                     'date_de_naissance' => [
                         'required',
                         'date',

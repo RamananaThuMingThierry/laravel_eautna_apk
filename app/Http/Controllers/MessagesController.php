@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Messages;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class MessagesController extends Controller
@@ -66,7 +67,7 @@ class MessagesController extends Controller
                         ], 403);
     
                     }else{                
-                
+                        
                         Messages::create([
                             'message' => $message,
                             'users_id' => $user->id,
@@ -75,7 +76,7 @@ class MessagesController extends Controller
 
                         return response()->json([
                             'message' => 'Message envoyer'
-                        ], 403);
+                        ], 200);
 
                     }
                 }
@@ -84,6 +85,35 @@ class MessagesController extends Controller
                     'message' => 'Ce membre n\'existe pas dans la base de données!'
                 ], 403);
             }
+        }
+        else
+        {
+            return response()->json([
+                'message' => 'Accès interdit! veuillez vous authentifier!'
+            ], 403);
+        }
+    }
+
+    public function show($userReceivedId){
+        $user = auth()->user();
+        if($user){
+            $messages = DB::table('messages')
+            ->where(function($query) use ($userReceivedId){
+                $query
+                    ->where('users_id', auth()->user()->id)
+                    ->where('users_receive', $userReceivedId);
+                })
+            ->orWhere(function($query) use ($userReceivedId){
+                $query
+                    ->where('users_id', $userReceivedId)
+                    ->where('users_receive', auth()->user()->id);
+                })
+            ->orderBy('created_at')
+            ->get();
+        
+            return response()->json([
+                'messages' => $messages
+            ], 200);
         }
         else
         {

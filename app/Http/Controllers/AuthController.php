@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Psy\Readline\Hoa\Console;
 
 class AuthController extends Controller
 {
@@ -125,7 +126,7 @@ class AuthController extends Controller
         if($user){
             $users = User::all();
             return response()->json([
-                'user' => $user
+                'user' => $users
             ], 200);
         }else{
             return response()->json([
