@@ -124,7 +124,7 @@ class AuthController extends Controller
         $user = auth()->user();
         
         if($user){
-            $users = User::all();
+            $users = User::where('id', '<>', $user->id)->get();
             return response()->json([
                 'user' => $users
             ], 200);

@@ -122,4 +122,43 @@ class MessagesController extends Controller
             ], 403);
         }
     }
+
+    public function ListeMessages($userReceivedId){
+        $user = auth()->user();
+        if($user){
+           
+            $latestmessages = DB::table('messages')
+            ->select('users_id', DB::raw('MAX(created_at) as latest_date'))
+            ->groupBy('users_id');
+    
+            $messages = DB::table('messages')
+            ->joinSub($latestmessages, 'latest_messages', function($join){
+                $join->on('messages.users_id', '=', 'latest_messages.users_id')
+                    ->on('messages.created_at', '=', 'latest_messages.latest_date');
+            })->select('messages.*')
+            ->get();
+            
+           
+            $users = DB::table('messages')
+                ->distinct()
+                ->select('users_receive')
+                ->get();
+            
+            foreach($users as $u){
+                $u->messages = $messages->where('users_receive', $u->users_receive)
+                ->first();
+            }
+
+            return response()->json([
+                'messages' => $users
+            ], 200);
+        }
+        else
+        {
+            return response()->json([
+                'message' => 'Accès interdit! veuillez vous authentifier!'
+            ], 403);
+        }
+    }
+    
 }
