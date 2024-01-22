@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Validator;
 
 class FilieresController extends Controller
 {
+
     public function index(){
 
         $filieres = Filieres::orderBy('nom_filieres')->with('users:id,pseudo,contact,image')->get();
@@ -99,6 +100,24 @@ class FilieresController extends Controller
                     'message' => ' Veuillez vous authentifiez!'
             ], 403);
 
+        }
+    }
+
+    public function search($value){
+
+        $user = auth()->user();
+
+        if($user){
+            
+            $filieres = Filieres::where('nom_filieres', 'like', "%$value%")->with('users:id,pseudo,image')->get();
+
+            return response()->json([
+                'filieres' => $filieres
+            ], 200);
+        }else{
+            return response()->json([
+                'message' => 'Accès interdit! Veuillez vous authentifiez!'
+        ], 403);
         }
     }
 

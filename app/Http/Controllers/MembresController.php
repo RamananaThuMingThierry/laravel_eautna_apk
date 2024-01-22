@@ -232,6 +232,25 @@ class MembresController extends Controller
         
     }
 
+    public function getMembre($id){
+
+        $user = auth()->user();
+
+        if($user){
+
+            $membres = Membres::where('lien_membre_id', $id)->with('users:id,pseudo,image')->first();
+
+            return response()->json([
+                'membres' => $membres 
+            ], 200);
+    
+        }else{
+            return response()->json([
+                'message' => 'Accès interdit! Veuillez vous authentifiez!'
+            ]);
+        }        
+    }
+
     public function delete($membres_id){
         $autorisation = false;
 

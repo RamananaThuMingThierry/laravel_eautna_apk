@@ -51,6 +51,7 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::post('/filieres', [FilieresController::class, "store"]);
     Route::get('/filieres/{id}', [FilieresController::class, "show"]);
     Route::put('/filieres/{id}', [FilieresController::class, "update"]);
+    Route::get('/filieres_search/{value}', [FilieresController::class, "search"]);
     Route::delete('/filieres/{id}', [FilieresController::class, "delete"]);
   
     /** ------------ Niveau ------------ */
@@ -95,6 +96,7 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::get('/membres', [MembresController::class, "index"]);
     Route::post('/membres', [MembresController::class, "store"]);
     Route::get('/membres/{id}', [MembresController::class, "show"]);
+    Route::get('/getmembres/{id}', [MembresController::class, "getMembre"]);
     Route::put('/membres/{id}', [MembresController::class, "update"]);
     Route::delete('/membres/{id}', [MembresController::class, "delete"]);
 });
