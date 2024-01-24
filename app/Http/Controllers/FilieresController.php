@@ -29,7 +29,7 @@ class FilieresController extends Controller
             if($users->roles == "Administrateurs"){
         
                 $validator = Validator::make($request->all(), [
-                    'nom_filieres' => 'required|string',
+                    'nom_filieres' => 'required|string|unique:filieres|alpha',
                 ]);        
         
                 if($validator->fails()){
