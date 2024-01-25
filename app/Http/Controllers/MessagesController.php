@@ -27,7 +27,7 @@ class MessagesController extends Controller
         {
             return response()->json([
                 'message' => 'Accès interdit! veuillez vous authentifier!'
-            ], 403);
+            ], 401);
         }
     }
 
@@ -46,7 +46,7 @@ class MessagesController extends Controller
                 if($user_received->id == $user->id){
                     return response()->json([
                         'message' => 'Opération invalide! Vous ne pouvez pas envoyer un message à vous-même!'
-                    ], 403);
+                    ], 304);
                 }else{
 
                     if($user_received->status == false){
@@ -84,14 +84,14 @@ class MessagesController extends Controller
             }else{
                 return response()->json([
                     'message' => 'Ce membre n\'existe pas dans la base de données!'
-                ], 403);
+                ], 404);
             }
         }
         else
         {
             return response()->json([
                 'message' => 'Accès interdit! veuillez vous authentifier!'
-            ], 403);
+            ], 401);
         }
     }
 
@@ -120,7 +120,7 @@ class MessagesController extends Controller
         {
             return response()->json([
                 'message' => 'Accès interdit! veuillez vous authentifier!'
-            ], 403);
+            ], 401);
         }
     }
 
@@ -158,7 +158,7 @@ class MessagesController extends Controller
         {
             return response()->json([
                 'message' => 'Accès interdit! veuillez vous authentifier!'
-            ], 403);
+            ], 401);
         }
     }
     

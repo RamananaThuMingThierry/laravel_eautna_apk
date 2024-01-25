@@ -40,7 +40,7 @@ class LikesController extends Controller
         }else{
             return response()->json([
                 'message' => 'Post non trouvé!.'
-            ], 403);
+            ], 404);
         }
     }
 }

@@ -125,7 +125,7 @@ class AuthController extends Controller
         }else{
             return response()->json([
                 'message' => 'Accès interdit! veuillez vous authentifiez!'
-            ], 403);
+            ], 401);
         }
     }
 
@@ -140,8 +140,8 @@ class AuthController extends Controller
             ], 200);
         }else{
             return response()->json([
-                'user' => 'Vous n\'êtes pas authentifier'
-            ], 404);
+                'user' => 'Accès interdit! Veuillez vous pas authentifier!'
+            ], 401);
         }
     }
 
@@ -154,7 +154,7 @@ class AuthController extends Controller
         }else{
             return response()->json([
                 'message' => 'Accès interdit! Veuillez vous authentifier'
-            ], 403);
+            ], 401);
         }
     }
 
@@ -175,13 +175,13 @@ class AuthController extends Controller
             
                 return response()->json([
                     'message' => 'Cet utilisateur n\'existe pas dans la base de données!'
-                ], 403);
+                ], 404);
             }
             
         }else{
             return response()->json([
                 'message' => 'Accès interdit! Veuillz vous authentifier'
-            ], 403);
+            ], 401);
         }
     }
 
@@ -195,7 +195,7 @@ class AuthController extends Controller
         }else{
             return response()->json([
                 'message' => 'Accès interdit! Veuillz vous authentifier'
-            ], 403);
+            ], 401);
         }
     }
 }

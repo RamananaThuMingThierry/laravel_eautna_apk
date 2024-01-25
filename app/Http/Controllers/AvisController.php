@@ -11,11 +11,19 @@ class AvisController extends Controller
 {
     public function index(){
 
-        $avis = Avis::orderBy('created_at', 'desc')->with('users:id,pseudo,image')->get();
+       $user = auth()->user();
+       
+       if($user){
+            $avis = Avis::orderBy('created_at', 'desc')->with('users:id,pseudo,image')->get();
 
-        return Response()->json([
-            'avis' => $avis
-        ], 200);
+            return Response()->json([
+                'avis' => $avis
+            ], 200);
+       }else{
+           return response()->json([
+            'message' => 'Accès interdit! Veuillez vous authentifier!'
+           ], 401);
+       }
     }
 
     public function store(Request $request){
@@ -61,7 +69,7 @@ class AvisController extends Controller
                 
             return response()->json([
                 'message' => 'Accès Interdit! Veuillez vous authentifiez!'
-            ], 403);
+            ], 401);
 
         }
     }
@@ -83,20 +91,19 @@ class AvisController extends Controller
                 }else{
                     return response()->json([
                         'message' => 'Cet avis n\'existe pas dans la base de données!'
-                    ], 403);
+                    ], 404);
                 }
             }else{
 
                 return response()->json([
-                    'message' => 'Accès interdit! Veuillez vous authentifiez!'
+                    'message' => 'Accès interdit! Vous n\'est pas autorisé à effectuer cet opération!'
                 ], 403);
-
             }
         }else{
                 
             return response()->json([
-                    'message' => ' Veuillez vous authentifiez!'
-            ], 403);
+                    'message' => 'Accès interdit! Veuillez vous authentifiez!'
+            ], 401);
 
         }
     }
@@ -133,7 +140,7 @@ class AvisController extends Controller
                 
                 return response()->json([
                     'message' => 'Cet avis n\'existe pas dans la base de données!'
-                ], 403);
+                ], 404);
 
             }
 
@@ -141,7 +148,7 @@ class AvisController extends Controller
                 
             return response()->json([
                     'message' => 'Accès Interdit! Veuillez vous authentifiez!'
-            ], 403);
+            ], 401);
 
         }
     }

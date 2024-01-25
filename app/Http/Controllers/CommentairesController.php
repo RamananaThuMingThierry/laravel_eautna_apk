@@ -26,13 +26,13 @@ class CommentairesController extends Controller
             }else{
                 return response()->json([
                     'message' => 'Post non trouvé!'
-                ], 403);
+                ], 404);
             }
 
         }else{
             return response()->json([
                 'message' => 'Accès Interdit! Veuillez vous authentifier.'
-            ], 403);
+            ], 401);
         }
     }
 
@@ -79,7 +79,7 @@ class CommentairesController extends Controller
                 }else{
                     return response()->json([
                         'message' => 'Post non trouvé!'
-                    ], 403);
+                    ], 404);
                 }
 
             }else{
@@ -87,10 +87,11 @@ class CommentairesController extends Controller
                     'message' => 'Accès Interdit! Vous n\'êtes pas un membre AEUTNA.'
                 ], 403);    
             }
+
         }else{
             return response()->json([
                 'message' => 'Accès Interdit! Veuillez vous authentifier.'
-            ], 403);
+            ], 401);
         }
     }
 
@@ -139,7 +140,7 @@ class CommentairesController extends Controller
                 }else{
                     return response()->json([
                         'message' => "Ce commentaires n'existe pas dans la base de données!"
-                    ], 403);
+                    ], 404);
                 }
 
             }else{
@@ -152,7 +153,7 @@ class CommentairesController extends Controller
         }else{
             return response()->json([
                 'message' => 'Accès Interdit! Veuillez vous authentifier.'
-            ], 403);
+            ], 401);
         }
     }
     
@@ -184,7 +185,7 @@ class CommentairesController extends Controller
                 
                     return response()->json([
                         'message' => "Ce commentaires n'existe pas dans la base de données!"
-                    ], 403);
+                    ], 404);
 
                 }
 
@@ -196,7 +197,7 @@ class CommentairesController extends Controller
         }else{
             return response()->json([
                 'message' => 'Accès Interdit! Veuillez vous authentifier.'
-            ], 403);            
+            ], 401);            
         }
     }
 }

@@ -37,6 +37,7 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::post('/axes', [AxesController::class, "store"]);
     Route::get('/axes/{id}', [AxesController::class, "show"]);
     Route::put('/axes/{id}', [AxesController::class, "update"]);
+    Route::get('/axes_search/{id}', [AxesController::class, "search"]);
     Route::delete('/axes/{id}', [AxesController::class, "delete"]);
     
     /** ------------ Fonctions ------------ */
@@ -60,6 +61,7 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::post('/niveau', [NiveauController::class, "store"]);
     Route::get('/niveau/{id}', [NiveauController::class, "show"]);
     Route::put('/niveau/{id}', [NiveauController::class, "update"]);
+    Route::get('/niveau_search/{id}', [NiveauController::class, "search"]);
     Route::delete('/niveau/{id}', [NiveauController::class, "delete"]);
     
     /** ------------ Post ------------ */

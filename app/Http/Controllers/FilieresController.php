@@ -13,11 +13,19 @@ class FilieresController extends Controller
 
     public function index(){
 
-        $filieres = Filieres::orderBy('nom_filieres')->with('users:id,pseudo,contact,image')->get();
+       $user = auth()->user();
 
-        return Response()->json([
-            'filieres' => $filieres
-        ], 200);
+       if($user){
+            $filieres = Filieres::orderBy('nom_filieres')->with('users:id,pseudo,contact,image')->get();
+
+            return Response()->json([
+                'filieres' => $filieres
+            ], 200);
+       }else{
+            return response()->json([
+                'message' => 'Accès interdit! Veuillez vous authentifier!'
+            ], 401);
+       }
     }
 
     public function store(Request $request){
@@ -62,8 +70,8 @@ class FilieresController extends Controller
         }else{
                 
             return response()->json([
-                'message' => ' Veuillez vous authentifiez!'
-            ], 403);
+                'message' => 'Accès interdit! Veuillez vous authentifiez!'
+            ], 401);
 
         }
     }
@@ -84,13 +92,13 @@ class FilieresController extends Controller
                 
                 return response()->json([
                     'message' => 'Ce filiere n\'existe pas dans la base de données!'
-                ], 403);
+                ], 404);
             }
         }else{
                 
             return response()->json([
-                    'message' => ' Veuillez vous authentifiez!'
-            ], 403);
+                    'message' => 'Accès interdit! Veuillez vous authentifiez!'
+            ], 401);
 
         }
     }
@@ -109,7 +117,7 @@ class FilieresController extends Controller
         }else{
             return response()->json([
                 'message' => 'Accès interdit! Veuillez vous authentifiez!'
-        ], 403);
+        ], 401);
         }
     }
 
@@ -150,7 +158,7 @@ class FilieresController extends Controller
                                 
                                 if($filieres->id == $get_filieres_existe->id){
                                     return response()->json(
-                                        ['message' => 'Aucun changement n\'a été apporté!'], 403
+                                        ['message' => 'Aucun changement n\'a été apporté!'], 304
                                     );
                                 }
             
@@ -171,14 +179,14 @@ class FilieresController extends Controller
 
                             }else{
                                 return response()->json([
-                                    'message' => 'Ce filiere existe déjà dans la base de données!'
+                                    'message' => 'Ce filière existe déjà dans la base de données!'
                                 ], 403);
                             }
                         }
                 }else{
                     return response()->json([
-                        'message' => "L'identifiant du filière à modifier n'existe pas dans la base de données!"
-                    ], 403);
+                        'message' => "Ce filière n'existe pas dans la base de données!"
+                    ], 404);
                 }
             }else{
                 return response()->json([
@@ -187,8 +195,8 @@ class FilieresController extends Controller
             }
         }else{
             return response()->json([
-                    'message' => ' Veuillez vous authentifiez!'
-            ], 403);
+                    'message' => 'Accès interdit! Veuillez vous authentifiez!'
+            ], 401);
         }
     }
 
@@ -222,15 +230,15 @@ class FilieresController extends Controller
                 
                 return response()->json([
                     'message' => 'Cet filieres n\'existe pas dans la base de données!'
-                ], 403);
+                ], 404);
 
             }
 
         }else{
                 
             return response()->json([
-                    'message' => ' Veuillez vous authentifiez!'
-            ], 403);
+                    'message' => 'Accès interdit! Veuillez vous authentifiez!'
+            ], 401);
 
         }
     }

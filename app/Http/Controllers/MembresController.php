@@ -124,7 +124,7 @@ class MembresController extends Controller
                     if($verification_fonctions == false){
                         return response()->json([
                             'message' => 'Cet fonction n\'existe pas dans la base de données!'
-                        ], 403);
+                        ], 404);
                     }
 
                     // Verification filieres_id
@@ -132,7 +132,7 @@ class MembresController extends Controller
                     if($verification_filieres == false){
                         return response()->json([
                             'message' => 'Cet filiere n\'existe pas dans la base de données!'
-                        ], 403);
+                        ], 404);
                     }
 
                      // Verification niveau
@@ -141,7 +141,7 @@ class MembresController extends Controller
                         if($verification_niveau == false){
                             return response()->json([
                                 'message' => 'Ce niveau n\'existe pas dans la base de données!'
-                            ], 403);
+                            ], 404);
                         }
                      }
 
@@ -151,7 +151,7 @@ class MembresController extends Controller
                         if($verification_axes == false){
                             return response()->json([
                                 'message' => 'Cet axes n\'existe pas dans la base de données!'
-                            ], 403);
+                            ], 404);
                         }
                      }
 
@@ -210,7 +210,7 @@ class MembresController extends Controller
         }else{
             return response()->json([
                 'message' => "Accès interdit! Veuillez vous authentifier!"
-            ], 403);
+            ], 401);
         }
 
     }
@@ -228,7 +228,7 @@ class MembresController extends Controller
         }else{
             return response()->json([
                 'message' => 'Ce membre n\'existe pas dans la base de données!'
-            ], 403);
+            ], 404);
         }
         
     }
@@ -248,7 +248,7 @@ class MembresController extends Controller
         }else{
             return response()->json([
                 'message' => 'Accès interdit! Veuillez vous authentifiez!'
-            ]);
+            ], 401);
         }        
     }
 
@@ -280,7 +280,7 @@ class MembresController extends Controller
                 }else{
                     return response()->json([
                         'message' => "Ce membre n'existe pas dans la base de données!"
-                    ], 403);
+                    ], 404);
                 }
 
             }else{
@@ -291,7 +291,7 @@ class MembresController extends Controller
         }else{
             return response()->json([
                 'message' => "Accès interdit! Veuillez vous authentifier!"
-            ], 403);
+            ], 401);
         }
     }
 

@@ -12,11 +12,19 @@ class FonctionsController extends Controller
 {
     public function index(){
 
+      $user = auth()->user();
+
+      if($user){
         $fonctions = Fonctions::orderBy('fonctions')->with('users:id,pseudo,contact,image,adresse')->get();
 
         return Response()->json([
             'fonctions' => $fonctions
         ], 200);
+      }else{
+        return response()->json([
+            'message' => 'Accès interdit! Veuillez vous authentifiez!'
+        ], 401);
+      }
     }
 
     public function store(Request $request){
@@ -61,8 +69,8 @@ class FonctionsController extends Controller
         }else{
                 
             return response()->json([
-                'message' => ' Veuillez vous authentifiez!'
-            ], 403);
+                'message' => 'Accès interdit! Veuillez vous authentifiez!'
+            ], 401);
 
         }
     }
@@ -83,13 +91,13 @@ class FonctionsController extends Controller
                 
                 return response()->json([
                     'message' => 'Ce filiere n\'existe pas dans la base de données!'
-                ], 403);
+                ], 404);
             }
         }else{
                 
             return response()->json([
-                    'message' => ' Veuillez vous authentifiez!'
-            ], 403);
+                    'message' => 'Accès interdit! Veuillez vous authentifiez!'
+            ], 401);
 
         }
     }
@@ -108,7 +116,7 @@ class FonctionsController extends Controller
         }else{
             return response()->json([
                 'message' => 'Accès interdit! Veuillez vous authentifiez!'
-        ], 403);
+        ], 401);
         }
     }
 
@@ -149,7 +157,7 @@ class FonctionsController extends Controller
                                 
                                 if($fonctions_update->id == $get_fonctions_existe->id){
                                     return response()->json(
-                                        ['message' => 'Aucun changement n\'a été apporté!'], 403
+                                        ['message' => 'Aucun changement n\'a été apporté!'], 304
                                     );
                                 }
             
@@ -177,7 +185,7 @@ class FonctionsController extends Controller
                 }else{
                     return response()->json([
                         'message' => 'Cet fonction n\'existe pas dans la base de données!'
-                    ], 403);
+                    ], 404);
                 }
             }else{
                 return response()->json([
@@ -187,7 +195,7 @@ class FonctionsController extends Controller
         }else{
             return response()->json([
                     'message' => ' Veuillez vous authentifiez!'
-            ], 403);
+            ], 401);
         }
     }
 
@@ -221,7 +229,7 @@ class FonctionsController extends Controller
                 
                 return response()->json([
                     'message' => 'Cet fonction n\'existe pas dans la base de données!'
-                ], 403);
+                ], 404);
 
             }
 
@@ -229,7 +237,7 @@ class FonctionsController extends Controller
                 
             return response()->json([
                     'message' => ' Veuillez vous authentifiez!'
-            ], 403);
+            ], 401);
 
         }
     }

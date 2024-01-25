@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Axes;
+use DragonCode\Contracts\Cashier\Http\Response;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -12,11 +13,38 @@ class AxesController extends Controller
 {
     public function index(){
 
-        $axes = Axes::orderBy('nom_axes')->with('users:id,pseudo,contact,image,adresse')->get();
+       $user = auth()->user();
 
-        return Response()->json([
-            'axes' => $axes
-        ], 200);
+       if($user){
+            $axes = Axes::orderBy('nom_axes')->with('users:id,pseudo,contact,image,adresse')->get();
+
+            return Response()->json([
+                'axes' => $axes
+            ], 200);
+       }else{
+           return Response()->json([
+            'message' => 'Accès interdit! Veuillez vous authentifiez'
+           ], 401);
+       }
+
+    }
+
+    public function search($value){
+
+        $user = auth()->user();
+
+        if($user){
+            
+            $axes = Axes::where('nom_axes', 'like', "%$value%")->with('users:id,pseudo,image')->get();
+
+            return response()->json([
+                'axes' => $axes
+            ], 200);
+        }else{
+            return response()->json([
+                'message' => 'Accès interdit! Veuillez vous authentifiez!'
+            ], 401);
+        }
     }
 
     public function store(Request $request){
@@ -55,14 +83,13 @@ class AxesController extends Controller
                 return response()->json([
                     'message' => "Accès interdit! Vous n'êtes pas autorisé à effectuer cet opération!"
                 ], 403);
-                
             }
 
         }else{
                 
             return response()->json([
                 'message' => 'Accès interdit! Veuillez vous authentifiez!'
-            ], 403);
+            ], 401);
 
         }
     }
@@ -83,15 +110,14 @@ class AxesController extends Controller
                 
                 return response()->json([
                     'message' => 'Cet axes n\'existe pas dans la base de données!'
-                ], 403);
-
+                ], 404);
             }
 
         }else{
                 
             return response()->json([
-                    'message' => ' Veuillez vous authentifiez!'
-            ], 403);
+                    'message' => 'Accès interdit! Veuillez vous authentifiez!'
+            ], 401);
 
         }
     }
@@ -132,7 +158,9 @@ class AxesController extends Controller
                                 $get_axes_existe = Axes::where('nom_axes', $nom_axes)->first();
                                 
                                 if($axes->id == $get_axes_existe->id){
-                                    $autorisation = true;
+                                      return response()->json([
+                                        'message' => 'Aucun changement n\'a été apporté!'
+                                    ], 304);
                                 }
             
                             }else{
@@ -159,7 +187,7 @@ class AxesController extends Controller
                 }else{
                     return response()->json([
                         'message' => 'Cet axes n\'existe pas dans la base de données!'
-                    ], 403);
+                    ], 404);
                 }
             }else{
                 return response()->json([
@@ -168,8 +196,8 @@ class AxesController extends Controller
             }
         }else{
             return response()->json([
-                    'message' => ' Veuillez vous authentifiez!'
-            ], 403);
+                    'message' => 'Accès interdit! Veuillez vous authentifiez!'
+            ], 401);
         }
     }
 
@@ -203,15 +231,15 @@ class AxesController extends Controller
                 
                 return response()->json([
                     'message' => 'Cet axes n\'existe pas dans la base de données!'
-                ], 403);
+                ], 404);
 
             }
 
         }else{
                 
             return response()->json([
-                    'message' => ' Veuillez vous authentifiez!'
-            ], 403);
+                    'message' => 'Accès interdit! Veuillez vous authentifiez!'
+            ], 401);
 
         }
     }

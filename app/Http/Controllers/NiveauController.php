@@ -12,11 +12,37 @@ class NiveauController extends Controller
 {
     public function index(){
 
-        $niveau = Level::orderBy('niveau')->with('users:id,pseudo,contact,image,adresse')->get();
+       $user = auth()->user();
 
-        return Response()->json([
-            'niveau' => $niveau
-        ], 200);
+       if($user){
+            $niveau = Level::orderBy('niveau')->with('users:id,pseudo,contact,image,adresse')->get();
+
+            return Response()->json([
+                'niveau' => $niveau
+            ], 200);
+       }else{
+            return response()->json([
+                'message' => 'Accès interdit! Veuillez vous authentifiez!'
+            ], 401);
+       }
+    }
+
+    public function search($value){
+
+        $user = auth()->user();
+
+        if($user){
+            
+            $niveau = Level::where('niveau', 'like', "%$value%")->with('users:id,pseudo,image')->get();
+
+            return response()->json([
+                'niveau' => $niveau
+            ], 200);
+        }else{
+            return response()->json([
+                'message' => 'Accès interdit! Veuillez vous authentifiez!'
+        ], 403);
+        }
     }
 
     public function store(Request $request){
@@ -133,7 +159,9 @@ class NiveauController extends Controller
                                 $get_niveau_existe = Level::where('niveau', $niveau)->first();
                                 
                                 if($niveau_update->id == $get_niveau_existe->id){
-                                    $autorisation = true;
+                                    return response()->json(
+                                        ['message' => 'Aucun changement n\'a été apporté!'], 403
+                                    );
                                 }
             
                             }else{
@@ -211,7 +239,7 @@ class NiveauController extends Controller
         }else{
                 
             return response()->json([
-                    'message' => ' Veuillez vous authentifiez!'
+                    'message' => 'Accès interdit! Veuillez vous authentifiez!'
             ], 403);
 
         }
