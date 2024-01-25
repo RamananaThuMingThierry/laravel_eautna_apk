@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Filieres;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -35,19 +36,10 @@ class FilieresController extends Controller
                 if($validator->fails()){
                     
                     return response()->json([
-                        'validator_errors' => $validator->messages(),
-                    ], 403);
+                        'errors' => $validator->messages(),
+                    ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
 
                 }else{                
-                    
-                    // Verifions si le nom du filière existe dans la bade données
-                    $nom_filieres_existes = Filieres::where('nom_filieres', $nom_filieres)->exists();
-
-                    if($nom_filieres_existes){
-                        return response()->json([
-                            'message' => 'Le nom du filière existe déjà dans la base de données!'
-                        ], 403);
-                    }
 
                     Filieres::create([
                         'nom_filieres' => $nom_filieres,
@@ -137,14 +129,14 @@ class FilieresController extends Controller
                 if($filieres){
     
                     $validator = Validator::make($request->all(), [
-                            'nom_filieres' => 'required|string',
+                            'nom_filieres' => 'required|string|alpha',
                         ]);        
                         
                         if($validator->fails()){
                             
                             return response()->json([
-                                'validator_errors' => $validator->messages(),
-                            ], 403);
+                                'errors' => $validator->messages(),
+                            ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
                 
                         }else{
                          
@@ -157,7 +149,9 @@ class FilieresController extends Controller
                                 $get_filieres_existe = Filieres::where('nom_filieres', $nom_filieres)->first();
                                 
                                 if($filieres->id == $get_filieres_existe->id){
-                                    $autorisation = true;
+                                    return response()->json(
+                                        ['message' => 'Aucun changement n\'a été apporté!'], 403
+                                    );
                                 }
             
                             }else{
@@ -177,13 +171,13 @@ class FilieresController extends Controller
 
                             }else{
                                 return response()->json([
-                                    'message' => 'Cet filieres existe déjà dans la base de données!'
+                                    'message' => 'Ce filiere existe déjà dans la base de données!'
                                 ], 403);
                             }
                         }
                 }else{
                     return response()->json([
-                        'message' => 'Cet filieres n\'existe pas dans la base de données!'
+                        'message' => "L'identifiant du filière à modifier n'existe pas dans la base de données!"
                     ], 403);
                 }
             }else{
