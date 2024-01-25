@@ -8,6 +8,7 @@ use App\Models\Level;
 use App\Models\Membres;
 use App\Models\Filieres;
 use App\Models\Fonctions;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
@@ -113,8 +114,8 @@ class MembresController extends Controller
                 if($validator->fails())
                 {
                     return response()->json([
-                        'validator_errors' => $validator->messages(),
-                    ], 403);
+                        'errors' => $validator->messages(),
+                    ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
                 }
                 else
                 {   

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Fonctions;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -34,8 +35,8 @@ class FonctionsController extends Controller
                 if($validator->fails()){
                     
                     return response()->json([
-                        'validator_errors' => $validator->messages(),
-                    ], 403);
+                        'errors' => $validator->messages(),
+                    ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
 
                 }else{                
                     
@@ -115,8 +116,8 @@ class FonctionsController extends Controller
                         if($validator->fails()){
                             
                             return response()->json([
-                                'validator_errors' => $validator->messages(),
-                            ], 403);
+                                'errors' => $validator->messages(),
+                            ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
                 
                         }else{
                          
@@ -129,7 +130,9 @@ class FonctionsController extends Controller
                                 $get_fonctions_existe = Fonctions::where('fonctions', $nom_fonctions)->first();
                                 
                                 if($fonctions_update->id == $get_fonctions_existe->id){
-                                    $autorisation = true;
+                                    return response()->json(
+                                        ['message' => 'Aucun changement n\'a été apporté!'], 403
+                                    );
                                 }
             
                             }else{

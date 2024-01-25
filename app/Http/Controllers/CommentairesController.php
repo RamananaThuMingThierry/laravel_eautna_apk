@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use App\Models\Commentaires;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Validator;
 
 class CommentairesController extends Controller
@@ -56,10 +57,10 @@ class CommentairesController extends Controller
                     ]);  
 
                     if($validator->fails()){
-            
+                        
                         return response()->json([
-                            'validator_errors' => $validator->messages(),
-                        ], 403);
+                            'errors' => $validator->messages(),
+                        ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
             
                     }else{
 
@@ -113,16 +114,28 @@ class CommentairesController extends Controller
 
                 if($commentaires_update){
 
-                    $commentaires_update->update([
-                        'commentaires' => $commentaires,
-                        'users_id' => $user->id
-                    ]);
+                    $validator = Validator::make($request->all(), [
+                        'commentaires' => 'required|string',
+                    ]);  
 
-                    return response()->json([
-                        'commentaires' => $commentaires_update,
-                        'message' => "Modification réussi!"
-                    ], 200);
-
+                    if($validator->fails()){
+                        
+                        return response()->json([
+                            'errors' => $validator->messages(),
+                        ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
+            
+                    }else{
+                        $commentaires_update->update([
+                            'commentaires' => $commentaires,
+                            'users_id' => $user->id
+                        ]);
+    
+                        return response()->json([
+                            'commentaires' => $commentaires_update,
+                            'message' => "Modification réussi!"
+                        ], 200);    
+                    }
+                    
                 }else{
                     return response()->json([
                         'message' => "Ce commentaires n'existe pas dans la base de données!"

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Level;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -34,8 +35,8 @@ class NiveauController extends Controller
                 if($validator->fails()){
                     
                     return response()->json([
-                        'validator_errors' => $validator->messages(),
-                    ], 403);
+                        'errors' => $validator->messages(),
+                    ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
 
                 }else{                
                     
@@ -118,8 +119,8 @@ class NiveauController extends Controller
                         if($validator->fails()){
                             
                             return response()->json([
-                                'validator_errors' => $validator->messages(),
-                            ], 403);
+                                'errors' => $validator->messages(),
+                            ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
                 
                         }else{
                          

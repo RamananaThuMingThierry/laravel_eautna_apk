@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -61,8 +62,8 @@ class AuthController extends Controller
 
         if($validator->fails()){
             return response()->json([
-                'Validation_errors' => $validator->messages(),
-            ], 401);
+                'errors' => $validator->messages(),
+            ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
         }else{
 
             $user = User::create([
@@ -84,38 +85,47 @@ class AuthController extends Controller
  
     public function update(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'pseudo' => 'required|max:255',
-            'contact' => 'required|string|max:10|min:10',
-            'genre' => 'required|string',
-            'roles' => 'required|string',
-            'adresse' => 'required|string',
-            'email' => 'required|email|max:255|regex:/^[a-zA-Z0-9\.\-\_]+@[a-zA-Z0-9\.\-\_]+\.[a-zA-Z]+$/',
-            'mot_de_passe' => 'required|min:6|confirmed',
-        ]);
+        $user = auth()->user();
 
-        if($validator->fails()){
-            return response()->json([
-                'Validation_errors' => $validator->messages(),
+        if($user){
+            
+            $validator = Validator::make($request->all(), [
+                'pseudo' => 'required|max:255',
+                'contact' => 'required|string|max:10|min:10',
+                'genre' => 'required|string',
+                'roles' => 'required|string',
+                'adresse' => 'required|string',
+                'email' => 'required|email|max:255|regex:/^[a-zA-Z0-9\.\-\_]+@[a-zA-Z0-9\.\-\_]+\.[a-zA-Z]+$/',
+                'mot_de_passe' => 'required|min:6|confirmed',
             ]);
+    
+            if($validator->fails()){
+                return response()->json([
+                    'errors' => $validator->messages(),
+                ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
+            }else{
+    
+                $image = $this->saveImage($request->image, 'users');
+    
+                $user->update([
+                    'pseudo' => $request->pseudo,
+                    'contact' => $request->contact,
+                    'genre' => $request->genre,
+                    'roles' => $request->roles,
+                    'image' => $image,
+                    'adresse' => $request->adresse,
+                    'email' => $request->email,
+                    'mot_de_passe' => Hash::make($request->mot_de_passe)
+                ]);
+               
+                return response()->json([
+                    'message' => 'Modification avec succès !',
+                ], 200);
+            }
         }else{
-
-            $image = $this->saveImage($request->image, 'users');
-
-            auth()->user()->update([
-                'pseudo' => $request->pseudo,
-                'contact' => $request->contact,
-                'genre' => $request->genre,
-                'roles' => $request->roles,
-                'image' => $image,
-                'adresse' => $request->adresse,
-                'email' => $request->email,
-                'mot_de_passe' => Hash::make($request->mot_de_passe)
-            ]);
-           
             return response()->json([
-                'message' => 'Modification avec succès !',
-            ], 200);
+                'message' => 'Accès interdit! veuillez vous authentifiez!'
+            ], 403);
         }
     }
 
@@ -143,8 +153,8 @@ class AuthController extends Controller
             ], 200);
         }else{
             return response()->json([
-                'user' => 'Vous n\'êtes pas authentifier'
-            ], 404);
+                'message' => 'Accès interdit! Veuillez vous authentifier'
+            ], 403);
         }
     }
 
@@ -170,15 +180,22 @@ class AuthController extends Controller
             
         }else{
             return response()->json([
-                    'message' => 'Vous n\'êtes pas authentifier'
+                'message' => 'Accès interdit! Veuillz vous authentifier'
             ], 403);
         }
     }
 
     public function logout(){
-        auth()->user()->tokens()->delete();
-        return response()->json([
-            'message' => "Déconnexion effectuée",
-        ], 200);
+        $user = auth()->user();
+        if($user){
+            $user->tokens()->delete();
+            return response()->json([
+                'message' => "Déconnexion effectuée",
+            ], 200);
+        }else{
+            return response()->json([
+                'message' => 'Accès interdit! Veuillz vous authentifier'
+            ], 403);
+        }
     }
 }
