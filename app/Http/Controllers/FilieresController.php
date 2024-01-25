@@ -13,6 +13,8 @@ class FilieresController extends Controller
 
     public function index(){
 
+       $constantes = app('constants');
+
        $user = auth()->user();
 
        if($user){
@@ -23,13 +25,14 @@ class FilieresController extends Controller
             ], 200);
        }else{
             return response()->json([
-                'message' => 'Accès interdit! Veuillez vous authentifier!'
+                'message' => $constantes['NonAuthentifier']
             ], 401);
        }
     }
 
     public function store(Request $request){
 
+        $constantes = app('constants');
         $nom_filieres = $request->nom_filieres;
         $users = auth()->user();
 
@@ -55,7 +58,7 @@ class FilieresController extends Controller
                     ]);
         
                     return response()->json([
-                        'message' => 'Enregistrement effectuée!'
+                        'message' => $constantes['Reussi']
                     ], 200);
                 
                 }
