@@ -44,6 +44,7 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::post('/fonctions', [FonctionsController::class, "store"]);
     Route::get('/fonctions/{id}', [FonctionsController::class, "show"]);
     Route::put('/fonctions/{id}', [FonctionsController::class, "update"]);
+    Route::get('/fonctions_search/{id}', [FonctionsController::class, "search"]);
     Route::delete('/fonctions/{id}', [FonctionsController::class, "delete"]);
     
     /** ------------ Filières ------------ */
@@ -51,7 +52,7 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::post('/filieres', [FilieresController::class, "store"]);
     Route::get('/filieres/{id}', [FilieresController::class, "show"]);
     Route::put('/filieres/{id}', [FilieresController::class, "update"]);
-    Route::get('/filieres_search/{value}', [FilieresController::class, "search"]);
+    Route::get('/filieres_search/{id}', [FilieresController::class, "search"]);
     Route::delete('/filieres/{id}', [FilieresController::class, "delete"]);
   
     /** ------------ Niveau ------------ */

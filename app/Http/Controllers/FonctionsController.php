@@ -29,7 +29,7 @@ class FonctionsController extends Controller
             if($users->roles == "Administrateurs"){
         
                 $validator = Validator::make($request->all(), [
-                    'fonctions' => 'required|string|unique:fonctions',
+                    'fonctions' => 'required|string|unique:fonctions|alpa',
                 ]);        
         
                 if($validator->fails()){
@@ -94,13 +94,31 @@ class FonctionsController extends Controller
         }
     }
 
+    public function search($value){
+
+        $user = auth()->user();
+
+        if($user){
+            
+            $fonctions = Fonctions::where('fonctions', 'like', "%$value%")->with('users:id,pseudo,image')->get();
+
+            return response()->json([
+                'fonctions' => $fonctions
+            ], 200);
+        }else{
+            return response()->json([
+                'message' => 'Accès interdit! Veuillez vous authentifiez!'
+        ], 403);
+        }
+    }
+
     public function update(Request $request, $fonctions_id){
         $autorisation = false;
 
         $nom_fonctions = $request->fonctions;
 
         $users = auth()->user();
-
+        
         if($users){
 
             if($users->roles == "Administrateurs"){
@@ -110,7 +128,7 @@ class FonctionsController extends Controller
                 if($fonctions_update){
     
                     $validator = Validator::make($request->all(), [
-                            'fonctions' => 'required|string',
+                            'fonctions' => 'required|string|alpha',
                         ]);        
                         
                         if($validator->fails()){
