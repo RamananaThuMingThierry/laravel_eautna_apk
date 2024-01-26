@@ -11,6 +11,7 @@ use Psy\Readline\Hoa\Console;
 
 class AuthController extends Controller
 {  
+
     public function login(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -29,7 +30,7 @@ class AuthController extends Controller
             if(!$user || !Hash::check($request->mot_de_passe, $user->mot_de_passe)){
                 return response()->json([
                     'message' => 'Informations d\'identification invalides',
-                ], 401);
+                ], 403);
 
             }else{
                 
@@ -143,7 +144,9 @@ class AuthController extends Controller
     }
 
     public function profiles(){
+        
         $user = auth()->user();
+
         if($user){
             return response()->json([
                 'user' => $user

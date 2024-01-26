@@ -15,13 +15,6 @@ use Illuminate\Support\Facades\Validator;
 
 class MembresController extends Controller
 {
-    protected $constantes;
-
-    public function __construct()
-    {
-        $this->constantes = app('constantes');
-    }
-    
     public function index(){
 
        $user = auth()->user();

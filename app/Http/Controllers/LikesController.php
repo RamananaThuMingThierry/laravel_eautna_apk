@@ -8,46 +8,46 @@ use Illuminate\Http\Request;
 
 class LikesController extends Controller
 {
-    protected $constantes;
-
-    public function __construct()
-    {
-        $this->constantes = app('constantes');
-    }
-
     public function likeOrDislike($id){
 
+        $user = auth()->user();
         $post = Post::find($id);
 
-        if($post){
+        if($user){
+            if($post){
 
-            $like = $post->likes()->where('users_id', auth()->user()->id)->first();
-
-                 // if not liked the like
-            if(!$like){
-
-                Likes::create([
-                    'post_id' => $post->id,
-                    'users_id' => auth()->user()->id
-                ]);
-
+                $like = $post->likes()->where('users_id', auth()->user()->id)->first();
+    
+                     // if not liked the like
+                if(!$like){
+    
+                    Likes::create([
+                        'post_id' => $post->id,
+                        'users_id' => auth()->user()->id
+                    ]);
+    
+                    return response()->json([
+                        'message' => $this->constantes['Like']
+                    ], 200);
+                }else{
+    
+                    // else dislike it
+                $like->delete();
+    
                 return response()->json([
-                    'message' => $this->constantes['Like']
+                    'message' => $this->constantes['DisLike']
                 ], 200);
+    
+                }
             }else{
-
-                // else dislike it
-            $like->delete();
-
-            return response()->json([
-                'message' => $this->constantes['DisLike']
-            ], 200);
-
+                return response()->json([
+                    'message' => 'Post '.$this->constantes['NExistePasDansBD']
+                ], 404);
             }
         }else{
             return response()->json([
-                'message' => 'Post '.$this->constantes['NExistePasDansBD']
-            ], 404);
+                'message' => $this->constantes['NonAuthentifier']
+            ], 401);
         }
     }
 }

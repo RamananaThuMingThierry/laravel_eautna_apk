@@ -11,13 +11,6 @@ use Illuminate\Support\Facades\Validator;
 
 class MessagesController extends Controller
 {
-    protected $constantes;
-
-    public function __construct()
-    {
-        $this->constantes = app('constantes');
-    }
-
     public function index()
     {
         $user = auth()->user();
@@ -116,7 +109,7 @@ class MessagesController extends Controller
                     ->where('users_id', $userReceivedId)
                     ->where('users_receive', auth()->user()->id);
                 })
-            ->orderBy('created_at')
+            ->orderBy('created_at', 'desc')
             ->get();
         
             return response()->json([

@@ -10,13 +10,6 @@ use Illuminate\Support\Facades\Validator;
 
 class FonctionsController extends Controller
 {
-    protected $constantes;
-
-    public function __construct()
-    {
-        $this->constantes = app('constantes');
-    }
-    
     public function index(){
 
       $user = auth()->user();
@@ -44,7 +37,7 @@ class FonctionsController extends Controller
             if($users->roles == "Administrateurs"){
         
                 $validator = Validator::make($request->all(), [
-                    'fonctions' => 'required|string|unique:fonctions|alpa',
+                    'fonctions' => 'required|string|unique:fonctions|alpha',
                 ]);        
         
                 if($validator->fails()){

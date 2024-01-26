@@ -14,7 +14,9 @@
     'Like' => "J'aime",
     'DisLike' => "Je n'aime pas",
     'Sympathisant' => 'Veuillez verifier si vous êtes sympathisant(e) ou pas!',
-    'Selection' =>  'Veuillez séléctionner'
+    'Selection' =>  'Veuillez séléctionner',
+    'SendMessageReussi' => 'Message a été envoyer',
+    'SendMessageInvalide' => 'Opération invalide! Vous ne pouvez pas envoyer un message à vous-même!'
   ];
 ?>
 

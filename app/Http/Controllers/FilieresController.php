@@ -10,12 +10,6 @@ use Illuminate\Support\Facades\Validator;
 
 class FilieresController extends Controller
 {
-    protected $constantes;
-
-    public function __construct()
-    {
-        $this->constantes = app('constantes');
-    }
 
     public function index(){
 

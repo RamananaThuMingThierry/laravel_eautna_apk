@@ -16,7 +16,7 @@ class Controller extends BaseController
 
     public function __construct()
     {
-        $this->constantes = app('constantes');
+        $this->constantes = app('constants');
     }
 
     public function saveImage($image, $path = 'public'){

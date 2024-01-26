@@ -158,7 +158,7 @@ class NiveauController extends Controller
                                 if($niveau_update->id == $get_niveau_existe->id){
                                     return response()->json([
                                         'message' =>  $this->constantes['PasDeChangement']
-                                    ], 403);
+                                    ], 304);
                                 }
             
                             }else{
