@@ -15,16 +15,30 @@ use Illuminate\Support\Facades\Validator;
 
 class MembresController extends Controller
 {
+    protected $constantes;
+
+    public function __construct()
+    {
+        $this->constantes = app('constantes');
+    }
     
     public function index(){
 
-        $membres = Membres::orderBy('numero_carte')
-        ->with('users:id,image,pseudo')
-        ->get();
+       $user = auth()->user();
 
-        return response()->json([
-            'membres' => $membres
-        ]);
+       if($user){
+            $membres = Membres::orderBy('numero_carte')
+            ->with('users:id,image,pseudo')
+            ->get();
+
+            return response()->json([
+                'membres' => $membres
+            ]);
+       }else{
+            return response()->json([
+                'message' => $this->constantes['NonAuthentifier']
+            ], 401);
+       }
     }
 
     public function store(Request $request){
@@ -123,7 +137,7 @@ class MembresController extends Controller
                     $verification_fonctions = Fonctions::where('id', $fonctions_id)->exists();
                     if($verification_fonctions == false){
                         return response()->json([
-                            'message' => 'Cet fonction n\'existe pas dans la base de données!'
+                            'message' => 'Cette fonction '.$this->constantes['NExistePasDansBD']
                         ], 404);
                     }
 
@@ -131,7 +145,7 @@ class MembresController extends Controller
                     $verification_filieres = Filieres::where('id', $filieres_id)->exists();
                     if($verification_filieres == false){
                         return response()->json([
-                            'message' => 'Cet filiere n\'existe pas dans la base de données!'
+                            'message' => 'Cette filiere '.$this->constantes['NExistePasDansBD']
                         ], 404);
                     }
 
@@ -140,7 +154,7 @@ class MembresController extends Controller
                         $verification_niveau = Level::where('id', $levels_id)->exists();
                         if($verification_niveau == false){
                             return response()->json([
-                                'message' => 'Ce niveau n\'existe pas dans la base de données!'
+                                'message' => 'Ce niveau '.$this->constantes['NExistePasDansBD']
                             ], 404);
                         }
                      }
@@ -150,7 +164,7 @@ class MembresController extends Controller
                         $verification_axes = Axes::where('id', $axes_id)->exists();
                         if($verification_axes == false){
                             return response()->json([
-                                'message' => 'Cet axes n\'existe pas dans la base de données!'
+                                'message' => 'Cet axes '.$this->constantes['NExistePasDansBD']
                             ], 404);
                         }
                      }
@@ -159,7 +173,7 @@ class MembresController extends Controller
                     if($sympathisant){
                         if($axes_id != 0){
                             return response()->json([
-                                'message' => 'Veuillez verifier si vous êtes sympathisant(e) ou pas!'
+                                'message' => $this->constantes['Sympathisant']
                             ], 403);
                         }
                     }      
@@ -170,7 +184,7 @@ class MembresController extends Controller
 
                         if($verification_filieres->nom_filieres != "Nouveau bachelier"){
                             return response()->json([
-                                'message' => 'Veuillez séléctionner votre niveau!'
+                                'message' => $this->constantes['Selection'].' votre niveau!'
                             ], 403);
                         }
                     }
@@ -198,18 +212,18 @@ class MembresController extends Controller
                     ]);
 
                     return response()->json([
-                        'message' => 'Enregistrement effectuer!'
+                        'message' => $this->constantes['Reussi']
                     ], 200);
                 }
 
             }else{
                 return response()->json([
-                    'message' => "Accès interdit! Vous n'avez pas eu le droit à effectuer cet opération!"
+                    'message' =>  $this->constantes['Permission']
                 ], 403);    
             }
         }else{
             return response()->json([
-                'message' => "Accès interdit! Veuillez vous authentifier!"
+                'message' =>  $this->constantes['NonAuthentifier']
             ], 401);
         }
 
@@ -217,18 +231,26 @@ class MembresController extends Controller
 
     public function show($membres_id){
 
-        $membres = Membres::where('id', $membres_id)->with('users:id,pseudo,image')->first();
+        $user = auth()->user();
 
-        if($membres){
+        if($user){
+            $membres = Membres::where('id', $membres_id)->with('users:id,pseudo,image')->first();
 
-            return response()->json([
-                'membres' => $membres 
-            ], 200);
-
+            if($membres){
+    
+                return response()->json([
+                    'membres' => $membres 
+                ], 200);
+    
+            }else{
+                return response()->json([
+                    'message' => 'Cette personne '.$this->constantes['NExistePasDansBD']
+                ], 404);
+            }
         }else{
             return response()->json([
-                'message' => 'Ce membre n\'existe pas dans la base de données!'
-            ], 404);
+                'message' =>  $this->constantes['NonAuthentifier']
+            ], 401);
         }
         
     }
@@ -247,7 +269,7 @@ class MembresController extends Controller
     
         }else{
             return response()->json([
-                'message' => 'Accès interdit! Veuillez vous authentifiez!'
+                'message' => $this->constantes['NonAuthentifier']
             ], 401);
         }        
     }
@@ -274,23 +296,23 @@ class MembresController extends Controller
                     $membres->delete();
 
                     return response()->json([
-                        'message' => "Suppression réussi!"
+                        'message' =>  $this->constantes['Suppression']
                     ], 200);
 
                 }else{
                     return response()->json([
-                        'message' => "Ce membre n'existe pas dans la base de données!"
+                        'message' => "Cette personne ".$this->constantes['NExistePasDansBD']
                     ], 404);
                 }
 
             }else{
                 return response()->json([
-                    'message' => "Accès interdit! Vous n'avez pas eu le droit à effectuer cet opération!"
+                    'message' => $this->constantes['Permission']
                 ], 403);    
             }
         }else{
             return response()->json([
-                'message' => "Accès interdit! Veuillez vous authentifier!"
+                'message' => $this->constantes['NonAuthentifier']
             ], 401);
         }
     }

@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Validator;
 class AxesController extends Controller
 {
     public function index(){
-
+       
        $user = auth()->user();
 
        if($user){
@@ -23,14 +23,14 @@ class AxesController extends Controller
             ], 200);
        }else{
            return Response()->json([
-            'message' => 'Accès interdit! Veuillez vous authentifiez'
+            'message' =>  $this->constantes['NonAuthentifier']
            ], 401);
        }
 
     }
 
     public function search($value){
-
+        
         $user = auth()->user();
 
         if($user){
@@ -42,13 +42,13 @@ class AxesController extends Controller
             ], 200);
         }else{
             return response()->json([
-                'message' => 'Accès interdit! Veuillez vous authentifiez!'
+                'message' => $this->constantes['NonAuthentifier']
             ], 401);
         }
     }
 
     public function store(Request $request){
-
+        
         $nom_axes = $request->nom_axes;
         $user = auth()->user();
 
@@ -74,28 +74,28 @@ class AxesController extends Controller
                     ]);
         
                     return response()->json([
-                        'message' => 'Enregistrement effectuée!'
+                        'message' => $this->constantes['Reussi']
                     ], 200);
                 
                 }
             }else{
 
                 return response()->json([
-                    'message' => "Accès interdit! Vous n'êtes pas autorisé à effectuer cet opération!"
+                    'message' => $this->constantes['Permission']
                 ], 403);
             }
 
         }else{
                 
             return response()->json([
-                'message' => 'Accès interdit! Veuillez vous authentifiez!'
+                'message' => $this->constantes['NonAuthentifier']
             ], 401);
 
         }
     }
 
     public function show($axes_id){
-
+        
         $user = auth()->user();
 
         if($user){
@@ -109,20 +109,21 @@ class AxesController extends Controller
             }else{
                 
                 return response()->json([
-                    'message' => 'Cet axes n\'existe pas dans la base de données!'
+                    'message' => 'Cet axes '.$this->constantes['NExistePasDansBD']
                 ], 404);
             }
 
         }else{
                 
             return response()->json([
-                    'message' => 'Accès interdit! Veuillez vous authentifiez!'
+                    'message' => $this->constantes['NonAuthentifier']
             ], 401);
 
         }
     }
 
     public function update(Request $request, $axes_id){
+        
         $autorisation = false;
 
         $nom_axes = $request->nom_axes;
@@ -159,7 +160,7 @@ class AxesController extends Controller
                                 
                                 if($axes->id == $get_axes_existe->id){
                                       return response()->json([
-                                        'message' => 'Aucun changement n\'a été apporté!'
+                                        'message' => $this->constantes['PasDeChangement']
                                     ], 304);
                                 }
             
@@ -175,34 +176,34 @@ class AxesController extends Controller
                                 ]);
                                 
                                 return response()->json([
-                                    'message' => 'Modification réussi!',
+                                    'message' => $this->constantes['Modification']
                                 ], 200);
 
                             }else{
                                 return response()->json([
-                                    'message' => 'Cet axes existe déjà dans la base de données!'
+                                    'message' => 'Cet axes '.$this->constantes['ExisteDansBD']
                                 ], 403);
                             }
                         }
                 }else{
                     return response()->json([
-                        'message' => 'Cet axes n\'existe pas dans la base de données!'
+                        'message' => 'Cet axes '.$this->constantes['NExistePasDansBD']
                     ], 404);
                 }
             }else{
                 return response()->json([
-                    'message' => ' Vous n\'êtes pas autorisée à effectuer cet opération!'
+                    'message' => $this->constantes['Permission']
                 ], 403);
             }
         }else{
             return response()->json([
-                    'message' => 'Accès interdit! Veuillez vous authentifiez!'
+                    'message' => $this->constantes['NonAuthentifier']
             ], 401);
         }
     }
 
     public function delete($axes_id){
-
+        
         $users = auth()->user();
 
         if($users){
@@ -216,13 +217,13 @@ class AxesController extends Controller
                     $axes->delete();
 
                     return response()->json([
-                        'message' => 'Suppression réussi!'
+                        'message' => $this->constantes['Suppression']
                     ], 200); 
 
                 }else{
                 
                     return response()->json([
-                        'message' => 'Vous n\'êtes pas autorisé à supprimer cet axes!'
+                        'message' => $this->constantes['Permission']
                     ], 403);
 
                 }
@@ -230,7 +231,7 @@ class AxesController extends Controller
             }else{
                 
                 return response()->json([
-                    'message' => 'Cet axes n\'existe pas dans la base de données!'
+                    'message' => 'Cet axes '.$this->constantes['NExistePasDansBD']
                 ], 404);
 
             }
@@ -238,7 +239,7 @@ class AxesController extends Controller
         }else{
                 
             return response()->json([
-                    'message' => 'Accès interdit! Veuillez vous authentifiez!'
+                    'message' => $this->constantes['NonAuthentifier']
             ], 401);
 
         }

@@ -12,6 +12,13 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
 
+    public $constantes;
+
+    public function __construct()
+    {
+        $this->constantes = app('constantes');
+    }
+
     public function saveImage($image, $path = 'public'){
         
         if(!$image) return null;

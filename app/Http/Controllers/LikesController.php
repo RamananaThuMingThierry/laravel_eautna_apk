@@ -8,6 +8,13 @@ use Illuminate\Http\Request;
 
 class LikesController extends Controller
 {
+    protected $constantes;
+
+    public function __construct()
+    {
+        $this->constantes = app('constantes');
+    }
+
     public function likeOrDislike($id){
 
         $post = Post::find($id);
@@ -25,7 +32,7 @@ class LikesController extends Controller
                 ]);
 
                 return response()->json([
-                    'message' => "J'aime"
+                    'message' => $this->constantes['Like']
                 ], 200);
             }else{
 
@@ -33,13 +40,13 @@ class LikesController extends Controller
             $like->delete();
 
             return response()->json([
-                'message' => "Je n'aime pas"
+                'message' => $this->constantes['DisLike']
             ], 200);
 
             }
         }else{
             return response()->json([
-                'message' => 'Post non trouvé!.'
+                'message' => 'Post '.$this->constantes['NExistePasDansBD']
             ], 404);
         }
     }

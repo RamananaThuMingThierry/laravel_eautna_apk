@@ -15,17 +15,25 @@ class PostController extends Controller
 
     public function index(){
 
-        $posts = Post::orderBy('created_at', 'desc')->with('users:id,pseudo,image')
-        ->withCount('commentaires', 'likes')
-        ->with('likes', function($like){
-            return $like->where('users_id', auth()->user()->id)
-            ->select('id','users_id','post_id')->get(); 
-        })
-        ->get();
-        
-        return response()->json([
-            'posts' => $posts 
-        ], 200);
+        $user = auth()->user();
+
+        if($user){
+            $posts = Post::orderBy('created_at', 'desc')->with('users:id,pseudo,image')
+            ->withCount('commentaires', 'likes')
+            ->with('likes', function($like){
+                return $like->where('users_id', auth()->user()->id)
+                ->select('id','users_id','post_id')->get(); 
+            })
+            ->get();
+            
+            return response()->json([
+                'posts' => $posts 
+            ], 200);
+        }else{
+            return response()->json([
+                'message' =>  $this->constantes['NonAuthentifier']
+            ], 401);
+        }
     }
 
     // Afficher un post
@@ -45,14 +53,14 @@ class PostController extends Controller
     
             }else{
                 return response()->json([
-                    'message' => 'Post non trouvé!'
-                ], 403);
+                    'message' => 'Post '. $this->constantes['NExistePasDansBD']
+                ], 404);
             }
 
         }else{
             return response()->json([
-                'message' => 'Veuillez vous authentifier!'
-            ], 403);
+                'message' =>  $this->constantes['NonAuthentifier']
+            ], 401);
         }
     }
 
@@ -89,7 +97,7 @@ class PostController extends Controller
                     ]);
     
                     return response()->json([
-                        'message' => 'Créer du post réussi',
+                        'message' => 'Post '. $this->constantes['Creation'],
                         'post' => $post
                     ], 200);
                 }
@@ -97,7 +105,7 @@ class PostController extends Controller
             }else{
 
                 return response()->json([
-                    'message' => "Accès Interdit! Vous n'êtes pas membre d'AEUTNA!"
+                    'message' =>  $this->constantes['Permission']
                 ], 403);
 
             }
@@ -105,8 +113,8 @@ class PostController extends Controller
         }else{
             
             return response()->json([
-                'message' => 'Veuillez vous authentifier!'
-            ], 403);
+                'message' =>  $this->constantes['NonAuthentifier']
+            ], 401);
 
         }
     }
@@ -154,25 +162,25 @@ class PostController extends Controller
 
                         // for now skip for post image
                         return response()->json([
-                            'message' => 'Modification réussi!',
+                            'message' =>  $this->constantes['Modification'],
                             'post' => $post
                         ], 200);
 
                     }    
                 }else{
                     return response()->json([
-                        'message' => 'Accès interdit!'
+                        'message' =>  $this->constantes['Permission']
                     ], 403);
                 }
             }else{
                 return response()->json([
-                    'message' => 'Post non trouvé!.'
-                ], 403);
+                    'message' => 'Post '. $this->constantes['NExistePasDansBD']
+                ], 404);
             }
         }else{
             return response()->json([
-                'message' => 'Accès interdit! Veuillez vous authentifier!'
-            ], 403);
+                'message' =>  $this->constantes['NonAuthentifier']
+            ], 401);
         }
     }
 
@@ -201,23 +209,23 @@ class PostController extends Controller
                     $post->delete();
                     
                     return response()->json([
-                        'message' => 'Suppression réussi!.'
+                        'message' =>  $this->constantes['Suppression']
                     ], 200);
                 }else{
                     return response()->json([
-                        'message' => 'Accès interdit.'
+                        'message' =>  $this->constantes['Permission']
                     ], 403);
                 }
             }else{
                 return response()->json([
-                    'message' => 'Post non trouve!.'
-                ], 403);
+                    'message' => 'Post '. $this->constantes['NExistePasDansBD']
+                ], 404);
             }
 
         }else{
             return response()->json([
-                'message' => 'Accès interdit! Veuillez vous authentifier!'
-            ], 403);
+                'message' =>  $this->constantes['NonAuthentifier']
+            ], 401);
         }
     }
 }

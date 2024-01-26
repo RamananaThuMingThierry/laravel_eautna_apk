@@ -10,10 +10,14 @@ use Illuminate\Support\Facades\Validator;
 
 class FilieresController extends Controller
 {
+    protected $constantes;
+
+    public function __construct()
+    {
+        $this->constantes = app('constantes');
+    }
 
     public function index(){
-
-       $constantes = app('constants');
 
        $user = auth()->user();
 
@@ -25,14 +29,13 @@ class FilieresController extends Controller
             ], 200);
        }else{
             return response()->json([
-                'message' => $constantes['NonAuthentifier']
+                'message' => $this->constantes['NonAuthentifier']
             ], 401);
        }
     }
 
     public function store(Request $request){
-
-        $constantes = app('constants');
+       
         $nom_filieres = $request->nom_filieres;
         $users = auth()->user();
 
@@ -58,14 +61,14 @@ class FilieresController extends Controller
                     ]);
         
                     return response()->json([
-                        'message' => $constantes['Reussi']
+                        'message' => $this->constantes['Reussi']
                     ], 200);
                 
                 }
             }else{
 
                 return response()->json([
-                    'message' => ' Vous \'êtes pas autorisé à effectuer cet opération!'
+                    'message' => $this->constantes['Permission']
                 ], 403);
                 
             }
@@ -73,7 +76,7 @@ class FilieresController extends Controller
         }else{
                 
             return response()->json([
-                'message' => 'Accès interdit! Veuillez vous authentifiez!'
+                'message' => $this->constantes['NonAuthentifier']
             ], 401);
 
         }
@@ -94,13 +97,13 @@ class FilieresController extends Controller
             }else{
                 
                 return response()->json([
-                    'message' => 'Ce filiere n\'existe pas dans la base de données!'
+                    'message' => 'Cette filière '.$this->constantes['NExistePasDansBD']
                 ], 404);
             }
         }else{
                 
             return response()->json([
-                    'message' => 'Accès interdit! Veuillez vous authentifiez!'
+                    'message' => $this->constantes['NonAuthentifier']
             ], 401);
 
         }
@@ -119,7 +122,7 @@ class FilieresController extends Controller
             ], 200);
         }else{
             return response()->json([
-                'message' => 'Accès interdit! Veuillez vous authentifiez!'
+                'message' => $this->constantes['NonAuthentifier']
         ], 401);
         }
     }
@@ -160,9 +163,9 @@ class FilieresController extends Controller
                                 $get_filieres_existe = Filieres::where('nom_filieres', $nom_filieres)->first();
                                 
                                 if($filieres->id == $get_filieres_existe->id){
-                                    return response()->json(
-                                        ['message' => 'Aucun changement n\'a été apporté!'], 304
-                                    );
+                                    return response()->json([
+                                        'message' => $this->constantes['PasDeChangement'] 
+                                    ], 304);
                                 }
             
                             }else{
@@ -177,34 +180,33 @@ class FilieresController extends Controller
                                 ]);
                                 
                                 return response()->json([
-                                    'message' => 'Modification réussi!',
+                                    'message' => $this->constantes['Modification'] 
                                 ], 200);
 
                             }else{
                                 return response()->json([
-                                    'message' => 'Ce filière existe déjà dans la base de données!'
+                                    'message' => 'Cette filière '.$this->constantes['ExisteDansBD'] 
                                 ], 403);
                             }
                         }
                 }else{
                     return response()->json([
-                        'message' => "Ce filière n'existe pas dans la base de données!"
+                        'message' =>'Cette filière '.$this->constantes['NExistePasDansBD'] 
                     ], 404);
                 }
             }else{
                 return response()->json([
-                    'message' => ' Vous n\'êtes pas autorisée à effectuer cet opération!'
+                    'message' => $this->constantes['Permission'] 
                 ], 403);
             }
         }else{
             return response()->json([
-                    'message' => 'Accès interdit! Veuillez vous authentifiez!'
+                    'message' =>  $this->constantes['NonAuthentifier'] 
             ], 401);
         }
     }
 
     public function delete($filieres_id){
-
         $users = auth()->user();
 
         if($users){
@@ -218,13 +220,13 @@ class FilieresController extends Controller
                     $filieres->delete();
 
                     return response()->json([
-                        'message' => 'Suppression réussi!'
+                        'message' => $this->constantes['Suppression'] 
                     ], 200); 
 
                 }else{
                 
                     return response()->json([
-                        'message' => 'Vous n\'êtes pas autorisé à supprimer cet filieres!'
+                        'message' =>  $this->constantes['Permission'] 
                     ], 403);
 
                 }
@@ -232,7 +234,7 @@ class FilieresController extends Controller
             }else{
                 
                 return response()->json([
-                    'message' => 'Cet filieres n\'existe pas dans la base de données!'
+                    'message' => 'Cette filière '. $this->constantes['NExistePasDansBD'] 
                 ], 404);
 
             }
@@ -240,7 +242,7 @@ class FilieresController extends Controller
         }else{
                 
             return response()->json([
-                    'message' => 'Accès interdit! Veuillez vous authentifiez!'
+                    'message' =>  $this->constantes['NonAuthentifier'] 
             ], 401);
 
         }

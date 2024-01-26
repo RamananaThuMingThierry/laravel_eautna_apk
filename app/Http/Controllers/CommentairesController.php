@@ -12,7 +12,6 @@ class CommentairesController extends Controller
 {
      // get all commentaires of a post
      public function index($id){
-
         $user = auth()->user();
 
         if($user){
@@ -25,13 +24,13 @@ class CommentairesController extends Controller
                 ], 200);
             }else{
                 return response()->json([
-                    'message' => 'Post non trouvé!'
+                    'message' => 'Post '.$this->constantes['NExistePasDansBD']
                 ], 404);
             }
 
         }else{
             return response()->json([
-                'message' => 'Accès Interdit! Veuillez vous authentifier.'
+                'message' => $this->constantes['NonAuthentifier']
             ], 401);
         }
     }
@@ -39,7 +38,6 @@ class CommentairesController extends Controller
 
     // Create comment
     public function store(Request $request, $id){
-
         $post = Post::find($id);
 
         $user = auth()->user();
@@ -71,33 +69,32 @@ class CommentairesController extends Controller
                         ]);
                             
                         return response()->json([
-                            'message' => 'Commentaires a été bien créer.'
+                            'message' => 'Le commentaire '.$this->constantes['Creation']
                         ], 200);
 
                     }
         
                 }else{
                     return response()->json([
-                        'message' => 'Post non trouvé!'
+                        'message' => 'Post '.$this->constantes['NExistePasDansBD']
                     ], 404);
                 }
 
             }else{
                 return response()->json([
-                    'message' => 'Accès Interdit! Vous n\'êtes pas un membre AEUTNA.'
+                    'message' => $this->constantes['Permission']
                 ], 403);    
             }
 
         }else{
             return response()->json([
-                'message' => 'Accès Interdit! Veuillez vous authentifier.'
+                'message' => $this->constantes['NonAuthentifier']
             ], 401);
         }
     }
 
     // Modifier un commentaire
     public function update(Request $request, $id){
-
         $autorisation = false;
         $commentaires = $request->commentaires;
         $commentaires_update = Commentaires::find($id);
@@ -133,26 +130,26 @@ class CommentairesController extends Controller
     
                         return response()->json([
                             'commentaires' => $commentaires_update,
-                            'message' => "Modification réussi!"
+                            'message' => $this->constantes['Reussi']
                         ], 200);    
                     }
                     
                 }else{
                     return response()->json([
-                        'message' => "Ce commentaires n'existe pas dans la base de données!"
+                        'message' => 'Cet commentaire '.$this->constantes['NExistePasDansBD']
                     ], 404);
                 }
 
             }else{
 
                 return response()->json([
-                    'message' => 'Accès Interdit! Vous n\'êtes pas autoriser a effectuer cet opération.'
+                    'message' => $this->constantes['Permission']
                 ], 403);
 
             }
         }else{
             return response()->json([
-                'message' => 'Accès Interdit! Veuillez vous authentifier.'
+                'message' => $this->constantes['NonAuthentifier']
             ], 401);
         }
     }
@@ -178,25 +175,25 @@ class CommentairesController extends Controller
                     $commentaires->delete();
 
                     return response()->json([
-                        'message' => 'Commentaire a été supprimer!.'
+                        'message' =>$this->constantes['Suppression']
                     ], 200);
                 
                 }else{
                 
                     return response()->json([
-                        'message' => "Ce commentaires n'existe pas dans la base de données!"
+                        'message' => 'Cet commentaire '.$this->constantes['NExistePasDansBD']
                     ], 404);
 
                 }
 
             }else{
                 return response()->json([
-                    'message' => 'Accès Interdit! Vous n\'êtes pas autoriser a effectuer cet opération.'
+                    'message' => $this->constantes['Permission']
                 ], 403);
             }
         }else{
             return response()->json([
-                'message' => 'Accès Interdit! Veuillez vous authentifier.'
+                'message' => $this->constantes['NonAuthentifier']
             ], 401);            
         }
     }

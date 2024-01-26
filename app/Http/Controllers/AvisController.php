@@ -10,7 +10,8 @@ use Illuminate\Support\Facades\Validator;
 class AvisController extends Controller
 {
     public function index(){
-
+        
+     
        $user = auth()->user();
        
        if($user){
@@ -21,13 +22,13 @@ class AvisController extends Controller
             ], 200);
        }else{
            return response()->json([
-            'message' => 'Accès interdit! Veuillez vous authentifier!'
+            'message' =>  $this->constantes['NonAuthentifier']
            ], 401);
        }
     }
 
     public function store(Request $request){
-
+      
         $message = $request->message;
         $user = auth()->user();
 
@@ -53,14 +54,14 @@ class AvisController extends Controller
                     ]);
         
                     return response()->json([
-                        'message' => 'Enregistrement effectuée!'
+                        'message' =>  $this->constantes['Reussi']
                     ], 200);
                 
                 }
             }else{
 
                 return response()->json([
-                    'message' => ' Vous \'êtes pas autorisé à effectuer cet opération!'
+                    'message' =>  $this->constantes['Permission']
                 ], 403);
                 
             }
@@ -68,14 +69,14 @@ class AvisController extends Controller
         }else{
                 
             return response()->json([
-                'message' => 'Accès Interdit! Veuillez vous authentifiez!'
+                'message' => $this->constantes['NonAuthentifier']
             ], 401);
 
         }
     }
 
     public function show($avis_id){
-
+      
         $user = auth()->user();
 
         if($user){
@@ -90,19 +91,19 @@ class AvisController extends Controller
                     ], 200);
                 }else{
                     return response()->json([
-                        'message' => 'Cet avis n\'existe pas dans la base de données!'
+                        'message' => 'Cet avis '. $this->constantes['NExistePasDansBD']
                     ], 404);
                 }
             }else{
 
                 return response()->json([
-                    'message' => 'Accès interdit! Vous n\'est pas autorisé à effectuer cet opération!'
+                    'message' =>  $this->constantes['Permission']
                 ], 403);
             }
         }else{
                 
             return response()->json([
-                    'message' => 'Accès interdit! Veuillez vous authentifiez!'
+                    'message' => $this->constantes['NonAuthentifier']
             ], 401);
 
         }
@@ -111,7 +112,7 @@ class AvisController extends Controller
 
 
     public function delete($avis_id){
-
+      
         $user = auth()->user();
 
         if($user){
@@ -125,13 +126,13 @@ class AvisController extends Controller
                     $avis->delete();
 
                     return response()->json([
-                        'message' => 'Suppression réussi!'
+                        'message' =>  $this->constantes['Suppression']
                     ], 200); 
 
                 }else{
                 
                     return response()->json([
-                        'message' => 'Vous n\'êtes pas autorisé à supprimer cet avis!'
+                        'message' =>  $this->constantes['Permission']
                     ], 403);
 
                 }
@@ -139,7 +140,7 @@ class AvisController extends Controller
             }else{
                 
                 return response()->json([
-                    'message' => 'Cet avis n\'existe pas dans la base de données!'
+                    'message' => 'Cet avis '.$this->constantes['NExistePasDansBD']
                 ], 404);
 
             }
@@ -147,7 +148,7 @@ class AvisController extends Controller
         }else{
                 
             return response()->json([
-                    'message' => 'Accès Interdit! Veuillez vous authentifiez!'
+                    'message' => $this->constantes['NonAuthentifier']
             ], 401);
 
         }

@@ -10,11 +10,9 @@ use Illuminate\Support\Facades\Validator;
 use Psy\Readline\Hoa\Console;
 
 class AuthController extends Controller
-{
-    
+{  
     public function login(Request $request)
     {
-        
         $validator = Validator::make($request->all(), [
             'email' => 'required|email|regex:/^[a-zA-Z0-9\.\-\_]+@[a-zA-Z0-9\.\-\_]+\.[a-zA-Z]+$/',
             'mot_de_passe' => 'required|min:6',
@@ -22,8 +20,8 @@ class AuthController extends Controller
 
         if($validator->fails()){
             return response()->json([
-                'Validation_errors' => $validator->messages(),
-            ]);
+                'errors' => $validator->messages(),
+            ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
         }else{
        
             $user = User::where('email', $request->email)->first();
@@ -119,18 +117,17 @@ class AuthController extends Controller
                 ]);
                
                 return response()->json([
-                    'message' => 'Modification avec succès !',
+                    'message' => $this->constantes['Modification']
                 ], 200);
             }
         }else{
             return response()->json([
-                'message' => 'Accès interdit! veuillez vous authentifiez!'
+                'message' => $this->constantes['NonAuthentifier']
             ], 401);
         }
     }
 
     public function index(){
-
         $user = auth()->user();
         
         if($user){
@@ -140,7 +137,7 @@ class AuthController extends Controller
             ], 200);
         }else{
             return response()->json([
-                'user' => 'Accès interdit! Veuillez vous pas authentifier!'
+                'message' => $this->constantes['NonAuthentifier']
             ], 401);
         }
     }
@@ -153,13 +150,12 @@ class AuthController extends Controller
             ], 200);
         }else{
             return response()->json([
-                'message' => 'Accès interdit! Veuillez vous authentifier'
+                'message' => $this->constantes['NonAuthentifier']
             ], 401);
         }
     }
 
     public function show($users_id){
-        
         $verifier_auth = auth()->user();
         if($verifier_auth){
         
@@ -174,13 +170,13 @@ class AuthController extends Controller
             }else{
             
                 return response()->json([
-                    'message' => 'Cet utilisateur n\'existe pas dans la base de données!'
+                    'message' => 'Cet utilisateur '.$this->constantes['NExistePasDansBD']
                 ], 404);
             }
             
         }else{
             return response()->json([
-                'message' => 'Accès interdit! Veuillz vous authentifier'
+                'message' => $this->constantes['NonAuthentifier']
             ], 401);
         }
     }
@@ -190,11 +186,11 @@ class AuthController extends Controller
         if($user){
             $user->tokens()->delete();
             return response()->json([
-                'message' => "Déconnexion effectuée",
+                'message' =>  $this->constantes['Deconnection']
             ], 200);
         }else{
             return response()->json([
-                'message' => 'Accès interdit! Veuillz vous authentifier'
+                'message' => $this->constantes['NonAuthentifier']
             ], 401);
         }
     }

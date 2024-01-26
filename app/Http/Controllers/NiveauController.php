@@ -22,7 +22,7 @@ class NiveauController extends Controller
             ], 200);
        }else{
             return response()->json([
-                'message' => 'Accès interdit! Veuillez vous authentifiez!'
+                'message' =>  $this->constantes['NonAuthentifier']
             ], 401);
        }
     }
@@ -40,8 +40,8 @@ class NiveauController extends Controller
             ], 200);
         }else{
             return response()->json([
-                'message' => 'Accès interdit! Veuillez vous authentifiez!'
-        ], 403);
+                'message' =>  $this->constantes['NonAuthentifier']
+        ], 401);
         }
     }
 
@@ -72,14 +72,14 @@ class NiveauController extends Controller
                     ]);
         
                     return response()->json([
-                        'message' => 'Enregistrement effectuée!'
+                        'message' => $this->constantes['Reussi']
                     ], 200);
                 
                 }
             }else{
 
                 return response()->json([
-                    'message' => ' Vous \'êtes pas autorisé à effectuer cet opération!'
+                    'message' =>  $this->constantes['Permission']
                 ], 403);
                 
             }
@@ -87,8 +87,8 @@ class NiveauController extends Controller
         }else{
                 
             return response()->json([
-                'message' => ' Veuillez vous authentifiez!'
-            ], 403);
+                'message' =>  $this->constantes['NonAuthentifier']
+            ], 401);
 
         }
     }
@@ -108,17 +108,14 @@ class NiveauController extends Controller
             }else{
                 
                 return response()->json([
-                    'message' => 'Cet niveau n\'existe pas dans la base de données!'
-                ], 403);
-
+                    'message' => 'Ce niveau '. $this->constantes['NExistePasDansBD']
+                ], 404);
             }
 
         }else{
-                
             return response()->json([
-                    'message' => ' Veuillez vous authentifiez!'
-            ], 403);
-
+                    'message' =>  $this->constantes['NonAuthentifier']
+            ], 401);
         }
     }
 
@@ -159,9 +156,9 @@ class NiveauController extends Controller
                                 $get_niveau_existe = Level::where('niveau', $niveau)->first();
                                 
                                 if($niveau_update->id == $get_niveau_existe->id){
-                                    return response()->json(
-                                        ['message' => 'Aucun changement n\'a été apporté!'], 403
-                                    );
+                                    return response()->json([
+                                        'message' =>  $this->constantes['PasDeChangement']
+                                    ], 403);
                                 }
             
                             }else{
@@ -176,29 +173,29 @@ class NiveauController extends Controller
                                 ]);
                                 
                                 return response()->json([
-                                    'message' => 'Modification réussi!',
+                                    'message' =>  $this->constantes['Modification']
                                 ], 200);
 
                             }else{
                                 return response()->json([
-                                    'message' => 'Ce niveau existe déjà dans la base de données!'
+                                    'message' => 'Ce niveau '.$this->constantes['ExisteDansBD']
                                 ], 403);
                             }
                         }
                 }else{
                     return response()->json([
-                        'message' => 'Ce niveau n\'existe pas dans la base de données!'
-                    ], 403);
+                        'message' => 'Ce niveau '. $this->constantes['NExistePasDansBD']
+                    ], 404);
                 }
             }else{
                 return response()->json([
-                    'message' => ' Vous n\'êtes pas autorisée à effectuer cet opération!'
+                    'message' =>  $this->constantes['Permission']
                 ], 403);
             }
         }else{
             return response()->json([
-                    'message' => ' Veuillez vous authentifiez!'
-            ], 403);
+                    'message' =>  $this->constantes['NonAuthentifier']
+            ], 401);
         }
     }
 
@@ -209,39 +206,31 @@ class NiveauController extends Controller
         if($users){
             
             $niveau = Level::where('id',$niveau_id)->with('users:id,pseudo,contact,adresse,image')->first();
-
-            if($niveau){
-
-                if($users->roles == "Administrateurs"){
+            
+            if($users->roles == "Administrateurs"){
+                
+                if($niveau){
 
                     $niveau->delete();
 
                     return response()->json([
-                        'message' => 'Suppression réussi!'
+                        'message' =>  $this->constantes['Suppression']
                     ], 200); 
 
                 }else{
-                
                     return response()->json([
-                        'message' => 'Vous n\'êtes pas autorisé à supprimer ce niveau!'
-                    ], 403);
-
+                        'message' => 'Ce niveau '. $this->constantes['NExistePasDansBD']
+                    ], 404);
                 }
-                
             }else{
-                
                 return response()->json([
-                    'message' => 'Ce niveau n\'existe pas dans la base de données!'
+                    'message' => $this->constantes['Permission']
                 ], 403);
-
             }
-
-        }else{
-                
+        }else{         
             return response()->json([
-                    'message' => 'Accès interdit! Veuillez vous authentifiez!'
-            ], 403);
-
+                    'message' =>  $this->constantes['NonAuthentifier']
+            ], 401);
         }
     }
 }

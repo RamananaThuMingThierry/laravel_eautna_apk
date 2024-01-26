@@ -10,6 +10,13 @@ use Illuminate\Support\Facades\Validator;
 
 class FonctionsController extends Controller
 {
+    protected $constantes;
+
+    public function __construct()
+    {
+        $this->constantes = app('constantes');
+    }
+    
     public function index(){
 
       $user = auth()->user();
@@ -22,7 +29,7 @@ class FonctionsController extends Controller
         ], 200);
       }else{
         return response()->json([
-            'message' => 'Accès interdit! Veuillez vous authentifiez!'
+            'message' => $this->constantes['NonAuthentifier']
         ], 401);
       }
     }
@@ -54,14 +61,14 @@ class FonctionsController extends Controller
                     ]);
         
                     return response()->json([
-                        'message' => 'Enregistrement effectuée!'
+                        'message' => $this->constantes['Reussi']
                     ], 200);
                 
                 }
             }else{
 
                 return response()->json([
-                    'message' => ' Vous \'êtes pas autorisé à effectuer cet opération!'
+                    'message' => $this->constantes['Permission']
                 ], 403);
                 
             }
@@ -69,7 +76,7 @@ class FonctionsController extends Controller
         }else{
                 
             return response()->json([
-                'message' => 'Accès interdit! Veuillez vous authentifiez!'
+                'message' => $this->constantes['NonAuthentifier']
             ], 401);
 
         }
@@ -90,13 +97,13 @@ class FonctionsController extends Controller
             }else{
                 
                 return response()->json([
-                    'message' => 'Ce filiere n\'existe pas dans la base de données!'
+                    'message' => 'Cette fonction '.$this->constantes['NExistePasDansBD']
                 ], 404);
             }
         }else{
                 
             return response()->json([
-                    'message' => 'Accès interdit! Veuillez vous authentifiez!'
+                    'message' => $this->constantes['NonAuthentifier']
             ], 401);
 
         }
@@ -115,7 +122,7 @@ class FonctionsController extends Controller
             ], 200);
         }else{
             return response()->json([
-                'message' => 'Accès interdit! Veuillez vous authentifiez!'
+                'message' => $this->constantes['NonAuthentifier']
         ], 401);
         }
     }
@@ -156,9 +163,9 @@ class FonctionsController extends Controller
                                 $get_fonctions_existe = Fonctions::where('fonctions', $nom_fonctions)->first();
                                 
                                 if($fonctions_update->id == $get_fonctions_existe->id){
-                                    return response()->json(
-                                        ['message' => 'Aucun changement n\'a été apporté!'], 304
-                                    );
+                                    return response()->json([
+                                        'message' => $this->constantes['PasDeChangement']
+                                    ], 304);
                                 }
             
                             }else{
@@ -173,28 +180,28 @@ class FonctionsController extends Controller
                                 ]);
                                 
                                 return response()->json([
-                                    'message' => 'Modification réussi!',
+                                    'message' => $this->constantes['Modification']
                                 ], 200);
 
                             }else{
                                 return response()->json([
-                                    'message' => 'Cet fonction existe déjà dans la base de données!'
+                                    'message' => 'Cette fonction '.$this->constantes['ExisteDansBD']
                                 ], 403);
                             }
                         }
                 }else{
                     return response()->json([
-                        'message' => 'Cet fonction n\'existe pas dans la base de données!'
+                        'message' => 'Cette fonction '.$this->constantes['NExistePasDansBD']
                     ], 404);
                 }
             }else{
                 return response()->json([
-                    'message' => ' Vous n\'êtes pas autorisée à effectuer cet opération!'
+                    'message' => $this->constantes['Permission']
                 ], 403);
             }
         }else{
             return response()->json([
-                    'message' => ' Veuillez vous authentifiez!'
+                    'message' => $this->constantes['NonAuthentifier']
             ], 401);
         }
     }
@@ -214,13 +221,13 @@ class FonctionsController extends Controller
                     $fonctions->delete();
 
                     return response()->json([
-                        'message' => 'Suppression réussi!'
+                        'message' => $this->constantes['Suppression']
                     ], 200); 
 
                 }else{
                 
                     return response()->json([
-                        'message' => 'Vous n\'êtes pas autorisé à supprimer cet fonction!'
+                        'message' => $this->constantes['Permission']
                     ], 403);
 
                 }
@@ -228,7 +235,7 @@ class FonctionsController extends Controller
             }else{
                 
                 return response()->json([
-                    'message' => 'Cet fonction n\'existe pas dans la base de données!'
+                    'message' => 'Cette fonction '.$this->constantes['NExistePasDansBD']
                 ], 404);
 
             }
@@ -236,7 +243,7 @@ class FonctionsController extends Controller
         }else{
                 
             return response()->json([
-                    'message' => ' Veuillez vous authentifiez!'
+                    'message' => $this->constantes['NonAuthentifier']
             ], 401);
 
         }

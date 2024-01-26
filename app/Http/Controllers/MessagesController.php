@@ -11,6 +11,13 @@ use Illuminate\Support\Facades\Validator;
 
 class MessagesController extends Controller
 {
+    protected $constantes;
+
+    public function __construct()
+    {
+        $this->constantes = app('constantes');
+    }
+
     public function index()
     {
         $user = auth()->user();
@@ -26,7 +33,7 @@ class MessagesController extends Controller
         else
         {
             return response()->json([
-                'message' => 'Accès interdit! veuillez vous authentifier!'
+                'message' => $this->constantes['NonAuthentifier']
             ], 401);
         }
     }
@@ -45,13 +52,13 @@ class MessagesController extends Controller
 
                 if($user_received->id == $user->id){
                     return response()->json([
-                        'message' => 'Opération invalide! Vous ne pouvez pas envoyer un message à vous-même!'
+                        'message' => $this->constantes['SendMessageInvalide']
                     ], 304);
                 }else{
 
                     if($user_received->status == false){
                         return response()->json([
-                            'message' => 'Opération invalide! Vous n\'êtes pas un membre AEUTNA!'
+                            'message' => $this->constantes['Permission']
                         ], 403);
                     }
 
@@ -76,21 +83,21 @@ class MessagesController extends Controller
                         ]);
 
                         return response()->json([
-                            'message' => 'Message envoyer'
+                            'message' => $this->constantes['SendMessageReussi']
                         ], 200);
 
                     }
                 }
             }else{
                 return response()->json([
-                    'message' => 'Ce membre n\'existe pas dans la base de données!'
+                    'message' => 'Cette personne '.$this->constantes['NExistePasDansBD']
                 ], 404);
             }
         }
         else
         {
             return response()->json([
-                'message' => 'Accès interdit! veuillez vous authentifier!'
+                'message' => $this->constantes['NonAuthentifier']
             ], 401);
         }
     }
@@ -119,7 +126,7 @@ class MessagesController extends Controller
         else
         {
             return response()->json([
-                'message' => 'Accès interdit! veuillez vous authentifier!'
+                'message' =>  $this->constantes['NonAuthentifier']
             ], 401);
         }
     }
@@ -157,7 +164,7 @@ class MessagesController extends Controller
         else
         {
             return response()->json([
-                'message' => 'Accès interdit! veuillez vous authentifier!'
+                'message' =>  $this->constantes['NonAuthentifier']
             ], 401);
         }
     }
