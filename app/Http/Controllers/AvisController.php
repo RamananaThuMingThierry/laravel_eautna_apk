@@ -54,7 +54,7 @@ class AvisController extends Controller
                     ]);
         
                     return response()->json([
-                        'message' =>  $this->constantes['Reussi']
+                        'message' =>  $this->constantes['Envoyer']
                     ], 200);
                 
                 }

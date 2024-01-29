@@ -1,6 +1,7 @@
 <?php
   
   return [
+    'Envoyer' => 'Message a été bien envoyer',
     'Creation' =>'a été bien créer!',
     'Reussi' => 'Enregistrement réussi!',
     'Modification' => 'Modification réussie!',
