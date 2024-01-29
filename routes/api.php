@@ -100,6 +100,7 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::post('/membres', [MembresController::class, "store"]);
     Route::get('/membres/{id}', [MembresController::class, "show"]);
     Route::get('/getmembres/{id}', [MembresController::class, "getMembre"]);
+    Route::get('/membres_numero/{debutNumero}', [MembresController::class, "ListeDesNumero"]);
     Route::put('/membres/{id}', [MembresController::class, "update"]);
     Route::delete('/membres/{id}', [MembresController::class, "delete"]);
 });

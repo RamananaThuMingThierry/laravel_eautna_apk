@@ -13,6 +13,7 @@
     'Permission' => "Vous n'êtes pas autorisé à effectuer cette opération!",
     'Deconnection' => 'Déconnection effectuée!',
     'Like' => "J'aime",
+    'Numero' => "n'est pas valide!",
     'DisLike' => "Je n'aime pas",
     'Sympathisant' => 'Veuillez verifier si vous êtes sympathisant(e) ou pas!',
     'Selection' =>  'Veuillez séléctionner',

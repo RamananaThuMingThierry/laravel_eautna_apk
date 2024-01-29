@@ -34,6 +34,31 @@ class MembresController extends Controller
        }
     }
 
+    public function ListeDesNumero($debutNumero){
+        $user = auth()->user();
+        
+        if($user){
+            if($debutNumero == "034" || $debutNumero == "038"){
+                $membre = Membres::select('contact_personnel')
+                ->where('contact_personnel', 'like', '038%')
+                ->orWhere('contact_personnel', 'like', '034%')
+                ->get();
+                return response()->json([
+                    'numero' => $membre
+                ]);
+            }else{
+                $membre = Membres::select('contact_personnel')->where('contact_personnel', 'like', $debutNumero."%")->get();
+                return response()->json([
+                    'numero' => $membre
+                ]);
+            }
+        }else{
+            return response()->json([
+                'message' => $this->constantes['NonAuthentifier']
+            ], 401);
+        }
+    }
+
     public function store(Request $request){
 
         $autorisation = false;
@@ -126,6 +151,21 @@ class MembresController extends Controller
                 }
                 else
                 {   
+                    
+                    // Verifier s'il le numéro est valide ou pas
+                    if($this->verifierNumeroTelephone($contact_personnel) == false){
+                        return response()->json([
+                            'message' => 'Votre contact personnel '.$this->constantes['Numero']
+                        ], 304);
+                    }
+
+                    // Verifier s'il le numéro est valide ou pas
+                    if($this->verifierNumeroTelephone($contact_personnel) == false){
+                        return response()->json([
+                            'message' => 'Le contact du votre tuteur '.$this->constantes['Numero']
+                        ], 304);
+                    }
+
                     // Verification fonctions_id
                     $verification_fonctions = Fonctions::where('id', $fonctions_id)->exists();
                     if($verification_fonctions == false){

@@ -65,6 +65,12 @@ class AuthController extends Controller
             ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
         }else{
 
+            if($this->verifierNumeroTelephone($contact) == false){
+                return response()->json([
+                    'messge' => "Votre contact ". $this->constantes['Numero']
+                ], 304);
+            }
+
             $user = User::create([
                 'pseudo' => $pseudo,
                 'email' => $email,

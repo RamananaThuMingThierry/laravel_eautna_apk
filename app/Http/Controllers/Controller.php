@@ -19,6 +19,10 @@ class Controller extends BaseController
         $this->constantes = app('constants');
     }
 
+    public function verifierNumeroTelephone($numero){
+        return (bool) preg_match('/^(032|033|034|038)/', $numero);
+    }
+
     public function saveImage($image, $path = 'public'){
         
         if(!$image) return null;
