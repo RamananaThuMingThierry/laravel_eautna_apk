@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Validator;
 
 class MembresController extends Controller
 {
+    
     public function index(){
 
        $user = auth()->user();
