@@ -26,6 +26,8 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
 
     /** ---------- Users ---------- */
     Route::get('/users_all', [AuthController::class, "index"]);
+    Route::get('/users_en_attente', [AuthController::class, "utilisateurs_en_attente"]);
+    Route::get('/users_valide', [AuthController::class, "utilisateurs"]);
     Route::put('/users', [AuthController::class, "update"]);
     Route::get('/users', [AuthController::class, "profiles"]);
     Route::get('/users/{id}', [AuthController::class, "show"]);

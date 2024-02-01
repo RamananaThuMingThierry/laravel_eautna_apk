@@ -149,6 +149,36 @@ class AuthController extends Controller
         }
     }
 
+    public function utilisateurs(){
+        $user = auth()->user();
+        
+        if($user){
+            $users = User::where('status', 1)->get();
+            return response()->json([
+                'user' => $users
+            ], 200);
+        }else{
+            return response()->json([
+                'message' => $this->constantes['NonAuthentifier']
+            ], 401);
+        }
+    }
+
+    public function utilisateurs_en_attente(){
+        $user = auth()->user();
+        
+        if($user){
+            $users = User::where('status', 0)->get();
+            return response()->json([
+                'user' => $users
+            ], 200);
+        }else{
+            return response()->json([
+                'message' => $this->constantes['NonAuthentifier']
+            ], 401);
+        }
+    }
+
     public function profiles(){
         
         $user = auth()->user();

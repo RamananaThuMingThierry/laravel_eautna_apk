@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Validator;
 
 class MembresController extends Controller
 {
-    
+
     public function index(){
 
        $user = auth()->user();
@@ -45,13 +45,14 @@ class MembresController extends Controller
                 ->orWhere('contact_personnel', 'like', '034%')
                 ->get();
                 return response()->json([
-                    'numero' => $membre
-                ]);
+                    'membres' => $membre
+                ], 200);
             }else{
-                $membre = Membres::select('contact_personnel')->where('contact_personnel', 'like', $debutNumero."%")->get();
+                $membre = Membres::select('contact_personnel')->where('contact_personnel', 'like', $debutNumero."%")
+                ->get();
                 return response()->json([
-                    'numero' => $membre
-                ]);
+                    'membres' => $membre
+                ], 200);
             }
         }else{
             return response()->json([
