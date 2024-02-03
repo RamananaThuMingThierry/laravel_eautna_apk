@@ -29,6 +29,7 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::get('/users_en_attente', [AuthController::class, "utilisateurs_en_attente"]);
     Route::get('/users_valide', [AuthController::class, "utilisateurs"]);
     Route::put('/users', [AuthController::class, "update"]);
+    Route::put('/users_valide/{userId}/{membreId}', [AuthController::class, "valideUsers"]);
     Route::get('/users', [AuthController::class, "profiles"]);
     Route::get('/users/{id}', [AuthController::class, "show"]);
     Route::delete('/users/{id}', [AuthController::class, "delete"]);
@@ -98,6 +99,7 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::delete('/messages/{id}', [MessagesController::class, "delete"]);
     
     /** ------------ Membres ------------ */
+    Route::get('/membres_getAllUsersNonPasUtilisateurs', [MembresController::class, "getAllUsersNonPasUtilisateurs"]);
     Route::get('/membres', [MembresController::class, "index"]);
     Route::post('/membres', [MembresController::class, "store"]);
     Route::get('/membres/{id}', [MembresController::class, "show"]);

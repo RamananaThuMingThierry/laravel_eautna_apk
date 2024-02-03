@@ -35,6 +35,26 @@ class MembresController extends Controller
        }
     }
 
+    public function getAllUsersNonPasUtilisateurs(){
+
+        $user = auth()->user();
+ 
+        if($user){
+             $membres = Membres::orderBy('numero_carte')
+             ->where('lien_membre_id', 0)
+             ->with('users:id,image,pseudo')
+             ->get();
+ 
+             return response()->json([
+                 'membres' => $membres
+             ]);
+        }else{
+             return response()->json([
+                 'message' => $this->constantes['NonAuthentifier']
+             ], 401);
+        }
+     }
+
     public function ListeDesNumero($debutNumero){
         $user = auth()->user();
         

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Membres;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -88,6 +89,52 @@ class AuthController extends Controller
         }
     }
  
+    public function valideUsers($users_id, $membre_id)
+    {
+        $user = auth()->user();
+
+        if($user){
+                
+                $verifier_users_id = User::where('id', $users_id)->exists();
+                if($verifier_users_id){
+                    $users_update = User::find($users_id);
+                    $verifier_id_membre = Membres::where('id', $membre_id)->exists();
+                if($verifier_id_membre){
+                    $get_membre = Membres::find($membre_id);
+                    if($users_update->status == 0){
+                        $users_update->update([
+                            'status' => 1
+                        ]);
+
+                        $get_membre->update([
+                            'lien_membre_id' => $users_update->id
+                        ]);
+                       
+                        return response()->json([
+                            'message' => $this->constantes['Modification']
+                        ], 200);
+                    }else{
+                        return response()->json([
+                            'message' => 'Cet utilisateur est déjà validé!'
+                        ], 403);
+                    }
+                }else{
+                    return response()->json([
+                        'message' => 'Ce personne '. $this->constantes['NExistePasDansBD']
+                    ], 404);
+                }
+                }else{
+                    return response()->json([
+                        'message' => 'Cet utilateur '. $this->constantes['NExistePasDansBD']
+                    ], 404);
+                }
+        }else{
+            return response()->json([
+                'message' => $this->constantes['NonAuthentifier']
+            ], 401);
+        }
+    }
+
     public function update(Request $request)
     {
         $user = auth()->user();
