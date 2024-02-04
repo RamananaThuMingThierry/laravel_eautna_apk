@@ -13,11 +13,13 @@ class Post extends Model
     public $table = "posts";
 
     protected $fillable = [
-        "image",
         "description",
-        "date",
         "users_id"
     ];
+
+    public function images(){
+        return $this->hasMany(PostImages::class);
+    }
 
     public function users(){
         return $this->belongsTo(User::class);

@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Date;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class PostController extends Controller
@@ -18,7 +20,9 @@ class PostController extends Controller
         $user = auth()->user();
 
         if($user){
-            $posts = Post::orderBy('created_at', 'desc')->with('users:id,pseudo,image')
+            $posts = Post::orderBy('created_at', 'desc')
+            ->with('images')
+            ->with('users:id,pseudo,image')
             ->withCount('commentaires', 'likes')
             ->with('likes', function($like){
                 return $like->where('users_id', auth()->user()->id)
@@ -76,8 +80,8 @@ class PostController extends Controller
 
                 $validator = Validator::make($request->all(), [
                     'description' => 'required|string',
+                    'images.*' => 'mimes:jpeg,png,jpg,gif,svg|max:2048', // Adaptez les extensions et la taille selon vos besoins.
                 ]);  
-                
                 
                 if($validator->fails()){
                             
@@ -87,15 +91,42 @@ class PostController extends Controller
         
                 }else{
 
-                    $image = $this->saveImage($request->image, 'posts');
-
                     $post = Post::create([
                         'description' => $description,
-                        'date' => Carbon::now(),
                         'users_id' => auth()->user()->id,
-                        'image' => $image
                     ]);
-    
+                     
+                    // if($request->hasFile('images')) {
+                    //     foreach ($request->file('images') as $img) {
+                    //         $filename = time() . '_' . $img->getClientOriginalName();
+                    //         Storage::disk('posts')->put($filename, file_get_contents($img));
+                    //         $path = URL::to('/').'/storage/posts/'.$filename;
+                    //         $post->images()->create(['image_path' => $path]);
+                    //     }
+                    // }
+                    
+
+                    // foreach ($request->file('images') as $image) {
+                    //     $path = $image->store('posts', 'public'); // 'public' est le disk par défaut
+                    //     $imagesPaths[] = $path;
+                    //     $post->images()->create(['image_path' => $path]);
+                    // }
+
+                    if($request->file('images')){
+                        foreach ($request->file('images') as $img) {
+                            $filename = time() . '_' . uniqid() . '_' . $img->getClientOriginalName();
+                            Storage::disk('posts')->put($filename, file_get_contents($img));
+                            $path = URL::to('/').'/storage/posts/'.$filename;
+                            $post->images()->create(['image_path' => $path]);
+                        }
+                    }
+                    // foreach ($request->file('images') as $image) {
+                    //     $timestamp = time();
+                    //     $filename = $timestamp . '.' . $image->getClientOriginalExtension();
+                    //     $path = $image->storeAs('posts', $filename, 'public'); // 'public' est le disk par défaut
+                    //     $post->images()->create(['image_path' => $path]);
+                    // }
+
                     return response()->json([
                         'message' => 'Post '. $this->constantes['Creation'],
                         'post' => $post

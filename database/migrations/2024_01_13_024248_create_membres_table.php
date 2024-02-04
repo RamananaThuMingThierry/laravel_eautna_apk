@@ -27,21 +27,21 @@ return new class extends Migration
             $table->boolean("sympathisant");
             $table->date('date_inscription');
             $table->unsignedBigInteger('fonctions_id');
-            $table->foreign('fonctions_id')->references('id')->on('fonctions')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('fonctions_id')->references('id')->on('fonctions')->onUpdate('cascade');
             
             $table->unsignedBigInteger('filieres_id');
-            $table->foreign('filieres_id')->references('id')->on('filieres')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('filieres_id')->references('id')->on('filieres')->onUpdate('cascade');
             
             $table->unsignedBigInteger('levels_id');
-            $table->foreign('levels_id')->references('id')->on('levels')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('levels_id')->references('id')->on('levels')->onUpdate('cascade');
             
             $table->unsignedBigInteger('axes_id');
-            $table->foreign('axes_id')->references('id')->on('axes')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('axes_id')->references('id')->on('axes')->onUpdate('cascade');
 
             $table->string('adresse');
 
             $table->unsignedBigInteger('users_id');
-            $table->foreign('users_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('users_id')->references('id')->on('users')->onUpdate('cascade');
             
             $table->integer('lien_membre_id')->default(0)->nullable();
 
