@@ -217,11 +217,12 @@ class PostController extends Controller
 
     // Delete post
     public function delete($id){
-
+        
         $users = auth()->user();
         $autorisation = false;
 
         if($users){
+        
             
             $post = Post::find($id);
 
@@ -229,7 +230,7 @@ class PostController extends Controller
 
                 if($users->roles == "Administrateurs"){
                     $autorisation = true;
-                }else if($post->user_id == $users->id){
+                }else if($post->users_id == $users->id){
                     $autorisation = true;
                 }
                 
