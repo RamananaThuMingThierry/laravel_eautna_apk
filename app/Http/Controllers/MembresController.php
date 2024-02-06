@@ -22,7 +22,7 @@ class MembresController extends Controller
 
        if($user){
             $membres = Membres::orderBy('numero_carte')
-            ->with('users:id,image,pseudo')
+            ->with('users:id,image,pseudo,email')
             ->get();
 
             return response()->json([
