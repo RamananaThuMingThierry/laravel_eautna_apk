@@ -14,6 +14,7 @@ use App\Http\Controllers\MoisController;
 use App\Http\Controllers\NiveauController;
 use App\Http\Controllers\PortesController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\SectionsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -35,6 +36,9 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::delete('/users/{id}', [AuthController::class, "delete"]);
     Route::post('/logout', [AuthController::class, "logout"]);
 
+    /** ------------ Sections ------------ */
+    Route::get('/sections', [SectionsController::class, "index"]);
+    Route::get('/sections/{id}', [SectionsController::class, "show"]);
     /** ------------ Axes ------------ */
     Route::get('/axes', [AxesController::class, "index"]);
     Route::post('/axes', [AxesController::class, "store"]);
@@ -100,6 +104,7 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     
     /** ------------ Membres ------------ */
     Route::get('/membres_getAllUsersNonPasUtilisateurs', [MembresController::class, "getAllUsersNonPasUtilisateurs"]);
+    Route::get('/membres_statistiques', [MembresController::class, "statistiques"]);
     Route::get('/membres', [MembresController::class, "index"]);
     Route::post('/membres', [MembresController::class, "store"]);
     Route::get('/membres/{id}', [MembresController::class, "show"]);
@@ -107,4 +112,5 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::get('/membres_numero/{debutNumero}', [MembresController::class, "ListeDesNumero"]);
     Route::put('/membres/{id}', [MembresController::class, "update"]);
     Route::delete('/membres/{id}', [MembresController::class, "delete"]);
+
 });

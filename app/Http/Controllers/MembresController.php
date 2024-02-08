@@ -8,6 +8,7 @@ use App\Models\Level;
 use App\Models\Membres;
 use App\Models\Filieres;
 use App\Models\Fonctions;
+use App\Models\sections;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -15,6 +16,32 @@ use Illuminate\Support\Facades\Validator;
 
 class MembresController extends Controller
 {
+
+    public function statistiques(){
+        $membres = Membres::all()->count();
+        $nombreTotal67h = Membres::where('sections_id', 1)->count();
+        $nombreTotalAmbohipo = Membres::where('sections_id', 2)->count();
+        $nombreTotalAnkatsoI = Membres::where('sections_id', 3)->count();
+        $nombreTotalAnkatsoII = Membres::where('sections_id', 4)->count();
+        $nombreTotalCentreVille = Membres::where('sections_id', 5)->count();
+        $nombreTotalRavitoto = Membres::where('sections_id', 6)->count();
+        $nombreTotalItaosy = Membres::where('sections_id', 7)->count();
+        $nombreTotalIvato = Membres::where('sections_id', 8)->count();
+        $nombreTotalVotovorona = Membres::where('sections_id', 9)->count();
+        
+        return response()->json([
+            'TOTAL MEMBRES' => $membres,
+            '67 h' => $nombreTotal67h,
+            'Ambohipo' => $nombreTotalAmbohipo,
+            'Ankatso I' => $nombreTotalAnkatsoI,
+            'Ankatso II' => $nombreTotalAnkatsoII,
+            'Centre  Ville' => $nombreTotalCentreVille,
+            'Ravitoto' => $nombreTotalRavitoto,
+            'Itaosy' => $nombreTotalItaosy,
+            'Ivato' => $nombreTotalIvato,
+            'Votovorona' => $nombreTotalVotovorona
+        ]);
+    }
 
     public function index(){
 
@@ -109,6 +136,7 @@ class MembresController extends Controller
                 $sympathisant = $request->sympathisant;
                 $fonctions_id = $request->fonctions_id;
                 $filieres_id = $request->filieres_id;
+                $sections_id = $request->sections_id;
                 $levels_id = $request->levels_id;
                 $axes_id = $request->axes_id;
                 $adresse = $request->adresse;
@@ -161,6 +189,7 @@ class MembresController extends Controller
                     'filieres_id' => 'required|integer',
                     'levels_id' => 'required|integer',
                     'axes_id' => 'required|integer',
+                    'sections_id' => 'required|integer',
                     'facebook' => 'required|string',
                     'adresse' => 'required|string',
                 ]);        
@@ -214,6 +243,16 @@ class MembresController extends Controller
                         }
                      }
 
+                     // Verification section
+                     if($sections_id != 0){
+                        $verification_section = sections::where('id', $sections_id)->exists();
+                        if($verification_section == false){
+                            return response()->json([
+                                'message' => 'Cette section '.$this->constantes['NExistePasDansBD']
+                            ], 404);
+                        }
+                     }
+
                      // Verification axes_id
                      if($axes_id != 0){
                         $verification_axes = Axes::where('id', $axes_id)->exists();
@@ -259,6 +298,7 @@ class MembresController extends Controller
                         'filieres_id' => $filieres_id,
                         'levels_id' => $levels_id,
                         'axes_id' => $axes_id,
+                        'sections_id' => $sections_id,
                         'facebook' => $facebook,
                         'adresse' => $adresse,
                         'users_id' => $user->id,

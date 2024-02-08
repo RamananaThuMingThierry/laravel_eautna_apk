@@ -29,6 +29,7 @@ class Membres extends Model
         "fonctions_id",
         "filieres_id",
         "levels_id",
+        "sections_id",
         "adresse",
         "lien_membre_id",
         "date_inscription",
