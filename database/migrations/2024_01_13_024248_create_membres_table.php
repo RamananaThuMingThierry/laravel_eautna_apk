@@ -26,10 +26,6 @@ return new class extends Migration
             $table->string('contact_tutaire');
             $table->boolean("sympathisant");
             $table->date('date_inscription');
-                     
-            $table->unsignedBigInteger('sections_id');
-            $table->foreign('sections_id')->references('id')->on('sections')->onUpdate('cascade');
-
             $table->unsignedBigInteger('fonctions_id');
             $table->foreign('fonctions_id')->references('id')->on('fonctions')->onUpdate('cascade');
             

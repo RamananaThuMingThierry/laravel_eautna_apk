@@ -112,7 +112,7 @@ class MembresController extends Controller
 
         $autorisation = false;
         $user = auth()->user();
-
+        
         if($user){
 
             if($user->status){
@@ -120,7 +120,7 @@ class MembresController extends Controller
                     $autorisation = true;
                 }
             }
-
+            
             if($autorisation){
 
                 // Déclarations des variables
@@ -143,6 +143,7 @@ class MembresController extends Controller
                 $facebook = $request->facebook;
                 $date_inscription = $request->date_inscription;
 
+                
                 $image = $this->saveImage($request->image, 'membres');
 
                 $validator = Validator::make($request->all(), [
@@ -180,7 +181,7 @@ class MembresController extends Controller
                         },
                     ],
                     'lieu_de_naissance' => 'required|string',
-                    'cin' => 'required|string|min:12|max:12|unique:membres',
+                    'cin' => 'nullable|string|min:12|max:12|unique:membres',
                     'genre' => 'required|string',
                     'contact_personnel' => 'required|max:10|min:10|string',
                     'contact_tutaire' => 'required|max:10|min:10|string',
@@ -188,7 +189,7 @@ class MembresController extends Controller
                     'fonctions_id' => 'required|integer',
                     'filieres_id' => 'required|integer',
                     'levels_id' => 'required|integer',
-                    'axes_id' => 'required|integer',
+                    'axes_id' => 'nullable|integer',
                     'sections_id' => 'required|integer',
                     'facebook' => 'required|string',
                     'adresse' => 'required|string',
@@ -253,15 +254,16 @@ class MembresController extends Controller
                         }
                      }
 
-                     // Verification axes_id
-                     if($axes_id != 0){
+                    // Verification axes_id
+                    if($axes_id != 0){
                         $verification_axes = Axes::where('id', $axes_id)->exists();
                         if($verification_axes == false){
                             return response()->json([
                                 'message' => 'Cet axes '.$this->constantes['NExistePasDansBD']
                             ], 404);
                         }
-                     }
+                    }
+                    
 
                     // Verification sympathisant
                     if($sympathisant){
