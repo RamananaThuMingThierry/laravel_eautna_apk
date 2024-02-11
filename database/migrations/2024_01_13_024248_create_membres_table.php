@@ -23,9 +23,13 @@ return new class extends Migration
             $table->string("cin", 12)->nullable();
             $table->string('genre');
             $table->string('contact_personnel');
-            $table->string('contact_tutaire');
+            $table->string('contact_tuteur');
             $table->boolean("sympathisant");
             $table->date('date_inscription');
+      
+            $table->unsignedBigInteger('sections_id');
+            $table->foreign('sections_id')->references('id')->on('sections')->onUpdate('cascade');
+      
             $table->unsignedBigInteger('fonctions_id');
             $table->foreign('fonctions_id')->references('id')->on('fonctions')->onUpdate('cascade');
             
@@ -35,7 +39,7 @@ return new class extends Migration
             $table->unsignedBigInteger('levels_id');
             $table->foreign('levels_id')->references('id')->on('levels')->onUpdate('cascade');
             
-            $table->unsignedBigInteger('axes_id');
+            $table->unsignedBigInteger('axes_id')->nullable();
             $table->foreign('axes_id')->references('id')->on('axes')->onUpdate('cascade');
 
             $table->string('adresse');

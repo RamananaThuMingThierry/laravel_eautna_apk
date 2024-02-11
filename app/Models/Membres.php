@@ -24,7 +24,7 @@ class Membres extends Model
         "cin",
         "genre",
         "contact_personnel",
-        "contact_tutaire",
+        "contact_tuteur",
         "sympathisant",
         "fonctions_id",
         "filieres_id",
