@@ -599,7 +599,7 @@ class MembresController extends Controller
                         $data['axes_id'] = null;
                     }
 
-                        // Sous-chaîne à rechercher
+                    // Sous-chaîne à rechercher
                     $sousChaine = "http://192.168.1.107:8000/storage/membres/";
                     if (strpos($request->image, $sousChaine) === false) {
                         $image = $this->saveImage($request->image, 'membres');
