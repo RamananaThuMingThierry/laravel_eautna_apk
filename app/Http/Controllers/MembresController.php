@@ -62,6 +62,24 @@ class MembresController extends Controller
        }
     }
 
+    public function filtreAxesMembre($axes_id){
+        $user = auth()->user();
+
+        if($user){
+            $membres = Membres::where('axes_id', $axes_id)
+                ->with('users:id,image,pseudo,email')
+                ->get();
+            
+            return response()->json([
+                'membres' => $membres
+            ]);
+        }else{
+            return response()->json([
+                'message' => $this->constantes['NonAuthentifier']
+            ], 401);
+        }
+    }
+
     public function getAllUsersNonPasUtilisateurs(){
 
         $user = auth()->user();
@@ -80,7 +98,7 @@ class MembresController extends Controller
                  'message' => $this->constantes['NonAuthentifier']
              ], 401);
         }
-     }
+    }
 
     public function ListeDesNumero($debutNumero){
         $user = auth()->user();
@@ -630,6 +648,52 @@ class MembresController extends Controller
         }
 
     }
+
+    public function searchNameOrNumber($value){
+        $user = auth()->user();
+
+        if($user){
+            if(preg_match('/^\d+$/', $value)){
+                $membres = Membres::where('numero_carte','like', '%'. $value . '%') ->with('users:id,image,pseudo,email')->get();
+            }else{
+                $membres = Membres::where('nom', 'like', '%' . $value . '%')
+                ->orWhere('prenom', 'like', '%' . $value . '%')
+                ->with('users:id,image,pseudo,email')
+                ->get();
+            }
+            return response()->json([
+                'membres' => $membres
+            ], 200);
+        }else{
+            return response()->json([
+                'message' => $this->constantes['NonAuthentifier']
+            ], 401);
+        }
+    }
+
+    // public function searchNameOrNumberAxesMembres($value, $axes_id){
+        
+    //     $user = auth()->user();
+
+    //     if($user){
+    //         if(preg_match('/^\d+$/', $value)){
+    //             $membres = Membres::where('numero_carte','like', '%'. $value . '%') ->with('users:id,image,pseudo,email')->get();
+    //         }else{
+    //             $membres = Membres::where('nom', 'like', '%' . $value . '%')
+    //             ->orWhere('prenom', 'like', '%' . $value . '%')
+    //             ->with('users:id,image,pseudo,email')
+    //             ->get();
+    //         }
+    //         return response()->json([
+    //             'membres' => $membres
+    //         ], 200);
+    //     }else{
+    //         return response()->json([
+    //             'message' => $this->constantes['NonAuthentifier']
+    //         ], 401);
+    //     }
+
+    // }
 
     public function show($membres_id){
 

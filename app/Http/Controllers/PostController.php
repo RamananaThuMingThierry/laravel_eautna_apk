@@ -236,7 +236,7 @@ class PostController extends Controller
                 
                 if($autorisation){
 
-                    $post->comments()->delete();
+                    $post->commentaires()->delete();
                     $post->likes()->delete();
                     $post->delete();
                     

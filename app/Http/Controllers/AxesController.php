@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use Dompdf\Dompdf;
 use App\Models\Axes;
-use DragonCode\Contracts\Cashier\Http\Response;
-use Illuminate\Http\JsonResponse;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use DragonCode\Contracts\Cashier\Http\Response;
 
 class AxesController extends Controller
 {
