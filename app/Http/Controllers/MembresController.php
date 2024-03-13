@@ -98,6 +98,44 @@ class MembresController extends Controller
         }
     }
 
+    public function filtreFiliereMembre($filieres_id){
+        $user = auth()->user();
+
+        if($user){
+            $membres = Membres::where('filieres_id', $filieres_id)
+                ->with('users:id,image,pseudo,email')
+                ->get();
+            
+            return response()->json([
+                'membres' => $membres
+            ]);
+        }else{
+            return response()->json([
+                'message' => $this->constantes['NonAuthentifier']
+            ], 401);
+        }
+    }
+    
+    public function filtreFonctionMembre($fonctions_id){
+        $user = auth()->user();
+
+        if($user){
+            
+            $membres = Membres::where('fonctions_id', $fonctions_id)
+                ->with('users:id,image,pseudo,email')
+                ->get();
+            
+            return response()->json([
+                'membres' => $membres
+            ]);
+
+        }else{
+            return response()->json([
+                'message' => $this->constantes['NonAuthentifier']
+            ], 401);
+        }
+    }
+
     public function getAllUsersNonPasUtilisateurs(){
 
         $user = auth()->user();
@@ -764,6 +802,86 @@ class MembresController extends Controller
                 } else {
                     // Sinon, rechercher dans les colonnes du nom et du prénom séparément
                     $membres = Membres::where('levels_id', $levels_id)
+                    ->where(function ($query) use ($value) {
+                        $query->where('nom', 'like', '%' . $value . '%')
+                            ->orWhere('prenom', 'like', '%' . $value . '%');
+                    })
+                    ->with('users:id,image,pseudo,email')
+                    ->get();
+                }
+            }
+            return response()->json([
+                'membres' => $membres
+            ], 200);
+        }else{
+            return response()->json([
+                'message' => $this->constantes['NonAuthentifier']
+            ], 401);
+        }
+
+    }
+
+    public function searchNameOrNumberFiliereMembres($value, $filieres_id){
+        
+        $user = auth()->user();
+
+        if($user){
+            if(preg_match('/^\d+$/', $value)){
+                $membres = Membres::where('numero_carte','like', '%'. trim($value). '%')
+                ->where('filieres_id', $filieres_id)    
+                ->with('users:id,image,pseudo,email')
+                ->get();
+            }else{
+               // Vérifier si le terme de recherche contient un espace
+                if (strpos($value, ' ') !== false) {
+                    // Si le terme de recherche contient un espace, rechercher par nom et prénom ensemble
+                    $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
+                    ->where('filieres_id', $filieres_id)    
+                    ->with('users:id,image,pseudo,email')
+                    ->get();
+                } else {
+                    // Sinon, rechercher dans les colonnes du nom et du prénom séparément
+                    $membres = Membres::where('filieres_id', $filieres_id)
+                    ->where(function ($query) use ($value) {
+                        $query->where('nom', 'like', '%' . $value . '%')
+                            ->orWhere('prenom', 'like', '%' . $value . '%');
+                    })
+                    ->with('users:id,image,pseudo,email')
+                    ->get();
+                }
+            }
+            return response()->json([
+                'membres' => $membres
+            ], 200);
+        }else{
+            return response()->json([
+                'message' => $this->constantes['NonAuthentifier']
+            ], 401);
+        }
+
+    }
+    
+    public function searchNameOrNumberFonctionMembres($value, $fonctions_id){
+        
+        $user = auth()->user();
+
+        if($user){
+            if(preg_match('/^\d+$/', $value)){
+                $membres = Membres::where('numero_carte','like', '%'. trim($value). '%')
+                ->where('fonctions_id', $fonctions_id)    
+                ->with('users:id,image,pseudo,email')
+                ->get();
+            }else{
+               // Vérifier si le terme de recherche contient un espace
+                if (strpos($value, ' ') !== false) {
+                    // Si le terme de recherche contient un espace, rechercher par nom et prénom ensemble
+                    $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
+                    ->where('fonctions_id', $fonctions_id)    
+                    ->with('users:id,image,pseudo,email')
+                    ->get();
+                } else {
+                    // Sinon, rechercher dans les colonnes du nom et du prénom séparément
+                    $membres = Membres::where('fonctions_id', $fonctions_id)
                     ->where(function ($query) use ($value) {
                         $query->where('nom', 'like', '%' . $value . '%')
                             ->orWhere('prenom', 'like', '%' . $value . '%');

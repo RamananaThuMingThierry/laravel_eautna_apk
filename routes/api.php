@@ -111,8 +111,12 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::get('/membres_search/{value}', [MembresController::class, "searchNameOrNumber"]);
     Route::get('/membres_search_axes/{value}/{axesId}', [MembresController::class, "searchNameOrNumberAxesMembres"]);
     Route::get('/membres_search_niveau/{value}/{niveauId}', [MembresController::class, "searchNameOrNumberNiveauMembres"]);
+    Route::get('/membres_search_filiere/{value}/{niveauId}', [MembresController::class, "searchNameOrNumberFiliereMembres"]);
+    Route::get('/membres_search_fonction/{value}/{niveauId}', [MembresController::class, "searchNameOrNumberFonctionMembres"]);
     Route::get('/membres_filtreAxesMembre/{id}', [MembresController::class, "filtreAxesMembre"]);
     Route::get('/membres_filtreNiveauMembre/{id}', [MembresController::class, "filtreNiveauMembre"]);
+    Route::get('/membres_filtreFiliereMembre/{id}', [MembresController::class, "filtreFiliereMembre"]);
+    Route::get('/membres_filtreFonctionMembre/{id}', [MembresController::class, "filtreFonctionMembre"]);
     Route::get('/membres', [MembresController::class, "index"]);
     Route::post('/membres', [MembresController::class, "store"]);
     Route::get('/membres/{id}', [MembresController::class, "show"]);
