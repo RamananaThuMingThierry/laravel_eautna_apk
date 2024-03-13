@@ -656,10 +656,24 @@ class MembresController extends Controller
             if(preg_match('/^\d+$/', $value)){
                 $membres = Membres::where('numero_carte','like', '%'. $value . '%') ->with('users:id,image,pseudo,email')->get();
             }else{
-                $membres = Membres::where('nom', 'like', '%' . $value . '%')
-                ->orWhere('prenom', 'like', '%' . $value . '%')
-                ->with('users:id,image,pseudo,email')
-                ->get();
+                // Vérifier si le terme de recherche contient un espace
+                if (strpos($value, ' ') !== false) {
+                    // Si le terme de recherche contient un espace, rechercher par nom et prénom ensemble
+                    $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
+                    ->with('users:id,image,pseudo,email')
+                    ->get();
+                } else {
+                    // Sinon, rechercher dans les colonnes du nom et du prénom séparément
+                    $membres = Membres::where('nom', 'like', '%' . $value . '%')
+                                ->orWhere('prenom', 'like', '%' . $value . '%')
+                                ->with('users:id,image,pseudo,email')
+                                ->get();
+                }
+
+                // $membres = Membres::where('nom', 'like', '%' . $value . '%')
+                // ->orWhere('prenom', 'like', '%' . $value . '%')
+                // ->with('users:id,image,pseudo,email')
+                // ->get();
             }
             return response()->json([
                 'membres' => $membres
@@ -671,29 +685,45 @@ class MembresController extends Controller
         }
     }
 
-    // public function searchNameOrNumberAxesMembres($value, $axes_id){
+    public function searchNameOrNumberAxesMembres($value, $axes_id){
         
-    //     $user = auth()->user();
+        $user = auth()->user();
 
-    //     if($user){
-    //         if(preg_match('/^\d+$/', $value)){
-    //             $membres = Membres::where('numero_carte','like', '%'. $value . '%') ->with('users:id,image,pseudo,email')->get();
-    //         }else{
-    //             $membres = Membres::where('nom', 'like', '%' . $value . '%')
-    //             ->orWhere('prenom', 'like', '%' . $value . '%')
-    //             ->with('users:id,image,pseudo,email')
-    //             ->get();
-    //         }
-    //         return response()->json([
-    //             'membres' => $membres
-    //         ], 200);
-    //     }else{
-    //         return response()->json([
-    //             'message' => $this->constantes['NonAuthentifier']
-    //         ], 401);
-    //     }
+        if($user){
+            if(preg_match('/^\d+$/', $value)){
+                $membres = Membres::where('numero_carte','like', '%'. $value . '%')
+                ->where('axes_id', $axes_id)    
+                ->with('users:id,image,pseudo,email')
+                ->get();
+            }else{
+               // Vérifier si le terme de recherche contient un espace
+                if (strpos($value, ' ') !== false) {
+                    // Si le terme de recherche contient un espace, rechercher par nom et prénom ensemble
+                    $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
+                    ->where('axes_id', $axes_id)    
+                    ->with('users:id,image,pseudo,email')
+                    ->get();
+                } else {
+                    // Sinon, rechercher dans les colonnes du nom et du prénom séparément
+                    $membres = Membres::where('axes_id', $axes_id)
+                    ->where(function ($query) use ($value) {
+                        $query->where('nom', 'like', '%' . $value . '%')
+                            ->orWhere('prenom', 'like', '%' . $value . '%');
+                    })
+                    ->with('users:id,image,pseudo,email')
+                    ->get();
+                }
+            }
+            return response()->json([
+                'membres' => $membres
+            ], 200);
+        }else{
+            return response()->json([
+                'message' => $this->constantes['NonAuthentifier']
+            ], 401);
+        }
 
-    // }
+    }
 
     public function show($membres_id){
 

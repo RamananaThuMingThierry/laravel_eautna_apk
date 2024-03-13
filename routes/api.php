@@ -104,9 +104,12 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::delete('/messages/{id}', [MessagesController::class, "delete"]);
     
     /** ------------ Membres ------------ */
+
+    
     Route::get('/membres_getAllUsersNonPasUtilisateurs', [MembresController::class, "getAllUsersNonPasUtilisateurs"]);
     Route::get('/membres_statistiques', [MembresController::class, "statistiques"]);
     Route::get('/membres_search/{value}', [MembresController::class, "searchNameOrNumber"]);
+    Route::get('/membres_search_axes/{value}/{axesId}', [MembresController::class, "searchNameOrNumberAxesMembres"]);
     Route::get('/membres_filtreAxesMembre/{id}', [MembresController::class, "filtreAxesMembre"]);
     Route::get('/membres', [MembresController::class, "index"]);
     Route::post('/membres', [MembresController::class, "store"]);
