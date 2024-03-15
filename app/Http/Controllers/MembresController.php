@@ -61,7 +61,7 @@ class MembresController extends Controller
             ], 401);
        }
     }
-
+   
     public function filtreAxesMembre($axes_id){
         $user = auth()->user();
 
@@ -705,12 +705,2607 @@ class MembresController extends Controller
 
     }
 
+    public function filtreAll($fonctions_id, $filieres_id, $niveau_id, $sections_id, $axes_id, $genre, $sympathisant){
+        
+        $user = auth()->user();
+
+        if($user){
+            if($fonctions_id == 0){
+                if($filieres_id == 0){
+                    if($niveau_id == 0){
+                        if($sections_id == 0){
+                            if($axes_id == 0){
+                                if($genre == "null"){
+                                    $membres = Membres::where('sympathisant', $sympathisant)
+                                        ->with('users:id,image,pseudo,email')
+                                        ->get();
+                                }else{
+                                    $membres = Membres::where('sympathisant', $sympathisant)
+                                        ->where('genre', $genre)
+                                        ->with('users:id,image,pseudo,email')
+                                        ->get();
+                                }
+                            }else{
+                                if($genre == "null"){
+                                    $membres = Membres::where('axes_id', $axes_id)
+                                        ->with('users:id,image,pseudo,email')
+                                        ->get();
+                                }else{
+                                    $membres = Membres::where('axes_id', $axes_id)
+                                        ->where('genre', $genre)
+                                        ->with('users:id,image,pseudo,email')
+                                        ->get();
+                                }
+                            }
+                        }else{
+                            if($axes_id == 0){
+                                if($genre == "null"){
+                                    $membres = Membres::where('sympathisant', $sympathisant)
+                                        ->where('sections_id', $sections_id)
+                                        ->with('users:id,image,pseudo,email')
+                                        ->get();
+                                }else{
+                                    $membres = Membres::where('sympathisant', $sympathisant)
+                                        ->where('sections_id', $sections_id)
+                                        ->where('genre', $genre)
+                                        ->with('users:id,image,pseudo,email')
+                                        ->get();
+                                }
+                            }else{
+                                if($genre == "null"){
+                                    $membres = Membres::where('sections_id', $sections_id)
+                                        ->where('axes_id', $axes_id)
+                                        ->with('users:id,image,pseudo,email')
+                                        ->get();
+                                }else{
+                                    $membres = Membres::where('sections_id', $sections_id)
+                                        ->where('axes_id', $axes_id)
+                                        ->where('genre', $genre)
+                                        ->with('users:id,image,pseudo,email')
+                                        ->get();
+                                }
+                            }
+                        }
+                    }else{
+                        if($sections_id == 0){
+                            if($axes_id == 0){
+                                if($genre == "null"){
+                                    $membres = Membres::where('sympathisant', $sympathisant)
+                                        ->where('levels_id', $niveau_id)
+                                        ->with('users:id,image,pseudo,email')
+                                        ->get();
+                                }else{
+                                    $membres = Membres::where('sympathisant', $sympathisant)
+                                        ->where('levels_id', $niveau_id)
+                                        ->where('genre', $genre)
+                                        ->with('users:id,image,pseudo,email')
+                                        ->get(); 
+                                }
+                            }else{
+                                if($genre == "null"){
+                                    $membres = Membres::where('levels_id', $niveau_id)
+                                        ->where('axes_id', $axes_id)
+                                        ->with('users:id,image,pseudo,email')
+                                        ->get();
+                                }else{
+                                    $membres = Membres::where('levels_id', $niveau_id)
+                                        ->where('axes_id', $axes_id)
+                                        ->where('genre', $genre)
+                                        ->with('users:id,image,pseudo,email')
+                                        ->get();
+                                }
+                            }
+                        }else{
+                            if($axes_id == 0){
+                                if($genre == "null"){
+                                    $membres = Membres::where('sympathisant', $sympathisant)
+                                        ->where('levels_id', $niveau_id)
+                                        ->where('sections_id', $sections_id)
+                                        ->with('users:id,image,pseudo,email')
+                                        ->get();
+                                }else{
+                                    $membres = Membres::where('sympathisant', $sympathisant)
+                                        ->where('levels_id', $niveau_id)
+                                        ->where('sections_id', $sections_id)
+                                        ->where('genre', $genre)
+                                        ->with('users:id,image,pseudo,email')
+                                        ->get();
+                                }
+                            }else{
+                                if($genre == "null"){
+                                    $membres = Membres::where('levels_id', $niveau_id)
+                                        ->where('sections_id', $sections_id)
+                                        ->where('axes_id', $axes_id)
+                                        ->with('users:id,image,pseudo,email')
+                                        ->get();
+                                }else{
+                                    $membres = Membres::where('levels_id', $niveau_id)
+                                        ->where('sections_id', $sections_id)
+                                        ->where('axes_id', $axes_id)
+                                        ->where('genre', $genre)
+                                        ->with('users:id,image,pseudo,email')
+                                        ->get();
+                                }
+                            }
+                        }
+                    }
+                }else{
+                if($niveau_id == 0){
+                        if($sections_id == 0){
+                            if($axes_id == 0){
+                                if($genre == "null"){
+                                    $membres = Membres::where('sympathisant', $sympathisant)
+                                        ->where('filieres_id', $filieres_id)
+                                        ->with('users:id,image,pseudo,email')
+                                        ->get();
+                                }else{
+                                    $membres = Membres::where('sympathisant', $sympathisant)
+                                        ->where('filieres_id', $filieres_id)
+                                        ->where('genre', $genre)
+                                        ->with('users:id,image,pseudo,email')
+                                        ->get();
+                                }
+                            }else{
+                                if($genre == "null"){
+                                    $membres = Membres::where('filieres_id', $filieres_id)
+                                        ->where('axes_id', $axes_id)
+                                        ->with('users:id,image,pseudo,email')
+                                        ->get();
+                                }else{
+                                    $membres = Membres::where('filieres_id', $filieres_id)
+                                        ->where('axes_id', $axes_id)
+                                        ->where('genre', $genre)
+                                        ->with('users:id,image,pseudo,email')
+                                        ->get();
+                                }
+                            }
+                        }else{
+                            if($axes_id == 0){
+                                if($genre == "null"){
+                                    $membres = Membres::where('sympathisant', $sympathisant)
+                                        ->where('filieres_id', $filieres_id)
+                                        ->where('sections_id', $sections_id)
+                                        ->with('users:id,image,pseudo,email')
+                                        ->get();
+                                }else{
+                                    $membres = Membres::where('sympathisant', $sympathisant)
+                                        ->where('filieres_id', $filieres_id)
+                                        ->where('sections_id', $sections_id)
+                                        ->where('genre', $genre)
+                                        ->with('users:id,image,pseudo,email')
+                                        ->get();
+                                }
+                            }else{
+                                if($genre == "null"){
+                                    $membres = Membres::where('filieres_id', $filieres_id)
+                                        ->where('sections_id', $sections_id)
+                                        ->where('axes_id', $axes_id)
+                                        ->with('users:id,image,pseudo,email')
+                                        ->get();
+                                }else{
+                                    $membres = Membres::where('sympathisant', $sympathisant)
+                                        ->where('filieres_id', $filieres_id)
+                                        ->where('sections_id', $sections_id)
+                                        ->where('axes_id', $axes_id)
+                                        ->where('genre', $genre)
+                                        ->with('users:id,image,pseudo,email')
+                                        ->get();
+                                }
+                            }
+                        }
+                }else{
+                        if($sections_id == 0){
+                            if($axes_id == 0){
+                                if($genre == "null"){
+                                    $membres = Membres::where('sympathisant', $sympathisant)
+                                        ->where('filieres_id', $filieres_id)
+                                        ->where('levels_id', $niveau_id)
+                                        ->with('users:id,image,pseudo,email')
+                                        ->get();
+                                }else{
+                                    $membres = Membres::where('sympathisant', $sympathisant)
+                                        ->where('filieres_id', $filieres_id)
+                                        ->where('levels_id', $niveau_id)
+                                        ->where('genre', $genre)
+                                        ->with('users:id,image,pseudo,email')
+                                        ->get();
+                                }
+                            }else{
+                                if($genre == "null"){
+                                    $membres = Membres::where('filieres_id', $filieres_id)
+                                        ->where('levels_id', $niveau_id)
+                                        ->where('axes_id', $axes_id)
+                                        ->with('users:id,image,pseudo,email')
+                                        ->get();
+                                }else{
+                                    $membres = Membres::where('filieres_id', $filieres_id)
+                                        ->where('levels_id', $niveau_id)
+                                        ->where('axes_id', $axes_id)
+                                        ->where('genre', $genre)
+                                        ->with('users:id,image,pseudo,email')
+                                        ->get();
+                                }
+                            }
+                        }else{
+                            if($axes_id == 0){
+                                if($genre == "null"){
+                                    $membres = Membres::where('sympathisant', $sympathisant)
+                                        ->where('filieres_id', $filieres_id)
+                                        ->where('levels_id', $niveau_id)
+                                        ->where('sections_id', $sections_id)
+                                        ->with('users:id,image,pseudo,email')
+                                        ->get();
+                                }else{
+                                    $membres = Membres::where('sympathisant', $sympathisant)
+                                        ->where('filieres_id', $filieres_id)
+                                        ->where('levels_id', $niveau_id)
+                                        ->where('sections_id', $sections_id)
+                                        ->where('genre', $genre)
+                                        ->with('users:id,image,pseudo,email')
+                                        ->get();
+                                }
+                            }else{
+                                if($genre == "null"){
+                                    $membres = Membres::where('filieres_id', $filieres_id)
+                                        ->where('levels_id', $niveau_id)
+                                        ->where('sections_id', $sections_id)
+                                        ->where('axes_id', $axes_id)
+                                        ->with('users:id,image,pseudo,email')
+                                        ->get();
+                                }else{
+                                    $membres = Membres::where('filieres_id', $filieres_id)
+                                        ->where('levels_id', $niveau_id)
+                                        ->where('sections_id', $sections_id)
+                                        ->where('axes_id', $axes_id)
+                                        ->where('genre', $genre)
+                                        ->with('users:id,image,pseudo,email')
+                                        ->get();
+                                }
+                            }
+                        }
+                }
+                }
+            }else{
+                if($filieres_id == 0){
+                    if($niveau_id == 0){
+                        if($sections_id == 0){
+                            if($axes_id == 0){
+                                if($genre == "null"){
+                                    $membres = Membres::where('sympathisant', $sympathisant)
+                                        ->where('fonctions_id', $fonctions_id)
+                                        ->with('users:id,image,pseudo,email')
+                                        ->get();
+                                }else{
+                                    $membres = Membres::where('sympathisant', $sympathisant)
+                                        ->where('fonctions_id', $fonctions_id)
+                                        ->where('genre', $genre)
+                                        ->with('users:id,image,pseudo,email')
+                                        ->get();
+                                }
+                            }else{
+                                if($genre == "null"){
+                                    $membres = Membres::where('fonctions_id', $fonctions_id)
+                                        ->where('axes_id', $axes_id)
+                                        ->with('users:id,image,pseudo,email')
+                                        ->get();
+                                }else{
+                                    $membres = Membres::where('fonctions_id', $fonctions_id)
+                                        ->where('axes_id', $axes_id)
+                                        ->where('genre', $genre)
+                                        ->with('users:id,image,pseudo,email')
+                                        ->get();
+                                }
+                            }
+                        }else{
+                            if($axes_id == 0){
+                                if($genre == "null"){
+                                    $membres = Membres::where('sympathisant', $sympathisant)
+                                        ->where('fonctions_id', $fonctions_id)
+                                        ->where('sections_id', $sections_id)
+                                        ->with('users:id,image,pseudo,email')
+                                        ->get();
+                                }else{
+                                    $membres = Membres::where('sympathisant', $sympathisant)
+                                        ->where('fonctions_id', $fonctions_id)
+                                        ->where('sections_id', $sections_id)
+                                        ->where('genre', $genre)
+                                        ->with('users:id,image,pseudo,email')
+                                        ->get();
+                                }
+                            }else{
+                                if($genre == "null"){
+                                    $membres = Membres::where('fonctions_id', $fonctions_id)
+                                        ->where('sections_id', $sections_id)
+                                        ->where('axes_id', $axes_id)
+                                        ->with('users:id,image,pseudo,email')
+                                        ->get();
+                                }else{
+                                    $membres = Membres::where('fonctions_id', $fonctions_id)
+                                        ->where('sections_id', $sections_id)
+                                        ->where('axes_id', $axes_id)
+                                        ->where('genre', $genre)
+                                        ->with('users:id,image,pseudo,email')
+                                        ->get();
+                                }
+                            }
+                        }
+                    }else{
+                        if($sections_id == 0){
+                            if($axes_id == 0){
+                                if($genre == "null"){
+                                    $membres = Membres::where('fonctions_id', $fonctions_id)
+                                        ->where('levels_id', $niveau_id)
+                                        ->where('sympathisant', $sympathisant)
+                                        ->with('users:id,image,pseudo,email')
+                                        ->get();
+                                }else{
+                                    $membres = Membres::where('fonctions_id', $fonctions_id)
+                                        ->where('levels_id', $niveau_id)
+                                        ->where('genre', $genre)
+                                        ->where('sympathisant', $sympathisant)
+                                        ->with('users:id,image,pseudo,email')
+                                        ->get();
+                                }
+                            }else{
+                                if($genre == "null"){
+                                    $membres = Membres::where('fonctions_id', $fonctions_id)
+                                        ->where('levels_id', $niveau_id)
+                                        ->where('axes_id', $axes_id)
+                                        ->with('users:id,image,pseudo,email')
+                                        ->get();
+                                }else{
+                                    $membres = Membres::where('fonctions_id', $fonctions_id)
+                                        ->where('levels_id', $niveau_id)
+                                        ->where('axes_id', $axes_id)
+                                        ->where('genre', $genre)
+                                        ->with('users:id,image,pseudo,email')
+                                        ->get();
+                                }
+                            }
+                        }else{
+                            if($axes_id == 0){
+                                if($genre == "null"){
+                                    $membres = Membres::where('fonctions_id', $fonctions_id)
+                                        ->where('levels_id', $niveau_id)
+                                        ->where('sections_id', $sections_id)
+                                        ->where('sympathisant', $sympathisant)
+                                        ->with('users:id,image,pseudo,email')
+                                        ->get();
+                                }else{
+                                    $membres = Membres::where('fonctions_id', $fonctions_id)
+                                        ->where('levels_id', $niveau_id)
+                                        ->where('sections_id', $sections_id)
+                                        ->where('sympathisant', $sympathisant)
+                                        ->where('genre', $genre)
+                                        ->with('users:id,image,pseudo,email')
+                                        ->get();
+                                }
+                            }else{
+                                if($genre == "null"){
+                                    $membres = Membres::where('fonctions_id', $fonctions_id)
+                                        ->where('levels_id', $niveau_id)
+                                        ->where('sections_id', $sections_id)
+                                        ->where('axes_id', $axes_id)
+                                        ->with('users:id,image,pseudo,email')
+                                        ->get();
+                                }else{
+                                    $membres = Membres::where('fonctions_id', $fonctions_id)
+                                        ->where('levels_id', $niveau_id)
+                                        ->where('sections_id', $sections_id)
+                                        ->where('axes_id', $axes_id)
+                                        ->where('genre', $genre)
+                                        ->with('users:id,image,pseudo,email')
+                                        ->get();
+                                }
+                            }
+                        }
+                    }
+                }else{
+                if($niveau_id == 0){
+                        if($sections_id == 0){
+                            if($axes_id == 0){
+                                if($genre == "null"){
+                                    $membres = Membres::where('fonctions_id', $fonctions_id)
+                                        ->where('filieres_id', $filieres_id)
+                                        ->where('sympathisant', $sympathisant)
+                                        ->with('users:id,image,pseudo,email')
+                                        ->get();
+                                }else{
+                                    $membres = Membres::where('fonctions_id', $fonctions_id)
+                                        ->where('filieres_id', $filieres_id)
+                                        ->where('genre', $genre)
+                                        ->where('sympathisant', $sympathisant)
+                                        ->with('users:id,image,pseudo,email')
+                                        ->get();
+                                }
+                            }else{
+                                if($genre == "null"){
+                                    $membres = Membres::where('fonctions_id', $fonctions_id)
+                                        ->where('filieres_id', $filieres_id)
+                                        ->where('axes_id', $axes_id)
+                                        ->with('users:id,image,pseudo,email')
+                                        ->get();
+                                }else{
+                                    $membres = Membres::where('fonctions_id', $fonctions_id)
+                                        ->where('filieres_id', $filieres_id)
+                                        ->where('axes_id', $axes_id)
+                                        ->where('genre', $genre)
+                                        ->with('users:id,image,pseudo,email')
+                                        ->get();
+                                }
+                            }
+                        }else{
+                            if($axes_id == 0){
+                                if($genre == "null"){
+                                    $membres = Membres::where('fonctions_id', $fonctions_id)
+                                        ->where('filieres_id', $filieres_id)
+                                        ->where('sections_id', $sections_id)
+                                        ->where('sympathisant', $sympathisant)
+                                        ->with('users:id,image,pseudo,email')
+                                        ->get();
+                                }else{
+                                    $membres = Membres::where('fonctions_id', $fonctions_id)
+                                        ->where('filieres_id', $filieres_id)
+                                        ->where('sections_id', $sections_id)
+                                        ->where('genre', $genre)
+                                        ->where('sympathisant', $sympathisant)
+                                        ->with('users:id,image,pseudo,email')
+                                        ->get();
+                                }
+                            }else{
+                                if($genre == "null"){
+                                    $membres = Membres::where('fonctions_id', $fonctions_id)
+                                        ->where('filieres_id', $filieres_id)
+                                        ->where('sections_id', $sections_id)
+                                        ->where('axes_id', $axes_id)
+                                        ->with('users:id,image,pseudo,email')
+                                        ->get();
+                                }else{
+                                    $membres = Membres::where('fonctions_id', $fonctions_id)
+                                    ->where('filieres_id', $filieres_id)
+                                    ->where('sections_id', $sections_id)
+                                    ->where('axes_id', $axes_id)
+                                    ->where('genre', $genre)
+                                    ->with('users:id,image,pseudo,email')
+                                    ->get();
+                                }
+                            }
+                        }
+                }else{
+                        if($sections_id == 0){
+                            if($axes_id == 0){
+                                if($genre == "null"){
+                                    $membres = Membres::where('fonctions_id', $fonctions_id)
+                                        ->where('filieres_id', $filieres_id)
+                                        ->where('levels_id', $niveau_id)
+                                        ->where('sympathisant', $sympathisant)
+                                        ->with('users:id,image,pseudo,email')
+                                        ->get();
+                                }else{
+                                    $membres = Membres::where('fonctions_id', $fonctions_id)
+                                        ->where('filieres_id', $filieres_id)
+                                        ->where('levels_id', $niveau_id)
+                                        ->where('genre', $genre)
+                                        ->where('sympathisant', $sympathisant)
+                                        ->with('users:id,image,pseudo,email')
+                                        ->get();
+                                }
+                            }else{
+                                if($genre == "null"){
+                                    $membres = Membres::where('fonctions_id', $fonctions_id)
+                                        ->where('filieres_id', $filieres_id)
+                                        ->where('levels_id', $niveau_id)
+                                        ->where('axes_id', $axes_id)
+                                        ->with('users:id,image,pseudo,email')
+                                        ->get();
+                                }else{
+                                    $membres = Membres::where('fonctions_id', $fonctions_id)
+                                        ->where('filieres_id', $filieres_id)
+                                        ->where('levels_id', $niveau_id)
+                                        ->where('axes_id', $axes_id)
+                                        ->where('genre', $genre)
+                                        ->with('users:id,image,pseudo,email')
+                                        ->get();
+                                }
+                            }
+                        }else{
+                            if($axes_id == 0){
+                                if($genre == "null"){
+                                    $membres = Membres::where('fonctions_id', $fonctions_id)
+                                        ->where('filieres_id', $filieres_id)
+                                        ->where('levels_id', $niveau_id)
+                                        ->where('sections_id', $sections_id)
+                                        ->where('sympathisant', $sympathisant)
+                                        ->with('users:id,image,pseudo,email')
+                                        ->get();
+                                }else{
+                                    $membres = Membres::where('fonctions_id', $fonctions_id)
+                                        ->where('filieres_id', $filieres_id)
+                                        ->where('levels_id', $niveau_id)
+                                        ->where('sections_id', $sections_id)
+                                        ->where('genre', $genre)
+                                        ->where('sympathisant', $sympathisant)
+                                        ->with('users:id,image,pseudo,email')
+                                        ->get();
+                                }
+                            }else{
+                                if($genre == "null"){
+                                    $membres = Membres::where('fonctions_id', $fonctions_id)
+                                        ->where('filieres_id', $filieres_id)
+                                        ->where('levels_id', $niveau_id)
+                                        ->where('sections_id', $sections_id)
+                                        ->where('axes_id', $axes_id)
+                                        ->with('users:id,image,pseudo,email')
+                                        ->get();
+                                }else{
+                                    $membres = Membres::where('fonctions_id', $fonctions_id)
+                                        ->where('filieres_id', $filieres_id)
+                                        ->where('levels_id', $niveau_id)
+                                        ->where('sections_id', $sections_id)
+                                        ->where('axes_id', $axes_id)
+                                        ->where('genre', $genre)
+                                        ->with('users:id,image,pseudo,email')
+                                        ->get();
+                                }
+                            }
+                        }
+                }
+                }
+            }
+        return response()->json([
+            'membres' => $membres
+        ], 200);
+        
+        }else{
+            return response()->json([
+                'message' => $this->constantes['NonAuthentifier']
+            ], 401);
+        }
+    }
+ 
+    public function searchInfiltreAll($value,$fonctions_id, $filieres_id, $niveau_id, $sections_id, $axes_id, $genre, $sympathisant){
+        
+        $user = auth()->user();
+
+        if($user){
+            if($fonctions_id == 0){
+                if($filieres_id == 0){
+                    if($niveau_id == 0){
+                        if($sections_id == 0){
+                            if($axes_id == 0){
+                                if($genre == "null"){
+                                    if(preg_match('/^\d+$/', $value)){
+                                        $membres = Membres::where('numero_carte','like', '%'. $value . '%')
+                                            ->where('sympathisant', $sympathisant)
+                                            ->with('users:id,image,pseudo,email')->get();
+                                    }else{
+                                        // Vérifier si le terme de recherche contient un espace
+                                        if (strpos($value, ' ') !== false) {
+                                            // Si le terme de recherche contient un espace, rechercher par nom et prénom ensemble
+                                            $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
+                                                ->where('sympathisant', $sympathisant)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        } else {
+                                            // Sinon, rechercher dans les colonnes du nom et du prénom séparément
+                                            $membres = Membres::where('nom', 'like', '%' . $value . '%')
+                                                ->orWhere('prenom', 'like', '%' . $value . '%')
+                                                ->where('sympathisant', $sympathisant)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        }
+                                    }
+                                }else{
+                                    if(preg_match('/^\d+$/', $value)){
+                                        $membres = Membres::where('numero_carte','like', '%'. $value . '%')
+                                            ->where('sympathisant', $sympathisant)
+                                            ->where('genre', $genre)
+                                            ->with('users:id,image,pseudo,email')->get();
+                                    }else{
+                                        // Vérifier si le terme de recherche contient un espace
+                                        if (strpos($value, ' ') !== false) {
+                                            // Si le terme de recherche contient un espace, rechercher par nom et prénom ensemble
+                                            $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
+                                                ->where('sympathisant', $sympathisant)
+                                                ->where('genre', $genre)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        } else {
+                                            // Sinon, rechercher dans les colonnes du nom et du prénom séparément
+                                            $membres = Membres::where('nom', 'like', '%' . $value . '%')
+                                                ->orWhere('prenom', 'like', '%' . $value . '%')
+                                                ->where('genre', $genre)
+                                                ->where('sympathisant', $sympathisant)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        }
+                                    }
+                                }
+                            }else{
+                                if($genre == "null"){
+                                    if(preg_match('/^\d+$/', $value)){
+                                        $membres = Membres::where('numero_carte','like', '%'. $value . '%')
+                                            ->where('axes_id', $axes_id)
+                                            ->with('users:id,image,pseudo,email')->get();
+                                    }else{
+                                        // Vérifier si le terme de recherche contient un espace
+                                        if (strpos($value, ' ') !== false) {
+                                            // Si le terme de recherche contient un espace, rechercher par nom et prénom ensemble
+                                            $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
+                                                ->where('axes_id', $axes_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        } else {
+                                            // Sinon, rechercher dans les colonnes du nom et du prénom séparément
+                                            $membres = Membres::where('nom', 'like', '%' . $value . '%')
+                                                ->orWhere('prenom', 'like', '%' . $value . '%')
+                                                ->where('axes_id', $axes_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        }
+                                    }
+                                }else{
+                                    if(preg_match('/^\d+$/', $value)){
+                                        $membres = Membres::where('numero_carte','like', '%'. $value . '%')
+                                            ->where('axes_id', $axes_id)
+                                            ->where('genre', $genre)
+                                            ->with('users:id,image,pseudo,email')->get();
+                                    }else{
+                                        // Vérifier si le terme de recherche contient un espace
+                                        if (strpos($value, ' ') !== false) {
+                                            // Si le terme de recherche contient un espace, rechercher par nom et prénom ensemble
+                                            $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
+                                                ->where('axes_id', $axes_id)
+                                                ->where('genre', $genre)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        } else {
+                                            // Sinon, rechercher dans les colonnes du nom et du prénom séparément
+                                            $membres = Membres::where('nom', 'like', '%' . $value . '%')
+                                                ->orWhere('prenom', 'like', '%' . $value . '%')
+                                                ->where('axes_id', $axes_id)
+                                                ->where('genre', $genre)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        }
+                                    }
+                                }
+                            }
+                        }else{
+                            if($axes_id == 0){
+                                if($genre == "null"){
+                                    if(preg_match('/^\d+$/', $value)){
+                                        $membres = Membres::where('numero_carte','like', '%'. $value . '%')
+                                            ->where('sections_id', $sections_id)
+                                            ->where('sympathisant', $sympathisant)
+                                            ->with('users:id,image,pseudo,email')->get();
+                                    }else{
+                                        // Vérifier si le terme de recherche contient un espace
+                                        if (strpos($value, ' ') !== false) {
+                                            // Si le terme de recherche contient un espace, rechercher par nom et prénom ensemble
+                                            $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
+                                                ->where('sections_id', $sections_id)
+                                                ->where('sympathisant', $sympathisant)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        } else {
+                                            // Sinon, rechercher dans les colonnes du nom et du prénom séparément
+                                            $membres = Membres::where('nom', 'like', '%' . $value . '%')
+                                                ->orWhere('prenom', 'like', '%' . $value . '%')
+                                                ->where('sections_id', $sections_id)
+                                                ->where('sympathisant', $sympathisant)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        }
+                                    }
+                                }else{
+                                    if(preg_match('/^\d+$/', $value)){
+                                        $membres = Membres::where('numero_carte','like', '%'. $value . '%')
+                                            ->where('sections_id', $sections_id)
+                                            ->where('genre', $genre)
+                                            ->where('sympathisant', $sympathisant)
+                                            ->with('users:id,image,pseudo,email')->get();
+                                    }else{
+                                        // Vérifier si le terme de recherche contient un espace
+                                        if (strpos($value, ' ') !== false) {
+                                            // Si le terme de recherche contient un espace, rechercher par nom et prénom ensemble
+                                            $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
+                                                ->where('sections_id', $sections_id)
+                                                ->where('genre', $genre)
+                                                ->where('sympathisant', $sympathisant)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        } else {
+                                            // Sinon, rechercher dans les colonnes du nom et du prénom séparément
+                                            $membres = Membres::where('nom', 'like', '%' . $value . '%')
+                                                ->orWhere('prenom', 'like', '%' . $value . '%')
+                                                ->where('sections_id', $sections_id)
+                                                ->where('genre', $genre)
+                                                ->where('sympathisant', $sympathisant)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        }
+                                    }
+                                }
+                            }else{
+                                if($genre == "null"){
+                                    if(preg_match('/^\d+$/', $value)){
+                                        $membres = Membres::where('numero_carte','like', '%'. $value . '%')
+                                            ->where('sections_id', $sections_id)
+                                            ->where('axes_id', $axes_id)
+                                            ->with('users:id,image,pseudo,email')->get();
+                                    }else{
+                                        // Vérifier si le terme de recherche contient un espace
+                                        if (strpos($value, ' ') !== false) {
+                                            // Si le terme de recherche contient un espace, rechercher par nom et prénom ensemble
+                                            $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
+                                                ->where('sections_id', $sections_id)
+                                                ->where('axes_id', $axes_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        } else {
+                                            // Sinon, rechercher dans les colonnes du nom et du prénom séparément
+                                            $membres = Membres::where('nom', 'like', '%' . $value . '%')
+                                                ->orWhere('prenom', 'like', '%' . $value . '%')
+                                                ->where('sections_id', $sections_id)
+                                                ->where('axes_id', $axes_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        }
+                                    }
+                                }else{
+                                    if(preg_match('/^\d+$/', $value)){
+                                        $membres = Membres::where('numero_carte','like', '%'. $value . '%')
+                                            ->where('sections_id', $sections_id)
+                                            ->where('axes_id', $axes_id)
+                                            ->where('genre', $genre)
+                                            ->with('users:id,image,pseudo,email')->get();
+                                    }else{
+                                        // Vérifier si le terme de recherche contient un espace
+                                        if (strpos($value, ' ') !== false) {
+                                            // Si le terme de recherche contient un espace, rechercher par nom et prénom ensemble
+                                            $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
+                                                ->where('sections_id', $sections_id)
+                                                ->where('axes_id', $axes_id)
+                                                ->where('genre', $genre)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        } else {
+                                            // Sinon, rechercher dans les colonnes du nom et du prénom séparément
+                                            $membres = Membres::where('nom', 'like', '%' . $value . '%')
+                                                ->orWhere('prenom', 'like', '%' . $value . '%')
+                                                ->where('sections_id', $sections_id)
+                                                ->where('axes_id', $axes_id)
+                                                ->where('genre', $genre)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }else{
+                        if($sections_id == 0){
+                            if($axes_id == 0){
+                                if($genre == "null"){
+                                    if(preg_match('/^\d+$/', $value)){
+                                        $membres = Membres::where('numero_carte','like', '%'. $value . '%')
+                                            ->where('sympathisant', $sympathisant)
+                                            ->where('levels_id', $niveau_id)
+                                            ->with('users:id,image,pseudo,email')->get();
+                                    }else{
+                                        // Vérifier si le terme de recherche contient un espace
+                                        if (strpos($value, ' ') !== false) {
+                                            // Si le terme de recherche contient un espace, rechercher par nom et prénom ensemble
+                                            $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
+                                                ->where('sympathisant', $sympathisant)
+                                                ->where('levels_id', $niveau_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        } else {
+                                            // Sinon, rechercher dans les colonnes du nom et du prénom séparément
+                                            $membres = Membres::where('nom', 'like', '%' . $value . '%')
+                                                ->orWhere('prenom', 'like', '%' . $value . '%')
+                                                ->where('sympathisant', $sympathisant)
+                                                ->where('levels_id', $niveau_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        }
+                                    }
+                                }else{
+                                    if(preg_match('/^\d+$/', $value)){
+                                        $membres = Membres::where('numero_carte','like', '%'. $value . '%')
+                                            ->where('genre', $genre)
+                                            ->where('sympathisant', $sympathisant)
+                                            ->where('levels_id', $niveau_id)
+                                            ->with('users:id,image,pseudo,email')->get();
+                                    }else{
+                                        // Vérifier si le terme de recherche contient un espace
+                                        if (strpos($value, ' ') !== false) {
+                                            // Si le terme de recherche contient un espace, rechercher par nom et prénom ensemble
+                                            $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
+                                                ->where('genre', $genre)
+                                                ->where('sympathisant', $sympathisant)
+                                                ->where('levels_id', $niveau_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        } else {
+                                            // Sinon, rechercher dans les colonnes du nom et du prénom séparément
+                                            $membres = Membres::where('nom', 'like', '%' . $value . '%')
+                                                ->orWhere('prenom', 'like', '%' . $value . '%')
+                                                ->where('genre', $genre)
+                                                ->where('sympathisant', $sympathisant)
+                                                ->where('levels_id', $niveau_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        }
+                                    }
+                                }
+                            }else{
+                                if($genre == "null"){
+                                    if(preg_match('/^\d+$/', $value)){
+                                        $membres = Membres::where('numero_carte','like', '%'. $value . '%')
+                                            ->where('axes_id', $axes_id)
+                                            ->where('levels_id', $niveau_id)
+                                            ->with('users:id,image,pseudo,email')->get();
+                                    }else{
+                                        // Vérifier si le terme de recherche contient un espace
+                                        if (strpos($value, ' ') !== false) {
+                                            // Si le terme de recherche contient un espace, rechercher par nom et prénom ensemble
+                                            $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
+                                                ->where('axes_id', $axes_id)
+                                                ->where('levels_id', $niveau_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        } else {
+                                            // Sinon, rechercher dans les colonnes du nom et du prénom séparément
+                                            $membres = Membres::where('nom', 'like', '%' . $value . '%')
+                                                ->orWhere('prenom', 'like', '%' . $value . '%')
+                                                ->where('axes_id', $axes_id)
+                                                ->where('levels_id', $niveau_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        }
+                                    }
+                                }else{
+                                    if(preg_match('/^\d+$/', $value)){
+                                        $membres = Membres::where('numero_carte','like', '%'. $value . '%')
+                                            ->where('genre', $genre)
+                                            ->where('axes_id', $axes_id)
+                                            ->where('levels_id', $niveau_id)
+                                            ->with('users:id,image,pseudo,email')->get();
+                                    }else{
+                                        // Vérifier si le terme de recherche contient un espace
+                                        if (strpos($value, ' ') !== false) {
+                                            // Si le terme de recherche contient un espace, rechercher par nom et prénom ensemble
+                                            $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
+                                                ->where('genre', $genre)
+                                                ->where('axes_id', $axes_id)
+                                                ->where('levels_id', $niveau_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        } else {
+                                            // Sinon, rechercher dans les colonnes du nom et du prénom séparément
+                                            $membres = Membres::where('nom', 'like', '%' . $value . '%')
+                                                ->orWhere('prenom', 'like', '%' . $value . '%')
+                                                ->where('genre', $genre)
+                                                ->where('axes_id', $axes_id)
+                                                ->where('levels_id', $niveau_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        }
+                                    }
+                                }
+                            }
+                        }else{
+                            if($axes_id == 0){
+                                if($genre == "null"){
+                                    if(preg_match('/^\d+$/', $value)){
+                                        $membres = Membres::where('numero_carte','like', '%'. $value . '%')
+                                            ->where('sympathisant', $sympathisant)
+                                            ->where('sections_id', $sections_id)
+                                            ->where('levels_id', $niveau_id)
+                                            ->with('users:id,image,pseudo,email')->get();
+                                    }else{
+                                        // Vérifier si le terme de recherche contient un espace
+                                        if (strpos($value, ' ') !== false) {
+                                            // Si le terme de recherche contient un espace, rechercher par nom et prénom ensemble
+                                            $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
+                                                ->where('sympathisant', $sympathisant)
+                                                ->where('sections_id', $sections_id)
+                                                ->where('levels_id', $niveau_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        } else {
+                                            // Sinon, rechercher dans les colonnes du nom et du prénom séparément
+                                            $membres = Membres::where('nom', 'like', '%' . $value . '%')
+                                                ->orWhere('prenom', 'like', '%' . $value . '%')
+                                                ->where('sympathisant', $sympathisant)
+                                                ->where('sections_id', $sections_id)
+                                                ->where('levels_id', $niveau_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        }
+                                    }
+                                }else{
+
+                                    if(preg_match('/^\d+$/', $value)){
+                                        $membres = Membres::where('numero_carte','like', '%'. $value . '%')
+                                            ->where('genre', $genre)
+                                            ->where('sympathisant', $sympathisant)
+                                            ->where('sections_id', $sections_id)
+                                            ->where('levels_id', $niveau_id)
+                                            ->with('users:id,image,pseudo,email')->get();
+                                    }else{
+                                        // Vérifier si le terme de recherche contient un espace
+                                        if (strpos($value, ' ') !== false) {
+                                            // Si le terme de recherche contient un espace, rechercher par nom et prénom ensemble
+                                            $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
+                                                ->where('genre', $genre)
+                                                ->where('sympathisant', $sympathisant)
+                                                ->where('sections_id', $sections_id)
+                                                ->where('levels_id', $niveau_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        } else {
+                                            // Sinon, rechercher dans les colonnes du nom et du prénom séparément
+                                            $membres = Membres::where('nom', 'like', '%' . $value . '%')
+                                                ->orWhere('prenom', 'like', '%' . $value . '%')
+                                                ->where('genre', $genre)
+                                                ->where('sympathisant', $sympathisant)
+                                                ->where('sections_id', $sections_id)
+                                                ->where('levels_id', $niveau_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        }
+                                    }
+                                }
+                            }else{
+                                if($genre == "null"){
+                                    if(preg_match('/^\d+$/', $value)){
+                                        $membres = Membres::where('numero_carte','like', '%'. $value . '%')
+                                            ->where('axes_id', $axes_id)
+                                            ->where('sections_id', $sections_id)
+                                            ->where('levels_id', $niveau_id)
+                                            ->with('users:id,image,pseudo,email')->get();
+                                    }else{
+                                        // Vérifier si le terme de recherche contient un espace
+                                        if (strpos($value, ' ') !== false) {
+                                            // Si le terme de recherche contient un espace, rechercher par nom et prénom ensemble
+                                            $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
+                                                ->where('axes_id', $axes_id)
+                                                ->where('sections_id', $sections_id)
+                                                ->where('levels_id', $niveau_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        } else {
+                                            // Sinon, rechercher dans les colonnes du nom et du prénom séparément
+                                            $membres = Membres::where('nom', 'like', '%' . $value . '%')
+                                                ->orWhere('prenom', 'like', '%' . $value . '%')
+                                                ->where('axes_id', $axes_id)
+                                                ->where('sections_id', $sections_id)
+                                                ->where('levels_id', $niveau_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        }
+                                    }
+                                }else{
+                                    if(preg_match('/^\d+$/', $value)){
+                                        $membres = Membres::where('numero_carte','like', '%'. $value . '%')
+                                            ->where('axes_id', $axes_id)
+                                            ->where('sections_id', $sections_id)
+                                            ->where('levels_id', $niveau_id)
+                                            ->where('genre', $genre)
+                                            ->with('users:id,image,pseudo,email')->get();
+                                    }else{
+                                        // Vérifier si le terme de recherche contient un espace
+                                        if (strpos($value, ' ') !== false) {
+                                            // Si le terme de recherche contient un espace, rechercher par nom et prénom ensemble
+                                            $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
+                                                ->where('axes_id', $axes_id)
+                                                ->where('sections_id', $sections_id)
+                                                ->where('levels_id', $niveau_id)
+                                                ->where('genre', $genre)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        } else {
+                                            // Sinon, rechercher dans les colonnes du nom et du prénom séparément
+                                            $membres = Membres::where('nom', 'like', '%' . $value . '%')
+                                                ->orWhere('prenom', 'like', '%' . $value . '%')
+                                                ->where('axes_id', $axes_id)
+                                                ->where('sections_id', $sections_id)
+                                                ->where('levels_id', $niveau_id)
+                                                ->where('genre', $genre)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }else{
+                    if($niveau_id == 0){
+                        if($sections_id == 0){
+                            if($axes_id == 0){
+                                if($genre == "null"){
+                                    if(preg_match('/^\d+$/', $value)){
+                                        $membres = Membres::where('numero_carte','like', '%'. $value . '%')
+                                            ->where('sympathisant', $sympathisant)
+                                            ->where('filieres_id', $filieres_id)
+                                            ->with('users:id,image,pseudo,email')->get();
+                                    }else{
+                                        // Vérifier si le terme de recherche contient un espace
+                                        if (strpos($value, ' ') !== false) {
+                                            // Si le terme de recherche contient un espace, rechercher par nom et prénom ensemble
+                                            $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
+                                                ->where('sympathisant', $sympathisant)
+                                                ->where('filieres_id', $filieres_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        } else {
+                                            // Sinon, rechercher dans les colonnes du nom et du prénom séparément
+                                            $membres = Membres::where('nom', 'like', '%' . $value . '%')
+                                                ->orWhere('prenom', 'like', '%' . $value . '%')
+                                                ->where('sympathisant', $sympathisant)
+                                                ->where('filieres_id', $filieres_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        }
+                                    }
+                                }else{
+                                    if(preg_match('/^\d+$/', $value)){
+                                        $membres = Membres::where('numero_carte','like', '%'. $value . '%')
+                                            ->where('genre', $genre)
+                                            ->where('sympathisant', $sympathisant)
+                                            ->where('filieres_id', $filieres_id)
+                                            ->with('users:id,image,pseudo,email')->get();
+                                    }else{
+                                        // Vérifier si le terme de recherche contient un espace
+                                        if (strpos($value, ' ') !== false) {
+                                            // Si le terme de recherche contient un espace, rechercher par nom et prénom ensemble
+                                            $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
+                                                ->where('genre', $genre)
+                                                ->where('sympathisant', $sympathisant)
+                                                ->where('filieres_id', $filieres_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        } else {
+                                            // Sinon, rechercher dans les colonnes du nom et du prénom séparément
+                                            $membres = Membres::where('nom', 'like', '%' . $value . '%')
+                                                ->orWhere('prenom', 'like', '%' . $value . '%')
+                                                ->where('genre', $genre)
+                                                ->where('sympathisant', $sympathisant)
+                                                ->where('filieres_id', $filieres_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        }
+                                    }
+                                }
+                            }else{
+                                if($genre == "null"){
+                                    if(preg_match('/^\d+$/', $value)){
+                                        $membres = Membres::where('numero_carte','like', '%'. $value . '%')
+                                            ->where('axes_id', $axes_id)
+                                            ->where('filieres_id', $filieres_id)
+                                            ->with('users:id,image,pseudo,email')->get();
+                                    }else{
+                                        // Vérifier si le terme de recherche contient un espace
+                                        if (strpos($value, ' ') !== false) {
+                                            // Si le terme de recherche contient un espace, rechercher par nom et prénom ensemble
+                                            $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
+                                                ->where('axes_id', $axes_id)
+                                                ->where('filieres_id', $filieres_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        } else {
+                                            // Sinon, rechercher dans les colonnes du nom et du prénom séparément
+                                            $membres = Membres::where('nom', 'like', '%' . $value . '%')
+                                                ->orWhere('prenom', 'like', '%' . $value . '%')
+                                                ->where('axes_id', $axes_id)
+                                                ->where('filieres_id', $filieres_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        }
+                                    }
+                                }else{
+                                    if(preg_match('/^\d+$/', $value)){
+                                        $membres = Membres::where('numero_carte','like', '%'. $value . '%')
+                                            ->where('genre', $genre)
+                                            ->where('axes_id', $axes_id)
+                                            ->where('filieres_id', $filieres_id)
+                                            ->with('users:id,image,pseudo,email')->get();
+                                    }else{
+                                        // Vérifier si le terme de recherche contient un espace
+                                        if (strpos($value, ' ') !== false) {
+                                            // Si le terme de recherche contient un espace, rechercher par nom et prénom ensemble
+                                            $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
+                                                ->where('genre', $genre)
+                                                ->where('axes_id', $axes_id)
+                                                ->where('filieres_id', $filieres_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        } else {
+                                            // Sinon, rechercher dans les colonnes du nom et du prénom séparément
+                                            $membres = Membres::where('nom', 'like', '%' . $value . '%')
+                                                ->orWhere('prenom', 'like', '%' . $value . '%')
+                                                ->where('genre', $genre)
+                                                ->where('axes_id', $axes_id)
+                                                ->where('filieres_id', $filieres_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        }
+                                    }
+                                }
+                            }
+                        }else{
+                            if($axes_id == 0){
+                                if($genre == "null"){
+                                    if(preg_match('/^\d+$/', $value)){
+                                        $membres = Membres::where('numero_carte','like', '%'. $value . '%')
+                                            ->where('sympathisant', $sympathisant)
+                                            ->where('sections_id', $sections_id)
+                                            ->where('filieres_id', $filieres_id)
+                                            ->with('users:id,image,pseudo,email')->get();
+                                    }else{
+                                        // Vérifier si le terme de recherche contient un espace
+                                        if (strpos($value, ' ') !== false) {
+                                            // Si le terme de recherche contient un espace, rechercher par nom et prénom ensemble
+                                            $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
+                                                ->where('sympathisant', $sympathisant)
+                                                ->where('sections_id', $sections_id)
+                                                ->where('filieres_id', $filieres_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        } else {
+                                            // Sinon, rechercher dans les colonnes du nom et du prénom séparément
+                                            $membres = Membres::where('nom', 'like', '%' . $value . '%')
+                                                ->orWhere('prenom', 'like', '%' . $value . '%')
+                                                ->where('sympathisant', $sympathisant)
+                                                ->where('sections_id', $sections_id)
+                                                ->where('filieres_id', $filieres_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        }
+                                    }
+                                }else{
+                                    if(preg_match('/^\d+$/', $value)){
+                                        $membres = Membres::where('numero_carte','like', '%'. $value . '%')
+                                            ->where('sympathisant', $sympathisant)
+                                            ->where('sections_id', $sections_id)
+                                            ->where('filieres_id', $filieres_id)
+                                            ->where('genre', $genre)
+                                            ->with('users:id,image,pseudo,email')->get();
+                                    }else{
+                                        // Vérifier si le terme de recherche contient un espace
+                                        if (strpos($value, ' ') !== false) {
+                                            // Si le terme de recherche contient un espace, rechercher par nom et prénom ensemble
+                                            $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
+                                                ->where('sympathisant', $sympathisant)
+                                                ->where('sections_id', $sections_id)
+                                                ->where('filieres_id', $filieres_id)
+                                                ->where('genre', $genre)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        } else {
+                                            // Sinon, rechercher dans les colonnes du nom et du prénom séparément
+                                            $membres = Membres::where('nom', 'like', '%' . $value . '%')
+                                                ->orWhere('prenom', 'like', '%' . $value . '%')
+                                                ->where('sympathisant', $sympathisant)
+                                                ->where('sections_id', $sections_id)
+                                                ->where('filieres_id', $filieres_id)
+                                                ->where('genre', $genre)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        }
+                                    }
+                                }
+                            }else{
+                                if($genre == "null"){
+                                    if(preg_match('/^\d+$/', $value)){
+                                        $membres = Membres::where('numero_carte','like', '%'. $value . '%')
+                                            ->where('axes_id', $axes_id)
+                                            ->where('sections_id', $sections_id)
+                                            ->where('filieres_id', $filieres_id)
+                                            ->with('users:id,image,pseudo,email')->get();
+                                    }else{
+                                        // Vérifier si le terme de recherche contient un espace
+                                        if (strpos($value, ' ') !== false) {
+                                            // Si le terme de recherche contient un espace, rechercher par nom et prénom ensemble
+                                            $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
+                                                ->where('axes_id', $axes_id)
+                                                ->where('sections_id', $sections_id)
+                                                ->where('filieres_id', $filieres_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        } else {
+                                            // Sinon, rechercher dans les colonnes du nom et du prénom séparément
+                                            $membres = Membres::where('nom', 'like', '%' . $value . '%')
+                                                ->orWhere('prenom', 'like', '%' . $value . '%')
+                                                ->where('axes_id', $axes_id)
+                                                ->where('sections_id', $sections_id)
+                                                ->where('filieres_id', $filieres_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        }
+                                    }
+                                }else{
+                                    if(preg_match('/^\d+$/', $value)){
+                                        $membres = Membres::where('numero_carte','like', '%'. $value . '%')
+                                            ->where('axes_id', $axes_id)
+                                            ->where('sections_id', $sections_id)
+                                            ->where('filieres_id', $filieres_id)
+                                            ->where('genre', $genre)
+                                            ->with('users:id,image,pseudo,email')->get();
+                                    }else{
+                                        // Vérifier si le terme de recherche contient un espace
+                                        if (strpos($value, ' ') !== false) {
+                                            // Si le terme de recherche contient un espace, rechercher par nom et prénom ensemble
+                                            $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
+                                                ->where('axes_id', $axes_id)
+                                                ->where('sections_id', $sections_id)
+                                                ->where('filieres_id', $filieres_id)
+                                                ->where('genre', $genre)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        } else {
+                                            // Sinon, rechercher dans les colonnes du nom et du prénom séparément
+                                            $membres = Membres::where('nom', 'like', '%' . $value . '%')
+                                                ->orWhere('prenom', 'like', '%' . $value . '%')
+                                                ->where('axes_id', $axes_id)
+                                                ->where('sections_id', $sections_id)
+                                                ->where('filieres_id', $filieres_id)
+                                                ->where('genre', $genre)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        }
+                                    }
+                                    $membres = Membres::where('sympathisant', $sympathisant)
+                                        ->where('filieres_id', $filieres_id)
+                                        ->where('sections_id', $sections_id)
+                                        ->where('axes_id', $axes_id)
+                                        ->where('genre', $genre)
+                                        ->with('users:id,image,pseudo,email')
+                                        ->get();
+                                }
+                            }
+                        }
+                    }else{
+                        if($sections_id == 0){
+                            if($axes_id == 0){
+                                if($genre == "null"){
+                                    if(preg_match('/^\d+$/', $value)){
+                                        $membres = Membres::where('numero_carte','like', '%'. $value . '%')
+                                            ->where('sympathisant', $sympathisant)
+                                            ->where('levels_id', $niveau_id)
+                                            ->where('filieres_id', $filieres_id)
+                                            ->with('users:id,image,pseudo,email')->get();
+                                    }else{
+                                        // Vérifier si le terme de recherche contient un espace
+                                        if (strpos($value, ' ') !== false) {
+                                            // Si le terme de recherche contient un espace, rechercher par nom et prénom ensemble
+                                            $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
+                                                ->where('sympathisant', $sympathisant)
+                                                ->where('levels_id', $niveau_id)
+                                                ->where('filieres_id', $filieres_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        } else {
+                                            // Sinon, rechercher dans les colonnes du nom et du prénom séparément
+                                            $membres = Membres::where('nom', 'like', '%' . $value . '%')
+                                                ->orWhere('prenom', 'like', '%' . $value . '%')
+                                                ->where('sympathisant', $sympathisant)
+                                                ->where('levels_id', $niveau_id)
+                                                ->where('filieres_id', $filieres_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        }
+                                    }
+                                }else{
+                                    if(preg_match('/^\d+$/', $value)){
+                                        $membres = Membres::where('numero_carte','like', '%'. $value . '%')
+                                            ->where('sympathisant', $sympathisant)
+                                            ->where('levels_id', $niveau_id)
+                                            ->where('filieres_id', $filieres_id)
+                                            ->where('genre', $genre)
+                                            ->with('users:id,image,pseudo,email')->get();
+                                    }else{
+                                        // Vérifier si le terme de recherche contient un espace
+                                        if (strpos($value, ' ') !== false) {
+                                            // Si le terme de recherche contient un espace, rechercher par nom et prénom ensemble
+                                            $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
+                                                ->where('sympathisant', $sympathisant)
+                                                ->where('levels_id', $niveau_id)
+                                                ->where('filieres_id', $filieres_id)
+                                                ->where('genre', $genre)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        } else {
+                                            // Sinon, rechercher dans les colonnes du nom et du prénom séparément
+                                            $membres = Membres::where('nom', 'like', '%' . $value . '%')
+                                                ->orWhere('prenom', 'like', '%' . $value . '%')
+                                                ->where('sympathisant', $sympathisant)
+                                                ->where('levels_id', $niveau_id)
+                                                ->where('filieres_id', $filieres_id)
+                                                ->where('genre', $genre)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        }
+                                    }
+                                }
+                            }else{
+                                if($genre == "null"){
+                                    if(preg_match('/^\d+$/', $value)){
+                                        $membres = Membres::where('numero_carte','like', '%'. $value . '%')
+                                            ->where('axes_id', $axes_id)
+                                            ->where('levels_id', $niveau_id)
+                                            ->where('filieres_id', $filieres_id)
+                                            ->with('users:id,image,pseudo,email')->get();
+                                    }else{
+                                        // Vérifier si le terme de recherche contient un espace
+                                        if (strpos($value, ' ') !== false) {
+                                            // Si le terme de recherche contient un espace, rechercher par nom et prénom ensemble
+                                            $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
+                                                ->where('axes_id', $axes_id)
+                                                ->where('levels_id', $niveau_id)
+                                                ->where('filieres_id', $filieres_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        } else {
+                                            // Sinon, rechercher dans les colonnes du nom et du prénom séparément
+                                            $membres = Membres::where('nom', 'like', '%' . $value . '%')
+                                                ->orWhere('prenom', 'like', '%' . $value . '%')
+                                                ->where('axes_id', $axes_id)
+                                                ->where('levels_id', $niveau_id)
+                                                ->where('filieres_id', $filieres_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        }
+                                    }
+                                }else{
+                                    if(preg_match('/^\d+$/', $value)){
+                                        $membres = Membres::where('numero_carte','like', '%'. $value . '%')
+                                            ->where('axes_id', $axes_id)
+                                            ->where('levels_id', $niveau_id)
+                                            ->where('genre', $genre)
+                                            ->where('filieres_id', $filieres_id)
+                                            ->with('users:id,image,pseudo,email')->get();
+                                    }else{
+                                        // Vérifier si le terme de recherche contient un espace
+                                        if (strpos($value, ' ') !== false) {
+                                            // Si le terme de recherche contient un espace, rechercher par nom et prénom ensemble
+                                            $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
+                                                ->where('axes_id', $axes_id)
+                                                ->where('levels_id', $niveau_id)
+                                                ->where('genre', $genre)
+                                                ->where('filieres_id', $filieres_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        } else {
+                                            // Sinon, rechercher dans les colonnes du nom et du prénom séparément
+                                            $membres = Membres::where('nom', 'like', '%' . $value . '%')
+                                                ->orWhere('prenom', 'like', '%' . $value . '%')
+                                                ->where('axes_id', $axes_id)
+                                                ->where('levels_id', $niveau_id)
+                                                ->where('genre', $genre)
+                                                ->where('filieres_id', $filieres_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        }
+                                    }
+                                }
+                            }
+                        }else{
+                            if($axes_id == 0){
+                                if($genre == "null"){
+                                    if(preg_match('/^\d+$/', $value)){
+                                        $membres = Membres::where('numero_carte','like', '%'. $value . '%')
+                                            ->where('sympathisant', $sympathisant)
+                                            ->where('levels_id', $niveau_id)
+                                            ->where('sections_id', $sections_id)
+                                            ->where('filieres_id', $filieres_id)
+                                            ->with('users:id,image,pseudo,email')->get();
+                                    }else{
+                                        // Vérifier si le terme de recherche contient un espace
+                                        if (strpos($value, ' ') !== false) {
+                                            // Si le terme de recherche contient un espace, rechercher par nom et prénom ensemble
+                                            $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
+                                                ->where('sympathisant', $sympathisant)
+                                                ->where('levels_id', $niveau_id)
+                                                ->where('sections_id', $sections_id)
+                                                ->where('filieres_id', $filieres_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        } else {
+                                            // Sinon, rechercher dans les colonnes du nom et du prénom séparément
+                                            $membres = Membres::where('nom', 'like', '%' . $value . '%')
+                                                ->orWhere('prenom', 'like', '%' . $value . '%')
+                                                ->where('sympathisant', $sympathisant)
+                                                ->where('levels_id', $niveau_id)
+                                                ->where('sections_id', $sections_id)
+                                                ->where('filieres_id', $filieres_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        }
+                                    }
+                                }else{
+                                    if(preg_match('/^\d+$/', $value)){
+                                        $membres = Membres::where('numero_carte','like', '%'. $value . '%')
+                                            ->where('sympathisant', $sympathisant)
+                                            ->where('levels_id', $niveau_id)
+                                            ->where('sections_id', $sections_id)
+                                            ->where('genre', $genre)
+                                            ->where('filieres_id', $filieres_id)
+                                            ->with('users:id,image,pseudo,email')->get();
+                                    }else{
+                                        // Vérifier si le terme de recherche contient un espace
+                                        if (strpos($value, ' ') !== false) {
+                                            // Si le terme de recherche contient un espace, rechercher par nom et prénom ensemble
+                                            $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
+                                                ->where('sympathisant', $sympathisant)
+                                                ->where('levels_id', $niveau_id)
+                                                ->where('sections_id', $sections_id)
+                                                ->where('genre', $genre)
+                                                ->where('filieres_id', $filieres_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        } else {
+                                            // Sinon, rechercher dans les colonnes du nom et du prénom séparément
+                                            $membres = Membres::where('nom', 'like', '%' . $value . '%')
+                                                ->orWhere('prenom', 'like', '%' . $value . '%')
+                                                ->where('sympathisant', $sympathisant)
+                                                ->where('levels_id', $niveau_id)
+                                                ->where('sections_id', $sections_id)
+                                                ->where('genre', $genre)
+                                                ->where('filieres_id', $filieres_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        }
+                                    }
+                                }
+                            }else{
+                                if($genre == "null"){
+                                    if(preg_match('/^\d+$/', $value)){
+                                        $membres = Membres::where('numero_carte','like', '%'. $value . '%')
+                                            ->where('axes_id', $axes_id)
+                                            ->where('levels_id', $niveau_id)
+                                            ->where('sections_id', $sections_id)
+                                            ->where('filieres_id', $filieres_id)
+                                            ->with('users:id,image,pseudo,email')->get();
+                                    }else{
+                                        // Vérifier si le terme de recherche contient un espace
+                                        if (strpos($value, ' ') !== false) {
+                                            // Si le terme de recherche contient un espace, rechercher par nom et prénom ensemble
+                                            $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
+                                                ->where('axes_id', $axes_id)
+                                                ->where('levels_id', $niveau_id)
+                                                ->where('sections_id', $sections_id)
+                                                ->where('filieres_id', $filieres_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        } else {
+                                            // Sinon, rechercher dans les colonnes du nom et du prénom séparément
+                                            $membres = Membres::where('nom', 'like', '%' . $value . '%')
+                                                ->orWhere('prenom', 'like', '%' . $value . '%')
+                                                ->where('axes_id', $axes_id)
+                                                ->where('levels_id', $niveau_id)
+                                                ->where('sections_id', $sections_id)
+                                                ->where('filieres_id', $filieres_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        }
+                                    }
+                                }else{
+                                    if(preg_match('/^\d+$/', $value)){
+                                        $membres = Membres::where('numero_carte','like', '%'. $value . '%')
+                                            ->where('axes_id', $axes_id)
+                                            ->where('levels_id', $niveau_id)
+                                            ->where('sections_id', $sections_id)
+                                            ->where('genre', $genre)
+                                            ->where('filieres_id', $filieres_id)
+                                            ->with('users:id,image,pseudo,email')->get();
+                                    }else{
+                                        // Vérifier si le terme de recherche contient un espace
+                                        if (strpos($value, ' ') !== false) {
+                                            // Si le terme de recherche contient un espace, rechercher par nom et prénom ensemble
+                                            $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
+                                                ->where('axes_id', $axes_id)
+                                                ->where('levels_id', $niveau_id)
+                                                ->where('sections_id', $sections_id)
+                                                ->where('genre', $genre)
+                                                ->where('filieres_id', $filieres_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        } else {
+                                            // Sinon, rechercher dans les colonnes du nom et du prénom séparément
+                                            $membres = Membres::where('nom', 'like', '%' . $value . '%')
+                                                ->orWhere('prenom', 'like', '%' . $value . '%')
+                                                ->where('axes_id', $axes_id)
+                                                ->where('levels_id', $niveau_id)
+                                                ->where('sections_id', $sections_id)
+                                                ->where('genre', $genre)
+                                                ->where('filieres_id', $filieres_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }else{
+                if($filieres_id == 0){
+                    if($niveau_id == 0){
+                        if($sections_id == 0){
+                            if($axes_id == 0){
+                                if($genre == "null"){
+                                    if(preg_match('/^\d+$/', $value)){
+                                        $membres = Membres::where('numero_carte','like', '%'. $value . '%')
+                                            ->where('sympathisant', $sympathisant)
+                                            ->where('fonctions_id', $fonctions_id)
+                                            ->with('users:id,image,pseudo,email')->get();
+                                    }else{
+                                        // Vérifier si le terme de recherche contient un espace
+                                        if (strpos($value, ' ') !== false) {
+                                            // Si le terme de recherche contient un espace, rechercher par nom et prénom ensemble
+                                            $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
+                                                ->where('sympathisant', $sympathisant)
+                                                ->where('fonctions_id', $fonctions_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        } else {
+                                            // Sinon, rechercher dans les colonnes du nom et du prénom séparément
+                                            $membres = Membres::where('nom', 'like', '%' . $value . '%')
+                                                ->orWhere('prenom', 'like', '%' . $value . '%')
+                                                ->where('sympathisant', $sympathisant)
+                                                ->where('fonctions_id', $fonctions_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        }
+                                    }
+                                }else{
+                                    if(preg_match('/^\d+$/', $value)){
+                                        $membres = Membres::where('numero_carte','like', '%'. $value . '%')
+                                            ->where('sympathisant', $sympathisant)
+                                            ->where('genre', $genre)
+                                            ->where('fonctions_id', $fonctions_id)
+                                            ->with('users:id,image,pseudo,email')->get();
+                                    }else{
+                                        // Vérifier si le terme de recherche contient un espace
+                                        if (strpos($value, ' ') !== false) {
+                                            // Si le terme de recherche contient un espace, rechercher par nom et prénom ensemble
+                                            $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
+                                                ->where('sympathisant', $sympathisant)
+                                                ->where('genre', $genre)
+                                                ->where('fonctions_id', $fonctions_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        } else {
+                                            // Sinon, rechercher dans les colonnes du nom et du prénom séparément
+                                            $membres = Membres::where('nom', 'like', '%' . $value . '%')
+                                                ->orWhere('prenom', 'like', '%' . $value . '%')
+                                                ->where('sympathisant', $sympathisant)
+                                                ->where('genre', $genre)
+                                                ->where('fonctions_id', $fonctions_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        }
+                                    }
+                                }
+                            }else{
+                                if($genre == "null"){
+                                    if(preg_match('/^\d+$/', $value)){
+                                        $membres = Membres::where('numero_carte','like', '%'. $value . '%')
+                                            ->where('axes_id', $axes_id)
+                                            ->where('fonctions_id', $fonctions_id)
+                                            ->with('users:id,image,pseudo,email')->get();
+                                    }else{
+                                        // Vérifier si le terme de recherche contient un espace
+                                        if (strpos($value, ' ') !== false) {
+                                            // Si le terme de recherche contient un espace, rechercher par nom et prénom ensemble
+                                            $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
+                                                ->where('axes_id', $axes_id)
+                                                ->where('fonctions_id', $fonctions_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        } else {
+                                            // Sinon, rechercher dans les colonnes du nom et du prénom séparément
+                                            $membres = Membres::where('nom', 'like', '%' . $value . '%')
+                                                ->orWhere('prenom', 'like', '%' . $value . '%')
+                                                ->where('axes_id', $axes_id)
+                                                ->where('fonctions_id', $fonctions_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        }
+                                    }
+                                }else{
+                                    if(preg_match('/^\d+$/', $value)){
+                                        $membres = Membres::where('numero_carte','like', '%'. $value . '%')
+                                            ->where('genre', $genre)
+                                            ->where('axes_id', $axes_id)
+                                            ->where('fonctions_id', $fonctions_id)
+                                            ->with('users:id,image,pseudo,email')->get();
+                                    }else{
+                                        // Vérifier si le terme de recherche contient un espace
+                                        if (strpos($value, ' ') !== false) {
+                                            // Si le terme de recherche contient un espace, rechercher par nom et prénom ensemble
+                                            $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
+                                                ->where('genre', $genre)
+                                                ->where('axes_id', $axes_id)
+                                                ->where('fonctions_id', $fonctions_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        } else {
+                                            // Sinon, rechercher dans les colonnes du nom et du prénom séparément
+                                            $membres = Membres::where('nom', 'like', '%' . $value . '%')
+                                                ->orWhere('prenom', 'like', '%' . $value . '%')
+                                                ->where('genre', $genre)
+                                                ->where('axes_id', $axes_id)
+                                                ->where('fonctions_id', $fonctions_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        }
+                                    }
+                                }
+                            }
+                        }else{
+                            if($axes_id == 0){
+                                if($genre == "null"){
+                                    if(preg_match('/^\d+$/', $value)){
+                                        $membres = Membres::where('numero_carte','like', '%'. $value . '%')
+                                            ->where('sympathisant', $sympathisant)
+                                            ->where('fonctions_id', $fonctions_id)
+                                            ->where('sections_id', $sections_id)
+                                            ->with('users:id,image,pseudo,email')->get();
+                                    }else{
+                                        // Vérifier si le terme de recherche contient un espace
+                                        if (strpos($value, ' ') !== false) {
+                                            // Si le terme de recherche contient un espace, rechercher par nom et prénom ensemble
+                                            $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
+                                                ->where('sympathisant', $sympathisant)
+                                                ->where('fonctions_id', $fonctions_id)
+                                                ->where('sections_id', $sections_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        } else {
+                                            // Sinon, rechercher dans les colonnes du nom et du prénom séparément
+                                            $membres = Membres::where('nom', 'like', '%' . $value . '%')
+                                                ->orWhere('prenom', 'like', '%' . $value . '%')
+                                                ->where('sympathisant', $sympathisant)
+                                                ->where('fonctions_id', $fonctions_id)
+                                                ->where('sections_id', $sections_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        }
+                                    }
+                                }else{
+                                    if(preg_match('/^\d+$/', $value)){
+                                        $membres = Membres::where('numero_carte','like', '%'. $value . '%')
+                                            ->where('sympathisant', $sympathisant)
+                                            ->where('fonctions_id', $fonctions_id)
+                                            ->where('genre', $genre)
+                                            ->where('sections_id', $sections_id)
+                                            ->with('users:id,image,pseudo,email')->get();
+                                    }else{
+                                        // Vérifier si le terme de recherche contient un espace
+                                        if (strpos($value, ' ') !== false) {
+                                            // Si le terme de recherche contient un espace, rechercher par nom et prénom ensemble
+                                            $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
+                                                ->where('sympathisant', $sympathisant)
+                                                ->where('fonctions_id', $fonctions_id)
+                                                ->where('genre', $genre)
+                                                ->where('sections_id', $sections_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        } else {
+                                            // Sinon, rechercher dans les colonnes du nom et du prénom séparément
+                                            $membres = Membres::where('nom', 'like', '%' . $value . '%')
+                                                ->orWhere('prenom', 'like', '%' . $value . '%')
+                                                ->where('sympathisant', $sympathisant)
+                                                ->where('fonctions_id', $fonctions_id)
+                                                ->where('genre', $genre)
+                                                ->where('sections_id', $sections_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        }
+                                    }
+                                }
+                            }else{
+                                if($genre == "null"){
+                                    if(preg_match('/^\d+$/', $value)){
+                                        $membres = Membres::where('numero_carte','like', '%'. $value . '%')
+                                            ->where('axes_id', $axes_id)
+                                            ->where('fonctions_id', $fonctions_id)
+                                            ->where('sections_id', $sections_id)
+                                            ->with('users:id,image,pseudo,email')->get();
+                                    }else{
+                                        // Vérifier si le terme de recherche contient un espace
+                                        if (strpos($value, ' ') !== false) {
+                                            // Si le terme de recherche contient un espace, rechercher par nom et prénom ensemble
+                                            $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
+                                                ->where('axes_id', $axes_id)
+                                                ->where('fonctions_id', $fonctions_id)
+                                                ->where('sections_id', $sections_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        } else {
+                                            // Sinon, rechercher dans les colonnes du nom et du prénom séparément
+                                            $membres = Membres::where('nom', 'like', '%' . $value . '%')
+                                                ->orWhere('prenom', 'like', '%' . $value . '%')
+                                                ->where('axes_id', $axes_id)
+                                                ->where('fonctions_id', $fonctions_id)
+                                                ->where('sections_id', $sections_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        }
+                                    }
+                                }else{
+                                    if(preg_match('/^\d+$/', $value)){
+                                        $membres = Membres::where('numero_carte','like', '%'. $value . '%')
+                                            ->where('axes_id', $axes_id)
+                                            ->where('fonctions_id', $fonctions_id)
+                                            ->where('genre', $genre)
+                                            ->where('sections_id', $sections_id)
+                                            ->with('users:id,image,pseudo,email')->get();
+                                    }else{
+                                        // Vérifier si le terme de recherche contient un espace
+                                        if (strpos($value, ' ') !== false) {
+                                            // Si le terme de recherche contient un espace, rechercher par nom et prénom ensemble
+                                            $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
+                                                ->where('axes_id', $axes_id)
+                                                ->where('fonctions_id', $fonctions_id)
+                                                ->where('genre', $genre)
+                                                ->where('sections_id', $sections_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        } else {
+                                            // Sinon, rechercher dans les colonnes du nom et du prénom séparément
+                                            $membres = Membres::where('nom', 'like', '%' . $value . '%')
+                                                ->orWhere('prenom', 'like', '%' . $value . '%')
+                                                ->where('axes_id', $axes_id)
+                                                ->where('fonctions_id', $fonctions_id)
+                                                ->where('genre', $genre)
+                                                ->where('sections_id', $sections_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }else{
+                        if($sections_id == 0){
+                            if($axes_id == 0){
+                                if($genre == "null"){
+                                    if(preg_match('/^\d+$/', $value)){
+                                        $membres = Membres::where('numero_carte','like', '%'. $value . '%')
+                                            ->where('sympathisant', $sympathisant)
+                                            ->where('fonctions_id', $fonctions_id)
+                                            ->where('levels_id', $niveau_id)
+                                            ->with('users:id,image,pseudo,email')->get();
+                                    }else{
+                                        // Vérifier si le terme de recherche contient un espace
+                                        if (strpos($value, ' ') !== false) {
+                                            // Si le terme de recherche contient un espace, rechercher par nom et prénom ensemble
+                                            $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
+                                                ->where('sympathisant', $sympathisant)
+                                                ->where('fonctions_id', $fonctions_id)
+                                                ->where('levels_id', $niveau_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        } else {
+                                            // Sinon, rechercher dans les colonnes du nom et du prénom séparément
+                                            $membres = Membres::where('nom', 'like', '%' . $value . '%')
+                                                ->orWhere('prenom', 'like', '%' . $value . '%')
+                                                ->where('sympathisant', $sympathisant)
+                                                ->where('fonctions_id', $fonctions_id)
+                                                ->where('levels_id', $niveau_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        }
+                                    }
+                                }else{
+                                    if(preg_match('/^\d+$/', $value)){
+                                        $membres = Membres::where('numero_carte','like', '%'. $value . '%')
+                                            ->where('sympathisant', $sympathisant)
+                                            ->where('fonctions_id', $fonctions_id)
+                                            ->where('levels_id', $niveau_id)
+                                            ->where('genre', $genre)
+                                            ->with('users:id,image,pseudo,email')->get();
+                                    }else{
+                                        // Vérifier si le terme de recherche contient un espace
+                                        if (strpos($value, ' ') !== false) {
+                                            // Si le terme de recherche contient un espace, rechercher par nom et prénom ensemble
+                                            $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
+                                                ->where('sympathisant', $sympathisant)
+                                                ->where('fonctions_id', $fonctions_id)
+                                                ->where('levels_id', $niveau_id)
+                                                ->where('genre', $genre)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        } else {
+                                            // Sinon, rechercher dans les colonnes du nom et du prénom séparément
+                                            $membres = Membres::where('nom', 'like', '%' . $value . '%')
+                                                ->orWhere('prenom', 'like', '%' . $value . '%')
+                                                ->where('sympathisant', $sympathisant)
+                                                ->where('fonctions_id', $fonctions_id)
+                                                ->where('levels_id', $niveau_id)
+                                                ->where('genre', $genre)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        }
+                                    }
+                                }
+                            }else{
+                                if($genre == "null"){
+                                    if(preg_match('/^\d+$/', $value)){
+                                        $membres = Membres::where('numero_carte','like', '%'. $value . '%')
+                                            ->where('axes_id', $axes_id)
+                                            ->where('fonctions_id', $fonctions_id)
+                                            ->where('levels_id', $niveau_id)
+                                            ->with('users:id,image,pseudo,email')->get();
+                                    }else{
+                                        // Vérifier si le terme de recherche contient un espace
+                                        if (strpos($value, ' ') !== false) {
+                                            // Si le terme de recherche contient un espace, rechercher par nom et prénom ensemble
+                                            $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
+                                                ->where('axes_id', $axes_id)
+                                                ->where('fonctions_id', $fonctions_id)
+                                                ->where('levels_id', $niveau_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        } else {
+                                            // Sinon, rechercher dans les colonnes du nom et du prénom séparément
+                                            $membres = Membres::where('nom', 'like', '%' . $value . '%')
+                                                ->orWhere('prenom', 'like', '%' . $value . '%')
+                                                ->where('axes_id', $axes_id)
+                                                ->where('fonctions_id', $fonctions_id)
+                                                ->where('levels_id', $niveau_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        }
+                                    }
+                                }else{
+                                    if(preg_match('/^\d+$/', $value)){
+                                        $membres = Membres::where('numero_carte','like', '%'. $value . '%')
+                                            ->where('axes_id', $axes_id)
+                                            ->where('fonctions_id', $fonctions_id)
+                                            ->where('levels_id', $niveau_id)
+                                            ->where('genre', $genre)
+                                            ->with('users:id,image,pseudo,email')->get();
+                                    }else{
+                                        // Vérifier si le terme de recherche contient un espace
+                                        if (strpos($value, ' ') !== false) {
+                                            // Si le terme de recherche contient un espace, rechercher par nom et prénom ensemble
+                                            $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
+                                                ->where('axes_id', $axes_id)
+                                                ->where('fonctions_id', $fonctions_id)
+                                                ->where('levels_id', $niveau_id)
+                                                ->where('genre', $genre)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        } else {
+                                            // Sinon, rechercher dans les colonnes du nom et du prénom séparément
+                                            $membres = Membres::where('nom', 'like', '%' . $value . '%')
+                                                ->orWhere('prenom', 'like', '%' . $value . '%')
+                                                ->where('axes_id', $axes_id)
+                                                ->where('fonctions_id', $fonctions_id)
+                                                ->where('levels_id', $niveau_id)
+                                                ->where('genre', $genre)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        }
+                                    }
+                                }
+                            }
+                        }else{
+                            if($axes_id == 0){
+                                if($genre == "null"){
+                                    if(preg_match('/^\d+$/', $value)){
+                                        $membres = Membres::where('numero_carte','like', '%'. $value . '%')
+                                            ->where('sympathisant', $sympathisant)
+                                            ->where('fonctions_id', $fonctions_id)
+                                            ->where('sections_id', $sections_id)
+                                            ->where('levels_id', $niveau_id)
+                                            ->with('users:id,image,pseudo,email')->get();
+                                    }else{
+                                        // Vérifier si le terme de recherche contient un espace
+                                        if (strpos($value, ' ') !== false) {
+                                            // Si le terme de recherche contient un espace, rechercher par nom et prénom ensemble
+                                            $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
+                                                ->where('sympathisant', $sympathisant)
+                                                ->where('fonctions_id', $fonctions_id)
+                                                ->where('sections_id', $sections_id)
+                                                ->where('levels_id', $niveau_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        } else {
+                                            // Sinon, rechercher dans les colonnes du nom et du prénom séparément
+                                            $membres = Membres::where('nom', 'like', '%' . $value . '%')
+                                                ->orWhere('prenom', 'like', '%' . $value . '%')
+                                                ->where('sympathisant', $sympathisant)
+                                                ->where('fonctions_id', $fonctions_id)
+                                                ->where('sections_id', $sections_id)
+                                                ->where('levels_id', $niveau_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        }
+                                    }
+                                }else{
+                                    if(preg_match('/^\d+$/', $value)){
+                                        $membres = Membres::where('numero_carte','like', '%'. $value . '%')
+                                            ->where('sympathisant', $sympathisant)
+                                            ->where('fonctions_id', $fonctions_id)
+                                            ->where('sections_id', $sections_id)
+                                            ->where('levels_id', $niveau_id)
+                                            ->where('genre', $genre)
+                                            ->with('users:id,image,pseudo,email')->get();
+                                    }else{
+                                        // Vérifier si le terme de recherche contient un espace
+                                        if (strpos($value, ' ') !== false) {
+                                            // Si le terme de recherche contient un espace, rechercher par nom et prénom ensemble
+                                            $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
+                                                ->where('sympathisant', $sympathisant)
+                                                ->where('fonctions_id', $fonctions_id)
+                                                ->where('sections_id', $sections_id)
+                                                ->where('levels_id', $niveau_id)
+                                                ->where('genre', $genre)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        } else {
+                                            // Sinon, rechercher dans les colonnes du nom et du prénom séparément
+                                            $membres = Membres::where('nom', 'like', '%' . $value . '%')
+                                                ->orWhere('prenom', 'like', '%' . $value . '%')
+                                                ->where('sympathisant', $sympathisant)
+                                                ->where('fonctions_id', $fonctions_id)
+                                                ->where('sections_id', $sections_id)
+                                                ->where('levels_id', $niveau_id)
+                                                ->where('genre', $genre)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        }
+                                    }
+                                }
+                            }else{
+                                if($genre == "null"){
+                                    if(preg_match('/^\d+$/', $value)){
+                                        $membres = Membres::where('numero_carte','like', '%'. $value . '%')
+                                            ->where('axes_id', $axes_id)
+                                            ->where('fonctions_id', $fonctions_id)
+                                            ->where('sections_id', $sections_id)
+                                            ->where('levels_id', $niveau_id)
+                                            ->with('users:id,image,pseudo,email')->get();
+                                    }else{
+                                        // Vérifier si le terme de recherche contient un espace
+                                        if (strpos($value, ' ') !== false) {
+                                            // Si le terme de recherche contient un espace, rechercher par nom et prénom ensemble
+                                            $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
+                                                ->where('axes_id', $axes_id)
+                                                ->where('fonctions_id', $fonctions_id)
+                                                ->where('sections_id', $sections_id)
+                                                ->where('levels_id', $niveau_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        } else {
+                                            // Sinon, rechercher dans les colonnes du nom et du prénom séparément
+                                            $membres = Membres::where('nom', 'like', '%' . $value . '%')
+                                                ->orWhere('prenom', 'like', '%' . $value . '%')
+                                                ->where('axes_id', $axes_id)
+                                                ->where('fonctions_id', $fonctions_id)
+                                                ->where('sections_id', $sections_id)
+                                                ->where('levels_id', $niveau_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        }
+                                    }
+                                }else{
+                                    if(preg_match('/^\d+$/', $value)){
+                                        $membres = Membres::where('numero_carte','like', '%'. $value . '%')
+                                            ->where('axes_id', $axes_id)
+                                            ->where('fonctions_id', $fonctions_id)
+                                            ->where('sections_id', $sections_id)
+                                            ->where('levels_id', $niveau_id)
+                                            ->where('genre', $genre)
+                                            ->with('users:id,image,pseudo,email')->get();
+                                    }else{
+                                        // Vérifier si le terme de recherche contient un espace
+                                        if (strpos($value, ' ') !== false) {
+                                            // Si le terme de recherche contient un espace, rechercher par nom et prénom ensemble
+                                            $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
+                                                ->where('axes_id', $axes_id)
+                                                ->where('fonctions_id', $fonctions_id)
+                                                ->where('sections_id', $sections_id)
+                                                ->where('levels_id', $niveau_id)
+                                                ->where('genre', $genre)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        } else {
+                                            // Sinon, rechercher dans les colonnes du nom et du prénom séparément
+                                            $membres = Membres::where('nom', 'like', '%' . $value . '%')
+                                                ->orWhere('prenom', 'like', '%' . $value . '%')
+                                                ->where('axes_id', $axes_id)
+                                                ->where('fonctions_id', $fonctions_id)
+                                                ->where('sections_id', $sections_id)
+                                                ->where('levels_id', $niveau_id)
+                                                ->where('genre', $genre)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }else{
+                    if($niveau_id == 0){
+                        if($sections_id == 0){
+                            if($axes_id == 0){
+                                if($genre == "null"){
+                                    if(preg_match('/^\d+$/', $value)){
+                                        $membres = Membres::where('numero_carte','like', '%'. $value . '%')
+                                            ->where('sympathisant', $sympathisant)
+                                            ->where('fonctions_id', $fonctions_id)
+                                            ->where('filieres_id', $filieres_id)
+                                            ->with('users:id,image,pseudo,email')->get();
+                                    }else{
+                                        // Vérifier si le terme de recherche contient un espace
+                                        if (strpos($value, ' ') !== false) {
+                                            // Si le terme de recherche contient un espace, rechercher par nom et prénom ensemble
+                                            $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
+                                                ->where('sympathisant', $sympathisant)
+                                                ->where('fonctions_id', $fonctions_id)
+                                                ->where('filieres_id', $filieres_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        } else {
+                                            // Sinon, rechercher dans les colonnes du nom et du prénom séparément
+                                            $membres = Membres::where('nom', 'like', '%' . $value . '%')
+                                                ->orWhere('prenom', 'like', '%' . $value . '%')
+                                                ->where('sympathisant', $sympathisant)
+                                                ->where('fonctions_id', $fonctions_id)
+                                                ->where('filieres_id', $filieres_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        }
+                                    }
+                                }else{
+                                    if(preg_match('/^\d+$/', $value)){
+                                        $membres = Membres::where('numero_carte','like', '%'. $value . '%')
+                                            ->where('sympathisant', $sympathisant)
+                                            ->where('fonctions_id', $fonctions_id)
+                                            ->where('genre', $genre)
+                                            ->where('filieres_id', $filieres_id)
+                                            ->with('users:id,image,pseudo,email')->get();
+                                    }else{
+                                        // Vérifier si le terme de recherche contient un espace
+                                        if (strpos($value, ' ') !== false) {
+                                            // Si le terme de recherche contient un espace, rechercher par nom et prénom ensemble
+                                            $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
+                                                ->where('sympathisant', $sympathisant)
+                                                ->where('fonctions_id', $fonctions_id)
+                                                ->where('genre', $genre)
+                                                ->where('filieres_id', $filieres_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        } else {
+                                            // Sinon, rechercher dans les colonnes du nom et du prénom séparément
+                                            $membres = Membres::where('nom', 'like', '%' . $value . '%')
+                                                ->orWhere('prenom', 'like', '%' . $value . '%')
+                                                ->where('sympathisant', $sympathisant)
+                                                ->where('fonctions_id', $fonctions_id)
+                                                ->where('genre', $genre)
+                                                ->where('filieres_id', $filieres_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        }
+                                    }
+                                }
+                            }else{
+                                if($genre == "null"){
+                                    if(preg_match('/^\d+$/', $value)){
+                                        $membres = Membres::where('numero_carte','like', '%'. $value . '%')
+                                            ->where('axes_id', $axes_id)
+                                            ->where('fonctions_id', $fonctions_id)
+                                            ->where('filieres_id', $filieres_id)
+                                            ->with('users:id,image,pseudo,email')->get();
+                                    }else{
+                                        // Vérifier si le terme de recherche contient un espace
+                                        if (strpos($value, ' ') !== false) {
+                                            // Si le terme de recherche contient un espace, rechercher par nom et prénom ensemble
+                                            $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
+                                                ->where('axes_id', $axes_id)
+                                                ->where('fonctions_id', $fonctions_id)
+                                                ->where('filieres_id', $filieres_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        } else {
+                                            // Sinon, rechercher dans les colonnes du nom et du prénom séparément
+                                            $membres = Membres::where('nom', 'like', '%' . $value . '%')
+                                                ->orWhere('prenom', 'like', '%' . $value . '%')
+                                                ->where('axes_id', $axes_id)
+                                                ->where('fonctions_id', $fonctions_id)
+                                                ->where('filieres_id', $filieres_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        }
+                                    }
+                                }else{
+                                    if(preg_match('/^\d+$/', $value)){
+                                        $membres = Membres::where('numero_carte','like', '%'. $value . '%')
+                                            ->where('axes_id', $axes_id)
+                                            ->where('fonctions_id', $fonctions_id)
+                                            ->where('genre', $genre)
+                                            ->where('filieres_id', $filieres_id)
+                                            ->with('users:id,image,pseudo,email')->get();
+                                    }else{
+                                        // Vérifier si le terme de recherche contient un espace
+                                        if (strpos($value, ' ') !== false) {
+                                            // Si le terme de recherche contient un espace, rechercher par nom et prénom ensemble
+                                            $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
+                                                ->where('axes_id', $axes_id)
+                                                ->where('fonctions_id', $fonctions_id)
+                                                ->where('genre', $genre)
+                                                ->where('filieres_id', $filieres_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        } else {
+                                            // Sinon, rechercher dans les colonnes du nom et du prénom séparément
+                                            $membres = Membres::where('nom', 'like', '%' . $value . '%')
+                                                ->orWhere('prenom', 'like', '%' . $value . '%')
+                                                ->where('axes_id', $axes_id)
+                                                ->where('fonctions_id', $fonctions_id)
+                                                ->where('genre', $genre)
+                                                ->where('filieres_id', $filieres_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        }
+                                    }
+                                }
+                            }
+                        }else{
+                            if($axes_id == 0){
+                                if($genre == "null"){
+                                    if(preg_match('/^\d+$/', $value)){
+                                        $membres = Membres::where('numero_carte','like', '%'. $value . '%')
+                                            ->where('sympathisant', $sympathisant)
+                                            ->where('fonctions_id', $fonctions_id)
+                                            ->where('sections_id', $sections_id)
+                                            ->where('filieres_id', $filieres_id)
+                                            ->with('users:id,image,pseudo,email')->get();
+                                    }else{
+                                        // Vérifier si le terme de recherche contient un espace
+                                        if (strpos($value, ' ') !== false) {
+                                            // Si le terme de recherche contient un espace, rechercher par nom et prénom ensemble
+                                            $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
+                                                ->where('sympathisant', $sympathisant)
+                                                ->where('fonctions_id', $fonctions_id)
+                                                ->where('sections_id', $sections_id)
+                                                ->where('filieres_id', $filieres_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        } else {
+                                            // Sinon, rechercher dans les colonnes du nom et du prénom séparément
+                                            $membres = Membres::where('nom', 'like', '%' . $value . '%')
+                                                ->orWhere('prenom', 'like', '%' . $value . '%')
+                                                ->where('sympathisant', $sympathisant)
+                                                ->where('fonctions_id', $fonctions_id)
+                                                ->where('sections_id', $sections_id)
+                                                ->where('filieres_id', $filieres_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        }
+                                    }
+                                }else{
+                                    if(preg_match('/^\d+$/', $value)){
+                                        $membres = Membres::where('numero_carte','like', '%'. $value . '%')
+                                            ->where('sympathisant', $sympathisant)
+                                            ->where('fonctions_id', $fonctions_id)
+                                            ->where('sections_id', $sections_id)
+                                            ->where('filieres_id', $filieres_id)
+                                            ->where('genre', $genre)
+                                            ->with('users:id,image,pseudo,email')->get();
+                                    }else{
+                                        // Vérifier si le terme de recherche contient un espace
+                                        if (strpos($value, ' ') !== false) {
+                                            // Si le terme de recherche contient un espace, rechercher par nom et prénom ensemble
+                                            $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
+                                                ->where('sympathisant', $sympathisant)
+                                                ->where('fonctions_id', $fonctions_id)
+                                                ->where('sections_id', $sections_id)
+                                                ->where('filieres_id', $filieres_id)
+                                                ->where('genre', $genre)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        } else {
+                                            // Sinon, rechercher dans les colonnes du nom et du prénom séparément
+                                            $membres = Membres::where('nom', 'like', '%' . $value . '%')
+                                                ->orWhere('prenom', 'like', '%' . $value . '%')
+                                                ->where('sympathisant', $sympathisant)
+                                                ->where('fonctions_id', $fonctions_id)
+                                                ->where('sections_id', $sections_id)
+                                                ->where('filieres_id', $filieres_id)
+                                                ->where('genre', $genre)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        }
+                                    }
+                                }
+                            }else{
+                                if($genre == "null"){
+                                    if(preg_match('/^\d+$/', $value)){
+                                        $membres = Membres::where('numero_carte','like', '%'. $value . '%')
+                                            ->where('axes_id', $axes_id)
+                                            ->where('fonctions_id', $fonctions_id)
+                                            ->where('sections_id', $sections_id)
+                                            ->where('filieres_id', $filieres_id)
+                                            ->with('users:id,image,pseudo,email')->get();
+                                    }else{
+                                        // Vérifier si le terme de recherche contient un espace
+                                        if (strpos($value, ' ') !== false) {
+                                            // Si le terme de recherche contient un espace, rechercher par nom et prénom ensemble
+                                            $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
+                                                ->where('axes_id', $axes_id)
+                                                ->where('fonctions_id', $fonctions_id)
+                                                ->where('sections_id', $sections_id)
+                                                ->where('filieres_id', $filieres_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        } else {
+                                            // Sinon, rechercher dans les colonnes du nom et du prénom séparément
+                                            $membres = Membres::where('nom', 'like', '%' . $value . '%')
+                                                ->orWhere('prenom', 'like', '%' . $value . '%')
+                                                ->where('axes_id', $axes_id)
+                                                ->where('fonctions_id', $fonctions_id)
+                                                ->where('sections_id', $sections_id)
+                                                ->where('filieres_id', $filieres_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        }
+                                    }
+                                }else{
+                                    if(preg_match('/^\d+$/', $value)){
+                                        $membres = Membres::where('numero_carte','like', '%'. $value . '%')
+                                            ->where('axes_id', $axes_id)
+                                            ->where('fonctions_id', $fonctions_id)
+                                            ->where('sections_id', $sections_id)
+                                            ->where('filieres_id', $filieres_id)
+                                            ->where('genre', $genre)
+                                            ->with('users:id,image,pseudo,email')->get();
+                                    }else{
+                                        // Vérifier si le terme de recherche contient un espace
+                                        if (strpos($value, ' ') !== false) {
+                                            // Si le terme de recherche contient un espace, rechercher par nom et prénom ensemble
+                                            $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
+                                                ->where('axes_id', $axes_id)
+                                                ->where('fonctions_id', $fonctions_id)
+                                                ->where('sections_id', $sections_id)
+                                                ->where('filieres_id', $filieres_id)
+                                                ->where('genre', $genre)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        } else {
+                                            // Sinon, rechercher dans les colonnes du nom et du prénom séparément
+                                            $membres = Membres::where('nom', 'like', '%' . $value . '%')
+                                                ->orWhere('prenom', 'like', '%' . $value . '%')
+                                                ->where('axes_id', $axes_id)
+                                                ->where('fonctions_id', $fonctions_id)
+                                                ->where('sections_id', $sections_id)
+                                                ->where('filieres_id', $filieres_id)
+                                                ->where('genre', $genre)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }else{
+                        if($sections_id == 0){
+                            if($axes_id == 0){
+                                if($genre == "null"){
+                                    if(preg_match('/^\d+$/', $value)){
+                                        $membres = Membres::where('numero_carte','like', '%'. $value . '%')
+                                            ->where('sympathisant', $sympathisant)
+                                            ->where('fonctions_id', $fonctions_id)
+                                            ->where('filieres_id', $filieres_id)
+                                            ->where('levels_id', $niveau_id)
+                                            ->with('users:id,image,pseudo,email')->get();
+                                    }else{
+                                        // Vérifier si le terme de recherche contient un espace
+                                        if (strpos($value, ' ') !== false) {
+                                            // Si le terme de recherche contient un espace, rechercher par nom et prénom ensemble
+                                            $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
+                                                ->where('sympathisant', $sympathisant)
+                                                ->where('fonctions_id', $fonctions_id)
+                                                ->where('filieres_id', $filieres_id)
+                                                ->where('levels_id', $niveau_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        } else {
+                                            // Sinon, rechercher dans les colonnes du nom et du prénom séparément
+                                            $membres = Membres::where('nom', 'like', '%' . $value . '%')
+                                                ->orWhere('prenom', 'like', '%' . $value . '%')
+                                                ->where('sympathisant', $sympathisant)
+                                                ->where('fonctions_id', $fonctions_id)
+                                                ->where('filieres_id', $filieres_id)
+                                                ->where('levels_id', $niveau_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        }
+                                    }
+                                }else{
+                                    if(preg_match('/^\d+$/', $value)){
+                                        $membres = Membres::where('numero_carte','like', '%'. $value . '%')
+                                            ->where('sympathisant', $sympathisant)
+                                            ->where('fonctions_id', $fonctions_id)
+                                            ->where('genre', $genre)
+                                            ->where('filieres_id', $filieres_id)
+                                            ->where('levels_id', $niveau_id)
+                                            ->with('users:id,image,pseudo,email')->get();
+                                    }else{
+                                        // Vérifier si le terme de recherche contient un espace
+                                        if (strpos($value, ' ') !== false) {
+                                            // Si le terme de recherche contient un espace, rechercher par nom et prénom ensemble
+                                            $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
+                                                ->where('sympathisant', $sympathisant)
+                                                ->where('fonctions_id', $fonctions_id)
+                                                ->where('genre', $genre)
+                                                ->where('filieres_id', $filieres_id)
+                                                ->where('levels_id', $niveau_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        } else {
+                                            // Sinon, rechercher dans les colonnes du nom et du prénom séparément
+                                            $membres = Membres::where('nom', 'like', '%' . $value . '%')
+                                                ->orWhere('prenom', 'like', '%' . $value . '%')
+                                                ->where('sympathisant', $sympathisant)
+                                                ->where('fonctions_id', $fonctions_id)
+                                                ->where('genre', $genre)
+                                                ->where('filieres_id', $filieres_id)
+                                                ->where('levels_id', $niveau_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        }
+                                    }
+                                }
+                            }else{
+                                if($genre == "null"){
+                                    if(preg_match('/^\d+$/', $value)){
+                                        $membres = Membres::where('numero_carte','like', '%'. $value . '%')
+                                            ->where('axes_id', $axes_id)
+                                            ->where('fonctions_id', $fonctions_id)
+                                            ->where('filieres_id', $filieres_id)
+                                            ->where('levels_id', $niveau_id)
+                                            ->with('users:id,image,pseudo,email')->get();
+                                    }else{
+                                        // Vérifier si le terme de recherche contient un espace
+                                        if (strpos($value, ' ') !== false) {
+                                            // Si le terme de recherche contient un espace, rechercher par nom et prénom ensemble
+                                            $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
+                                                ->where('axes_id', $axes_id)
+                                                ->where('fonctions_id', $fonctions_id)
+                                                ->where('filieres_id', $filieres_id)
+                                                ->where('levels_id', $niveau_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        } else {
+                                            // Sinon, rechercher dans les colonnes du nom et du prénom séparément
+                                            $membres = Membres::where('nom', 'like', '%' . $value . '%')
+                                                ->orWhere('prenom', 'like', '%' . $value . '%')
+                                                ->where('axes_id', $axes_id)
+                                                ->where('fonctions_id', $fonctions_id)
+                                                ->where('filieres_id', $filieres_id)
+                                                ->where('levels_id', $niveau_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        }
+                                    }
+                                }else{
+                                    if(preg_match('/^\d+$/', $value)){
+                                        $membres = Membres::where('numero_carte','like', '%'. $value . '%')
+                                            ->where('axes_id', $axes_id)
+                                            ->where('fonctions_id', $fonctions_id)
+                                            ->where('genre', $genre)
+                                            ->where('filieres_id', $filieres_id)
+                                            ->where('levels_id', $niveau_id)
+                                            ->with('users:id,image,pseudo,email')->get();
+                                    }else{
+                                        // Vérifier si le terme de recherche contient un espace
+                                        if (strpos($value, ' ') !== false) {
+                                            // Si le terme de recherche contient un espace, rechercher par nom et prénom ensemble
+                                            $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
+                                                ->where('axes_id', $axes_id)
+                                                ->where('fonctions_id', $fonctions_id)
+                                                ->where('genre', $genre)
+                                                ->where('filieres_id', $filieres_id)
+                                                ->where('levels_id', $niveau_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        } else {
+                                            // Sinon, rechercher dans les colonnes du nom et du prénom séparément
+                                            $membres = Membres::where('nom', 'like', '%' . $value . '%')
+                                                ->orWhere('prenom', 'like', '%' . $value . '%')
+                                                ->where('axes_id', $axes_id)
+                                                ->where('fonctions_id', $fonctions_id)
+                                                ->where('genre', $genre)
+                                                ->where('filieres_id', $filieres_id)
+                                                ->where('levels_id', $niveau_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        }
+                                    }
+                                }
+                            }
+                        }else{
+                            if($axes_id == 0){
+                                if($genre == "null"){
+                                    if(preg_match('/^\d+$/', $value)){
+                                        $membres = Membres::where('numero_carte','like', '%'. $value . '%')
+                                            ->where('sympathisant', $sympathisant)
+                                            ->where('fonctions_id', $fonctions_id)
+                                            ->where('sections_id', $sections_id)
+                                            ->where('filieres_id', $filieres_id)
+                                            ->where('levels_id', $niveau_id)
+                                            ->with('users:id,image,pseudo,email')->get();
+                                    }else{
+                                        // Vérifier si le terme de recherche contient un espace
+                                        if (strpos($value, ' ') !== false) {
+                                            // Si le terme de recherche contient un espace, rechercher par nom et prénom ensemble
+                                            $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
+                                                ->where('sympathisant', $sympathisant)
+                                                ->where('fonctions_id', $fonctions_id)
+                                                ->where('sections_id', $sections_id)
+                                                ->where('filieres_id', $filieres_id)
+                                                ->where('levels_id', $niveau_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        } else {
+                                            // Sinon, rechercher dans les colonnes du nom et du prénom séparément
+                                            $membres = Membres::where('nom', 'like', '%' . $value . '%')
+                                                ->orWhere('prenom', 'like', '%' . $value . '%')
+                                                ->where('sympathisant', $sympathisant)
+                                                ->where('fonctions_id', $fonctions_id)
+                                                ->where('sections_id', $sections_id)
+                                                ->where('filieres_id', $filieres_id)
+                                                ->where('levels_id', $niveau_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        }
+                                    }
+                                }else{
+                                    if(preg_match('/^\d+$/', $value)){
+                                        $membres = Membres::where('numero_carte','like', '%'. $value . '%')
+                                            ->where('sympathisant', $sympathisant)
+                                            ->where('fonctions_id', $fonctions_id)
+                                            ->where('sections_id', $sections_id)
+                                            ->where('filieres_id', $filieres_id)
+                                            ->where('genre', $genre)
+                                            ->where('levels_id', $niveau_id)
+                                            ->with('users:id,image,pseudo,email')->get();
+                                    }else{
+                                        // Vérifier si le terme de recherche contient un espace
+                                        if (strpos($value, ' ') !== false) {
+                                            // Si le terme de recherche contient un espace, rechercher par nom et prénom ensemble
+                                            $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
+                                                ->where('sympathisant', $sympathisant)
+                                                ->where('fonctions_id', $fonctions_id)
+                                                ->where('sections_id', $sections_id)
+                                                ->where('filieres_id', $filieres_id)
+                                                ->where('genre', $genre)
+                                                ->where('levels_id', $niveau_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        } else {
+                                            // Sinon, rechercher dans les colonnes du nom et du prénom séparément
+                                            $membres = Membres::where('nom', 'like', '%' . $value . '%')
+                                                ->orWhere('prenom', 'like', '%' . $value . '%')
+                                                ->where('sympathisant', $sympathisant)
+                                                ->where('fonctions_id', $fonctions_id)
+                                                ->where('sections_id', $sections_id)
+                                                ->where('filieres_id', $filieres_id)
+                                                ->where('genre', $genre)
+                                                ->where('levels_id', $niveau_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        }
+                                    }
+                                }
+                            }else{
+                                if($genre == "null"){
+                                    if(preg_match('/^\d+$/', $value)){
+                                        $membres = Membres::where('numero_carte','like', '%'. $value . '%')
+                                            ->where('axes_id', $axes_id)
+                                            ->where('fonctions_id', $fonctions_id)
+                                            ->where('sections_id', $sections_id)
+                                            ->where('filieres_id', $filieres_id)
+                                            ->where('levels_id', $niveau_id)
+                                            ->with('users:id,image,pseudo,email')->get();
+                                    }else{
+                                        // Vérifier si le terme de recherche contient un espace
+                                        if (strpos($value, ' ') !== false) {
+                                            // Si le terme de recherche contient un espace, rechercher par nom et prénom ensemble
+                                            $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
+                                                ->where('axes_id', $axes_id)
+                                                ->where('fonctions_id', $fonctions_id)
+                                                ->where('sections_id', $sections_id)
+                                                ->where('filieres_id', $filieres_id)
+                                                ->where('levels_id', $niveau_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        } else {
+                                            // Sinon, rechercher dans les colonnes du nom et du prénom séparément
+                                            $membres = Membres::where('nom', 'like', '%' . $value . '%')
+                                                ->orWhere('prenom', 'like', '%' . $value . '%')
+                                                ->where('axes_id', $axes_id)
+                                                ->where('fonctions_id', $fonctions_id)
+                                                ->where('sections_id', $sections_id)
+                                                ->where('filieres_id', $filieres_id)
+                                                ->where('levels_id', $niveau_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        }
+                                    }
+                                }else{
+                                    if(preg_match('/^\d+$/', $value)){
+                                        $membres = Membres::where('numero_carte','like', '%'. $value . '%')
+                                            ->where('axes_id', $axes_id)
+                                            ->where('fonctions_id', $fonctions_id)
+                                            ->where('sections_id', $sections_id)
+                                            ->where('filieres_id', $filieres_id)
+                                            ->where('genre', $genre)
+                                            ->where('levels_id', $niveau_id)
+                                            ->with('users:id,image,pseudo,email')->get();
+                                    }else{
+                                        // Vérifier si le terme de recherche contient un espace
+                                        if (strpos($value, ' ') !== false) {
+                                            // Si le terme de recherche contient un espace, rechercher par nom et prénom ensemble
+                                            $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
+                                                ->where('axes_id', $axes_id)
+                                                ->where('fonctions_id', $fonctions_id)
+                                                ->where('sections_id', $sections_id)
+                                                ->where('filieres_id', $filieres_id)
+                                                ->where('genre', $genre)
+                                                ->where('levels_id', $niveau_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        } else {
+                                            // Sinon, rechercher dans les colonnes du nom et du prénom séparément
+                                            $membres = Membres::where('nom', 'like', '%' . $value . '%')
+                                                ->orWhere('prenom', 'like', '%' . $value . '%')
+                                                ->where('axes_id', $axes_id)
+                                                ->where('fonctions_id', $fonctions_id)
+                                                ->where('sections_id', $sections_id)
+                                                ->where('filieres_id', $filieres_id)
+                                                ->where('genre', $genre)
+                                                ->where('levels_id', $niveau_id)
+                                                ->with('users:id,image,pseudo,email')
+                                                ->get();
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            return response()->json([
+                'membres' => $membres
+            ], 200);
+        
+        }else{
+            return response()->json([
+                'message' => $this->constantes['NonAuthentifier']
+            ], 401);
+        }
+    }
     public function searchNameOrNumber($value){
         $user = auth()->user();
 
         if($user){
             if(preg_match('/^\d+$/', $value)){
-                $membres = Membres::where('numero_carte','like', '%'. $value . '%') ->with('users:id,image,pseudo,email')->get();
+                $membres = Membres::where('numero_carte','like', '%'. $value . '%')->with('users:id,image,pseudo,email')->get();
             }else{
                 // Vérifier si le terme de recherche contient un espace
                 if (strpos($value, ' ') !== false) {
@@ -725,11 +3320,6 @@ class MembresController extends Controller
                                 ->with('users:id,image,pseudo,email')
                                 ->get();
                 }
-
-                // $membres = Membres::where('nom', 'like', '%' . $value . '%')
-                // ->orWhere('prenom', 'like', '%' . $value . '%')
-                // ->with('users:id,image,pseudo,email')
-                // ->get();
             }
             return response()->json([
                 'membres' => $membres

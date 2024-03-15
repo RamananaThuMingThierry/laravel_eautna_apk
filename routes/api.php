@@ -117,6 +117,8 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::get('/membres_filtreNiveauMembre/{id}', [MembresController::class, "filtreNiveauMembre"]);
     Route::get('/membres_filtreFiliereMembre/{id}', [MembresController::class, "filtreFiliereMembre"]);
     Route::get('/membres_filtreFonctionMembre/{id}', [MembresController::class, "filtreFonctionMembre"]);
+    Route::get('/membres_filtreAll/{fonction}/{filiere}/{niveau}/{section}/{axes}/{genre}/{sympathisant}', [MembresController::class, "filtreAll"]);
+    Route::get('/membres_searchInfiltreAll/{value}/{fonction}/{filiere}/{niveau}/{section}/{axes}/{genre}/{sympathisant}', [MembresController::class, "searchInfiltreAll"]);
     Route::get('/membres', [MembresController::class, "index"]);
     Route::post('/membres', [MembresController::class, "store"]);
     Route::get('/membres/{id}', [MembresController::class, "show"]);
