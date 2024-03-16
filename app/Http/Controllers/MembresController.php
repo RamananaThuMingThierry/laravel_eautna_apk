@@ -256,7 +256,7 @@ class MembresController extends Controller
                         },
                     ],
                     'lieu_de_naissance' => 'required|string',
-                    'cin' => 'nullable|string|min:12|max:12|unique:membres',
+                    'cin' => 'nullable|string|max:12',
                     'genre' => 'required|string',
                     'contact_personnel' => 'required|max:10|min:10|string|unique:membres',
                     'contact_tuteur' => 'required|max:10|min:10|string',
@@ -277,6 +277,16 @@ class MembresController extends Controller
                 }
                 else
                 {   
+                    // Vérifier si cin existe 
+                    $verification_cin = Membres::where('cin', $cin)->exists();
+                    if($verification_cin){
+                        $get_cin = Membres::where('cin', $cin)->first();
+                        if($get_cin->cin != "null"){
+                            return response()->json([
+                                'message' => 'CIN appartient à un autre membre'
+                            ], 403);
+                        }
+                    }
                     
                     // Verifier s'il le numéro est valide ou pas
                     if($this->verifierNumeroTelephone($contact_personnel) == false){

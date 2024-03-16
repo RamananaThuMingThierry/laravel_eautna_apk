@@ -37,7 +37,7 @@ class FonctionsController extends Controller
             if($users->roles == "Administrateurs"){
         
                 $validator = Validator::make($request->all(), [
-                    'fonctions' => 'required|string|unique:fonctions|alpha',
+                    'fonctions' => 'required|string|unique:fonctions',
                 ]);        
         
                 if($validator->fails()){
@@ -136,7 +136,7 @@ class FonctionsController extends Controller
                 if($fonctions_update){
     
                     $validator = Validator::make($request->all(), [
-                            'fonctions' => 'required|string|alpha',
+                            'fonctions' => 'required|string',
                         ]);        
                         
                         if($validator->fails()){
