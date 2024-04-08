@@ -18,7 +18,8 @@ class AxesController extends Controller
        $user = auth()->user();
 
        if($user){
-            $axes = Axes::orderBy('nom_axes')->with('users:id,pseudo,contact,image,adresse')->get();
+
+            $axes = Axes::orderBy('nom_axes')->get();
 
             return Response()->json([
                 'axes' => $axes
@@ -37,7 +38,7 @@ class AxesController extends Controller
 
         if($user){
             
-            $axes = Axes::where('nom_axes', 'like', "%$value%")->with('users:id,pseudo,image')->get();
+            $axes = Axes::where('nom_axes', 'like', "%$value%")->get();
 
             return response()->json([
                 'axes' => $axes
@@ -71,8 +72,7 @@ class AxesController extends Controller
                 }else{                
                     
                     Axes::create([
-                        'nom_axes' => $nom_axes,
-                        'users_id' => auth()->user()->id
+                        'nom_axes' => $nom_axes
                     ]);
         
                     return response()->json([
@@ -102,7 +102,7 @@ class AxesController extends Controller
 
         if($user){
             
-            $axes = Axes::where('id',$axes_id)->with('users:id,pseudo,contact,adresse,image')->first();
+            $axes = Axes::where('id',$axes_id)->first();
 
             if($axes){
                 return response()->json([
@@ -173,8 +173,7 @@ class AxesController extends Controller
                             if($autorisation){
 
                                 $axes->update([
-                                    'nom_axes' => $nom_axes,
-                                    'user_id' => $user->id
+                                    'nom_axes' => $nom_axes
                                 ]);
                                 
                                 return response()->json([
@@ -210,7 +209,7 @@ class AxesController extends Controller
 
         if($users){
             
-            $axes = Axes::where('id',$axes_id)->with('users:id,pseudo,contact,adresse,image')->first();
+            $axes = Axes::where('id',$axes_id)->first();
 
             if($axes){
 

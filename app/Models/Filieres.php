@@ -12,11 +12,6 @@ class Filieres extends Model
     public $table = "filieres";
 
     protected $fillable = [
-        "nom_filieres",
-        "users_id",
+        "nom_filieres"
     ];
-
-    public function users(){
-        return $this->belongsTo(User::class);
-    }
 }

@@ -16,7 +16,7 @@ class FilieresController extends Controller
        $user = auth()->user();
 
        if($user){
-            $filieres = Filieres::orderBy('nom_filieres')->with('users:id,pseudo,contact,image')->get();
+            $filieres = Filieres::orderBy('nom_filieres')->get();
 
             return Response()->json([
                 'filieres' => $filieres
@@ -51,7 +51,6 @@ class FilieresController extends Controller
 
                     Filieres::create([
                         'nom_filieres' => $nom_filieres,
-                        'users_id' => auth()->user()->id
                     ]);
         
                     return response()->json([
@@ -82,7 +81,7 @@ class FilieresController extends Controller
 
         if($users){
             
-            $filieres = Filieres::where('id',$filieres_id)->with('users:id,pseudo,contact,adresse,image')->first();
+            $filieres = Filieres::where('id',$filieres_id)->first();
 
             if($filieres){
                 return response()->json([
@@ -109,7 +108,7 @@ class FilieresController extends Controller
 
         if($user){
             
-            $filieres = Filieres::where('nom_filieres', 'like', "%$value%")->with('users:id,pseudo,image')->get();
+            $filieres = Filieres::where('nom_filieres', 'like', "%$value%")->get();
 
             return response()->json([
                 'filieres' => $filieres
@@ -205,7 +204,7 @@ class FilieresController extends Controller
 
         if($users){
             
-            $filieres = Filieres::where('id',$filieres_id)->with('users:id,pseudo,contact,adresse,image')->first();
+            $filieres = Filieres::where('id',$filieres_id)->first();
 
             if($filieres){
 

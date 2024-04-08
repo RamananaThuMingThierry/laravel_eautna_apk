@@ -12,11 +12,6 @@ class Level extends Model
     public $table = "levels";
 
     protected $fillable = [
-        "niveau",
-        "users_id"
+        "nom_niveau",
     ];
-
-    public function users(){
-        return $this->belongsTo(User::class);
-    }
 }

@@ -24,33 +24,4 @@ class SectionsController extends Controller
         }
  
      }
-
-     public function show($sections_id){
-        
-        $user = auth()->user();
-
-        if($user){
-            
-            $sections = sections::where('id',$sections_id)->first();
-
-            if($sections){
-                return response()->json([
-                    'sections' => $sections
-                ], 200);
-            }else{
-                
-                return response()->json([
-                    'message' => 'Cette sections '.$this->constantes['NExistePasDansBD']
-                ], 404);
-            }
-
-        }else{
-                
-            return response()->json([
-                    'message' => $this->constantes['NonAuthentifier']
-            ], 401);
-
-        }
-    }
- 
 }

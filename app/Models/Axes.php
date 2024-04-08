@@ -14,11 +14,6 @@ class Axes extends Model
     public $table = "axes";
 
     protected $fillable = [
-        "nom_axes",
-        "users_id"
+        "nom_axes"
     ];
-
-    public function users(){
-        return $this->belongsTo(User::class);
-    }
 }

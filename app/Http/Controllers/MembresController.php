@@ -18,7 +18,9 @@ class MembresController extends Controller
 {
 
     public function statistiques(){
+
         $membres = Membres::all()->count();
+        
         $nombreTotal67h = Membres::where('sections_id', 1)->count();
         $nombreTotalAmbohipo = Membres::where('sections_id', 2)->count();
         $nombreTotalAnkatsoI = Membres::where('sections_id', 3)->count();
@@ -49,7 +51,6 @@ class MembresController extends Controller
 
        if($user){
             $membres = Membres::orderBy('numero_carte')
-            ->with('users:id,image,pseudo,email')
             ->get();
 
             return response()->json([
@@ -67,7 +68,6 @@ class MembresController extends Controller
 
         if($user){
             $membres = Membres::where('axes_id', $axes_id)
-                ->with('users:id,image,pseudo,email')
                 ->get();
             
             return response()->json([
@@ -85,7 +85,6 @@ class MembresController extends Controller
 
         if($user){
             $membres = Membres::where('levels_id', $levels_id)
-                ->with('users:id,image,pseudo,email')
                 ->get();
             
             return response()->json([
@@ -103,7 +102,6 @@ class MembresController extends Controller
 
         if($user){
             $membres = Membres::where('filieres_id', $filieres_id)
-                ->with('users:id,image,pseudo,email')
                 ->get();
             
             return response()->json([
@@ -122,7 +120,6 @@ class MembresController extends Controller
         if($user){
             
             $membres = Membres::where('fonctions_id', $fonctions_id)
-                ->with('users:id,image,pseudo,email')
                 ->get();
             
             return response()->json([
@@ -143,7 +140,6 @@ class MembresController extends Controller
         if($user){
              $membres = Membres::orderBy('numero_carte')
              ->where('lien_membre_id', 0)
-             ->with('users:id,image,pseudo')
              ->get();
  
              return response()->json([
@@ -189,7 +185,7 @@ class MembresController extends Controller
         
         if($user){
 
-            if($user->status){
+            if($user->status == 1){
                 if($user->roles == "Administrateurs"){
                     $autorisation = true;
                 }
@@ -205,6 +201,7 @@ class MembresController extends Controller
                 $date_de_naissance = $request->date_de_naissance;
                 $lieu_de_naissance = $request->lieu_de_naissance;
                 $cin = $request->cin;
+                $etablissement = $request->etablissement;
                 $genre = $request->genre;
                 $contact_personnel = $request->contact_personnel;
                 $contact_tuteur = $request->contact_tuteur;
@@ -255,18 +252,18 @@ class MembresController extends Controller
                             }
                         },
                     ],
-                    'lieu_de_naissance' => 'required|string',
+                    'lieu_de_naissance' => 'string',
                     'cin' => 'nullable|string|max:12',
                     'genre' => 'required|string',
                     'contact_personnel' => 'required|max:10|min:10|string|unique:membres',
-                    'contact_tuteur' => 'required|max:10|min:10|string',
+                    'contact_tuteur' => 'max:10|min:10|string',
                     'sympathisant' => 'required|boolean',
                     'fonctions_id' => 'required|integer',
                     'filieres_id' => 'required|integer',
                     'levels_id' => 'required|integer',
                     'sections_id' => 'required|integer',
-                    'facebook' => 'required|string',
-                    'adresse' => 'required|string',
+                    'facebook' => 'string',
+                    'adresse' => 'string',
                 ]);        
         
                 if($validator->fails())
@@ -381,13 +378,13 @@ class MembresController extends Controller
                         'contact_personnel' => $contact_personnel,
                         'contact_tuteur' => $contact_tuteur,
                         'sympathisant' => $sympathisant,
+                        'etablissement' => $etablissement,
                         'fonctions_id' => $fonctions_id,
                         'filieres_id' => $filieres_id,
                         'levels_id' => $levels_id,
                         'sections_id' => $sections_id,
                         'facebook' => $facebook,
                         'adresse' => $adresse,
-                        'users_id' => $user->id,
                         'image' => $image,
                         'date_inscription' => $date_inscription
                     ];
@@ -459,6 +456,7 @@ class MembresController extends Controller
                     $lieu_de_naissance = $request->lieu_de_naissance;
                     $cin = $request->cin;
                     $genre = $request->genre;
+                    $etablissement = $request->etablissement;
                     $contact_personnel = $request->contact_personnel;
                     $contact_tuteur = $request->contact_tuteur;
                     $sympathisant = $request->sympathisant;
@@ -633,6 +631,7 @@ class MembresController extends Controller
                         'contact_personnel' => $contact_personnel,
                         'contact_tuteur' => $contact_tuteur,
                         'sympathisant' => $sympathisant,
+                        'etablissement' => $etablissement,
                         'fonctions_id' => $fonctions_id,
                         'filieres_id' => $filieres_id,
                         'levels_id' => $levels_id,
@@ -727,23 +726,19 @@ class MembresController extends Controller
                             if($axes_id == 0){
                                 if($genre == "null"){
                                     $membres = Membres::where('sympathisant', $sympathisant)
-                                        ->with('users:id,image,pseudo,email')
                                         ->get();
                                 }else{
                                     $membres = Membres::where('sympathisant', $sympathisant)
                                         ->where('genre', $genre)
-                                        ->with('users:id,image,pseudo,email')
                                         ->get();
                                 }
                             }else{
                                 if($genre == "null"){
                                     $membres = Membres::where('axes_id', $axes_id)
-                                        ->with('users:id,image,pseudo,email')
                                         ->get();
                                 }else{
                                     $membres = Membres::where('axes_id', $axes_id)
                                         ->where('genre', $genre)
-                                        ->with('users:id,image,pseudo,email')
                                         ->get();
                                 }
                             }
@@ -752,26 +747,22 @@ class MembresController extends Controller
                                 if($genre == "null"){
                                     $membres = Membres::where('sympathisant', $sympathisant)
                                         ->where('sections_id', $sections_id)
-                                        ->with('users:id,image,pseudo,email')
                                         ->get();
                                 }else{
                                     $membres = Membres::where('sympathisant', $sympathisant)
                                         ->where('sections_id', $sections_id)
                                         ->where('genre', $genre)
-                                        ->with('users:id,image,pseudo,email')
                                         ->get();
                                 }
                             }else{
                                 if($genre == "null"){
                                     $membres = Membres::where('sections_id', $sections_id)
                                         ->where('axes_id', $axes_id)
-                                        ->with('users:id,image,pseudo,email')
                                         ->get();
                                 }else{
                                     $membres = Membres::where('sections_id', $sections_id)
                                         ->where('axes_id', $axes_id)
                                         ->where('genre', $genre)
-                                        ->with('users:id,image,pseudo,email')
                                         ->get();
                                 }
                             }
@@ -782,26 +773,22 @@ class MembresController extends Controller
                                 if($genre == "null"){
                                     $membres = Membres::where('sympathisant', $sympathisant)
                                         ->where('levels_id', $niveau_id)
-                                        ->with('users:id,image,pseudo,email')
                                         ->get();
                                 }else{
                                     $membres = Membres::where('sympathisant', $sympathisant)
                                         ->where('levels_id', $niveau_id)
                                         ->where('genre', $genre)
-                                        ->with('users:id,image,pseudo,email')
                                         ->get(); 
                                 }
                             }else{
                                 if($genre == "null"){
                                     $membres = Membres::where('levels_id', $niveau_id)
                                         ->where('axes_id', $axes_id)
-                                        ->with('users:id,image,pseudo,email')
                                         ->get();
                                 }else{
                                     $membres = Membres::where('levels_id', $niveau_id)
                                         ->where('axes_id', $axes_id)
                                         ->where('genre', $genre)
-                                        ->with('users:id,image,pseudo,email')
                                         ->get();
                                 }
                             }
@@ -811,14 +798,12 @@ class MembresController extends Controller
                                     $membres = Membres::where('sympathisant', $sympathisant)
                                         ->where('levels_id', $niveau_id)
                                         ->where('sections_id', $sections_id)
-                                        ->with('users:id,image,pseudo,email')
                                         ->get();
                                 }else{
                                     $membres = Membres::where('sympathisant', $sympathisant)
                                         ->where('levels_id', $niveau_id)
                                         ->where('sections_id', $sections_id)
                                         ->where('genre', $genre)
-                                        ->with('users:id,image,pseudo,email')
                                         ->get();
                                 }
                             }else{
@@ -826,14 +811,12 @@ class MembresController extends Controller
                                     $membres = Membres::where('levels_id', $niveau_id)
                                         ->where('sections_id', $sections_id)
                                         ->where('axes_id', $axes_id)
-                                        ->with('users:id,image,pseudo,email')
                                         ->get();
                                 }else{
                                     $membres = Membres::where('levels_id', $niveau_id)
                                         ->where('sections_id', $sections_id)
                                         ->where('axes_id', $axes_id)
                                         ->where('genre', $genre)
-                                        ->with('users:id,image,pseudo,email')
                                         ->get();
                                 }
                             }
@@ -846,26 +829,22 @@ class MembresController extends Controller
                                 if($genre == "null"){
                                     $membres = Membres::where('sympathisant', $sympathisant)
                                         ->where('filieres_id', $filieres_id)
-                                        ->with('users:id,image,pseudo,email')
                                         ->get();
                                 }else{
                                     $membres = Membres::where('sympathisant', $sympathisant)
                                         ->where('filieres_id', $filieres_id)
                                         ->where('genre', $genre)
-                                        ->with('users:id,image,pseudo,email')
                                         ->get();
                                 }
                             }else{
                                 if($genre == "null"){
                                     $membres = Membres::where('filieres_id', $filieres_id)
                                         ->where('axes_id', $axes_id)
-                                        ->with('users:id,image,pseudo,email')
                                         ->get();
                                 }else{
                                     $membres = Membres::where('filieres_id', $filieres_id)
                                         ->where('axes_id', $axes_id)
                                         ->where('genre', $genre)
-                                        ->with('users:id,image,pseudo,email')
                                         ->get();
                                 }
                             }
@@ -875,14 +854,12 @@ class MembresController extends Controller
                                     $membres = Membres::where('sympathisant', $sympathisant)
                                         ->where('filieres_id', $filieres_id)
                                         ->where('sections_id', $sections_id)
-                                        ->with('users:id,image,pseudo,email')
                                         ->get();
                                 }else{
                                     $membres = Membres::where('sympathisant', $sympathisant)
                                         ->where('filieres_id', $filieres_id)
                                         ->where('sections_id', $sections_id)
                                         ->where('genre', $genre)
-                                        ->with('users:id,image,pseudo,email')
                                         ->get();
                                 }
                             }else{
@@ -890,7 +867,6 @@ class MembresController extends Controller
                                     $membres = Membres::where('filieres_id', $filieres_id)
                                         ->where('sections_id', $sections_id)
                                         ->where('axes_id', $axes_id)
-                                        ->with('users:id,image,pseudo,email')
                                         ->get();
                                 }else{
                                     $membres = Membres::where('sympathisant', $sympathisant)
@@ -898,7 +874,6 @@ class MembresController extends Controller
                                         ->where('sections_id', $sections_id)
                                         ->where('axes_id', $axes_id)
                                         ->where('genre', $genre)
-                                        ->with('users:id,image,pseudo,email')
                                         ->get();
                                 }
                             }
@@ -910,14 +885,12 @@ class MembresController extends Controller
                                     $membres = Membres::where('sympathisant', $sympathisant)
                                         ->where('filieres_id', $filieres_id)
                                         ->where('levels_id', $niveau_id)
-                                        ->with('users:id,image,pseudo,email')
                                         ->get();
                                 }else{
                                     $membres = Membres::where('sympathisant', $sympathisant)
                                         ->where('filieres_id', $filieres_id)
                                         ->where('levels_id', $niveau_id)
                                         ->where('genre', $genre)
-                                        ->with('users:id,image,pseudo,email')
                                         ->get();
                                 }
                             }else{
@@ -925,14 +898,12 @@ class MembresController extends Controller
                                     $membres = Membres::where('filieres_id', $filieres_id)
                                         ->where('levels_id', $niveau_id)
                                         ->where('axes_id', $axes_id)
-                                        ->with('users:id,image,pseudo,email')
                                         ->get();
                                 }else{
                                     $membres = Membres::where('filieres_id', $filieres_id)
                                         ->where('levels_id', $niveau_id)
                                         ->where('axes_id', $axes_id)
                                         ->where('genre', $genre)
-                                        ->with('users:id,image,pseudo,email')
                                         ->get();
                                 }
                             }
@@ -943,7 +914,6 @@ class MembresController extends Controller
                                         ->where('filieres_id', $filieres_id)
                                         ->where('levels_id', $niveau_id)
                                         ->where('sections_id', $sections_id)
-                                        ->with('users:id,image,pseudo,email')
                                         ->get();
                                 }else{
                                     $membres = Membres::where('sympathisant', $sympathisant)
@@ -951,7 +921,6 @@ class MembresController extends Controller
                                         ->where('levels_id', $niveau_id)
                                         ->where('sections_id', $sections_id)
                                         ->where('genre', $genre)
-                                        ->with('users:id,image,pseudo,email')
                                         ->get();
                                 }
                             }else{
@@ -960,7 +929,6 @@ class MembresController extends Controller
                                         ->where('levels_id', $niveau_id)
                                         ->where('sections_id', $sections_id)
                                         ->where('axes_id', $axes_id)
-                                        ->with('users:id,image,pseudo,email')
                                         ->get();
                                 }else{
                                     $membres = Membres::where('filieres_id', $filieres_id)
@@ -968,7 +936,6 @@ class MembresController extends Controller
                                         ->where('sections_id', $sections_id)
                                         ->where('axes_id', $axes_id)
                                         ->where('genre', $genre)
-                                        ->with('users:id,image,pseudo,email')
                                         ->get();
                                 }
                             }
@@ -983,26 +950,22 @@ class MembresController extends Controller
                                 if($genre == "null"){
                                     $membres = Membres::where('sympathisant', $sympathisant)
                                         ->where('fonctions_id', $fonctions_id)
-                                        ->with('users:id,image,pseudo,email')
                                         ->get();
                                 }else{
                                     $membres = Membres::where('sympathisant', $sympathisant)
                                         ->where('fonctions_id', $fonctions_id)
                                         ->where('genre', $genre)
-                                        ->with('users:id,image,pseudo,email')
                                         ->get();
                                 }
                             }else{
                                 if($genre == "null"){
                                     $membres = Membres::where('fonctions_id', $fonctions_id)
                                         ->where('axes_id', $axes_id)
-                                        ->with('users:id,image,pseudo,email')
                                         ->get();
                                 }else{
                                     $membres = Membres::where('fonctions_id', $fonctions_id)
                                         ->where('axes_id', $axes_id)
                                         ->where('genre', $genre)
-                                        ->with('users:id,image,pseudo,email')
                                         ->get();
                                 }
                             }
@@ -1012,14 +975,12 @@ class MembresController extends Controller
                                     $membres = Membres::where('sympathisant', $sympathisant)
                                         ->where('fonctions_id', $fonctions_id)
                                         ->where('sections_id', $sections_id)
-                                        ->with('users:id,image,pseudo,email')
                                         ->get();
                                 }else{
                                     $membres = Membres::where('sympathisant', $sympathisant)
                                         ->where('fonctions_id', $fonctions_id)
                                         ->where('sections_id', $sections_id)
                                         ->where('genre', $genre)
-                                        ->with('users:id,image,pseudo,email')
                                         ->get();
                                 }
                             }else{
@@ -1027,14 +988,12 @@ class MembresController extends Controller
                                     $membres = Membres::where('fonctions_id', $fonctions_id)
                                         ->where('sections_id', $sections_id)
                                         ->where('axes_id', $axes_id)
-                                        ->with('users:id,image,pseudo,email')
                                         ->get();
                                 }else{
                                     $membres = Membres::where('fonctions_id', $fonctions_id)
                                         ->where('sections_id', $sections_id)
                                         ->where('axes_id', $axes_id)
                                         ->where('genre', $genre)
-                                        ->with('users:id,image,pseudo,email')
                                         ->get();
                                 }
                             }
@@ -1046,14 +1005,12 @@ class MembresController extends Controller
                                     $membres = Membres::where('fonctions_id', $fonctions_id)
                                         ->where('levels_id', $niveau_id)
                                         ->where('sympathisant', $sympathisant)
-                                        ->with('users:id,image,pseudo,email')
                                         ->get();
                                 }else{
                                     $membres = Membres::where('fonctions_id', $fonctions_id)
                                         ->where('levels_id', $niveau_id)
                                         ->where('genre', $genre)
                                         ->where('sympathisant', $sympathisant)
-                                        ->with('users:id,image,pseudo,email')
                                         ->get();
                                 }
                             }else{
@@ -1061,14 +1018,12 @@ class MembresController extends Controller
                                     $membres = Membres::where('fonctions_id', $fonctions_id)
                                         ->where('levels_id', $niveau_id)
                                         ->where('axes_id', $axes_id)
-                                        ->with('users:id,image,pseudo,email')
                                         ->get();
                                 }else{
                                     $membres = Membres::where('fonctions_id', $fonctions_id)
                                         ->where('levels_id', $niveau_id)
                                         ->where('axes_id', $axes_id)
                                         ->where('genre', $genre)
-                                        ->with('users:id,image,pseudo,email')
                                         ->get();
                                 }
                             }
@@ -1079,7 +1034,6 @@ class MembresController extends Controller
                                         ->where('levels_id', $niveau_id)
                                         ->where('sections_id', $sections_id)
                                         ->where('sympathisant', $sympathisant)
-                                        ->with('users:id,image,pseudo,email')
                                         ->get();
                                 }else{
                                     $membres = Membres::where('fonctions_id', $fonctions_id)
@@ -1087,7 +1041,6 @@ class MembresController extends Controller
                                         ->where('sections_id', $sections_id)
                                         ->where('sympathisant', $sympathisant)
                                         ->where('genre', $genre)
-                                        ->with('users:id,image,pseudo,email')
                                         ->get();
                                 }
                             }else{
@@ -1096,7 +1049,6 @@ class MembresController extends Controller
                                         ->where('levels_id', $niveau_id)
                                         ->where('sections_id', $sections_id)
                                         ->where('axes_id', $axes_id)
-                                        ->with('users:id,image,pseudo,email')
                                         ->get();
                                 }else{
                                     $membres = Membres::where('fonctions_id', $fonctions_id)
@@ -1104,7 +1056,6 @@ class MembresController extends Controller
                                         ->where('sections_id', $sections_id)
                                         ->where('axes_id', $axes_id)
                                         ->where('genre', $genre)
-                                        ->with('users:id,image,pseudo,email')
                                         ->get();
                                 }
                             }
@@ -1118,14 +1069,12 @@ class MembresController extends Controller
                                     $membres = Membres::where('fonctions_id', $fonctions_id)
                                         ->where('filieres_id', $filieres_id)
                                         ->where('sympathisant', $sympathisant)
-                                        ->with('users:id,image,pseudo,email')
                                         ->get();
                                 }else{
                                     $membres = Membres::where('fonctions_id', $fonctions_id)
                                         ->where('filieres_id', $filieres_id)
                                         ->where('genre', $genre)
                                         ->where('sympathisant', $sympathisant)
-                                        ->with('users:id,image,pseudo,email')
                                         ->get();
                                 }
                             }else{
@@ -1133,14 +1082,12 @@ class MembresController extends Controller
                                     $membres = Membres::where('fonctions_id', $fonctions_id)
                                         ->where('filieres_id', $filieres_id)
                                         ->where('axes_id', $axes_id)
-                                        ->with('users:id,image,pseudo,email')
                                         ->get();
                                 }else{
                                     $membres = Membres::where('fonctions_id', $fonctions_id)
                                         ->where('filieres_id', $filieres_id)
                                         ->where('axes_id', $axes_id)
                                         ->where('genre', $genre)
-                                        ->with('users:id,image,pseudo,email')
                                         ->get();
                                 }
                             }
@@ -1151,7 +1098,6 @@ class MembresController extends Controller
                                         ->where('filieres_id', $filieres_id)
                                         ->where('sections_id', $sections_id)
                                         ->where('sympathisant', $sympathisant)
-                                        ->with('users:id,image,pseudo,email')
                                         ->get();
                                 }else{
                                     $membres = Membres::where('fonctions_id', $fonctions_id)
@@ -1159,7 +1105,6 @@ class MembresController extends Controller
                                         ->where('sections_id', $sections_id)
                                         ->where('genre', $genre)
                                         ->where('sympathisant', $sympathisant)
-                                        ->with('users:id,image,pseudo,email')
                                         ->get();
                                 }
                             }else{
@@ -1168,7 +1113,6 @@ class MembresController extends Controller
                                         ->where('filieres_id', $filieres_id)
                                         ->where('sections_id', $sections_id)
                                         ->where('axes_id', $axes_id)
-                                        ->with('users:id,image,pseudo,email')
                                         ->get();
                                 }else{
                                     $membres = Membres::where('fonctions_id', $fonctions_id)
@@ -1176,7 +1120,6 @@ class MembresController extends Controller
                                     ->where('sections_id', $sections_id)
                                     ->where('axes_id', $axes_id)
                                     ->where('genre', $genre)
-                                    ->with('users:id,image,pseudo,email')
                                     ->get();
                                 }
                             }
@@ -1189,7 +1132,6 @@ class MembresController extends Controller
                                         ->where('filieres_id', $filieres_id)
                                         ->where('levels_id', $niveau_id)
                                         ->where('sympathisant', $sympathisant)
-                                        ->with('users:id,image,pseudo,email')
                                         ->get();
                                 }else{
                                     $membres = Membres::where('fonctions_id', $fonctions_id)
@@ -1197,7 +1139,6 @@ class MembresController extends Controller
                                         ->where('levels_id', $niveau_id)
                                         ->where('genre', $genre)
                                         ->where('sympathisant', $sympathisant)
-                                        ->with('users:id,image,pseudo,email')
                                         ->get();
                                 }
                             }else{
@@ -1206,7 +1147,6 @@ class MembresController extends Controller
                                         ->where('filieres_id', $filieres_id)
                                         ->where('levels_id', $niveau_id)
                                         ->where('axes_id', $axes_id)
-                                        ->with('users:id,image,pseudo,email')
                                         ->get();
                                 }else{
                                     $membres = Membres::where('fonctions_id', $fonctions_id)
@@ -1214,7 +1154,6 @@ class MembresController extends Controller
                                         ->where('levels_id', $niveau_id)
                                         ->where('axes_id', $axes_id)
                                         ->where('genre', $genre)
-                                        ->with('users:id,image,pseudo,email')
                                         ->get();
                                 }
                             }
@@ -1226,7 +1165,6 @@ class MembresController extends Controller
                                         ->where('levels_id', $niveau_id)
                                         ->where('sections_id', $sections_id)
                                         ->where('sympathisant', $sympathisant)
-                                        ->with('users:id,image,pseudo,email')
                                         ->get();
                                 }else{
                                     $membres = Membres::where('fonctions_id', $fonctions_id)
@@ -1235,7 +1173,6 @@ class MembresController extends Controller
                                         ->where('sections_id', $sections_id)
                                         ->where('genre', $genre)
                                         ->where('sympathisant', $sympathisant)
-                                        ->with('users:id,image,pseudo,email')
                                         ->get();
                                 }
                             }else{
@@ -1245,7 +1182,6 @@ class MembresController extends Controller
                                         ->where('levels_id', $niveau_id)
                                         ->where('sections_id', $sections_id)
                                         ->where('axes_id', $axes_id)
-                                        ->with('users:id,image,pseudo,email')
                                         ->get();
                                 }else{
                                     $membres = Membres::where('fonctions_id', $fonctions_id)
@@ -1254,7 +1190,6 @@ class MembresController extends Controller
                                         ->where('sections_id', $sections_id)
                                         ->where('axes_id', $axes_id)
                                         ->where('genre', $genre)
-                                        ->with('users:id,image,pseudo,email')
                                         ->get();
                                 }
                             }
@@ -1286,22 +1221,19 @@ class MembresController extends Controller
                                 if($genre == "null"){
                                     if(preg_match('/^\d+$/', $value)){
                                         $membres = Membres::where('numero_carte','like', '%'. $value . '%')
-                                            ->where('sympathisant', $sympathisant)
-                                            ->with('users:id,image,pseudo,email')->get();
+                                            ->where('sympathisant', $sympathisant)->get();
                                     }else{
                                         // Vérifier si le terme de recherche contient un espace
                                         if (strpos($value, ' ') !== false) {
                                             // Si le terme de recherche contient un espace, rechercher par nom et prénom ensemble
                                             $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
                                                 ->where('sympathisant', $sympathisant)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         } else {
                                             // Sinon, rechercher dans les colonnes du nom et du prénom séparément
                                             $membres = Membres::where('nom', 'like', '%' . $value . '%')
                                                 ->orWhere('prenom', 'like', '%' . $value . '%')
                                                 ->where('sympathisant', $sympathisant)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         }
                                     }
@@ -1309,8 +1241,7 @@ class MembresController extends Controller
                                     if(preg_match('/^\d+$/', $value)){
                                         $membres = Membres::where('numero_carte','like', '%'. $value . '%')
                                             ->where('sympathisant', $sympathisant)
-                                            ->where('genre', $genre)
-                                            ->with('users:id,image,pseudo,email')->get();
+                                            ->where('genre', $genre)->get();
                                     }else{
                                         // Vérifier si le terme de recherche contient un espace
                                         if (strpos($value, ' ') !== false) {
@@ -1318,7 +1249,6 @@ class MembresController extends Controller
                                             $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
                                                 ->where('sympathisant', $sympathisant)
                                                 ->where('genre', $genre)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         } else {
                                             // Sinon, rechercher dans les colonnes du nom et du prénom séparément
@@ -1326,7 +1256,6 @@ class MembresController extends Controller
                                                 ->orWhere('prenom', 'like', '%' . $value . '%')
                                                 ->where('genre', $genre)
                                                 ->where('sympathisant', $sympathisant)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         }
                                     }
@@ -1335,22 +1264,19 @@ class MembresController extends Controller
                                 if($genre == "null"){
                                     if(preg_match('/^\d+$/', $value)){
                                         $membres = Membres::where('numero_carte','like', '%'. $value . '%')
-                                            ->where('axes_id', $axes_id)
-                                            ->with('users:id,image,pseudo,email')->get();
+                                            ->where('axes_id', $axes_id)->get();
                                     }else{
                                         // Vérifier si le terme de recherche contient un espace
                                         if (strpos($value, ' ') !== false) {
                                             // Si le terme de recherche contient un espace, rechercher par nom et prénom ensemble
                                             $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
                                                 ->where('axes_id', $axes_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         } else {
                                             // Sinon, rechercher dans les colonnes du nom et du prénom séparément
                                             $membres = Membres::where('nom', 'like', '%' . $value . '%')
                                                 ->orWhere('prenom', 'like', '%' . $value . '%')
                                                 ->where('axes_id', $axes_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         }
                                     }
@@ -1358,8 +1284,7 @@ class MembresController extends Controller
                                     if(preg_match('/^\d+$/', $value)){
                                         $membres = Membres::where('numero_carte','like', '%'. $value . '%')
                                             ->where('axes_id', $axes_id)
-                                            ->where('genre', $genre)
-                                            ->with('users:id,image,pseudo,email')->get();
+                                            ->where('genre', $genre)->get();
                                     }else{
                                         // Vérifier si le terme de recherche contient un espace
                                         if (strpos($value, ' ') !== false) {
@@ -1367,7 +1292,6 @@ class MembresController extends Controller
                                             $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
                                                 ->where('axes_id', $axes_id)
                                                 ->where('genre', $genre)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         } else {
                                             // Sinon, rechercher dans les colonnes du nom et du prénom séparément
@@ -1375,7 +1299,6 @@ class MembresController extends Controller
                                                 ->orWhere('prenom', 'like', '%' . $value . '%')
                                                 ->where('axes_id', $axes_id)
                                                 ->where('genre', $genre)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         }
                                     }
@@ -1387,8 +1310,7 @@ class MembresController extends Controller
                                     if(preg_match('/^\d+$/', $value)){
                                         $membres = Membres::where('numero_carte','like', '%'. $value . '%')
                                             ->where('sections_id', $sections_id)
-                                            ->where('sympathisant', $sympathisant)
-                                            ->with('users:id,image,pseudo,email')->get();
+                                            ->where('sympathisant', $sympathisant)->get();
                                     }else{
                                         // Vérifier si le terme de recherche contient un espace
                                         if (strpos($value, ' ') !== false) {
@@ -1396,7 +1318,6 @@ class MembresController extends Controller
                                             $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
                                                 ->where('sections_id', $sections_id)
                                                 ->where('sympathisant', $sympathisant)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         } else {
                                             // Sinon, rechercher dans les colonnes du nom et du prénom séparément
@@ -1404,7 +1325,6 @@ class MembresController extends Controller
                                                 ->orWhere('prenom', 'like', '%' . $value . '%')
                                                 ->where('sections_id', $sections_id)
                                                 ->where('sympathisant', $sympathisant)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         }
                                     }
@@ -1413,8 +1333,7 @@ class MembresController extends Controller
                                         $membres = Membres::where('numero_carte','like', '%'. $value . '%')
                                             ->where('sections_id', $sections_id)
                                             ->where('genre', $genre)
-                                            ->where('sympathisant', $sympathisant)
-                                            ->with('users:id,image,pseudo,email')->get();
+                                            ->where('sympathisant', $sympathisant)->get();
                                     }else{
                                         // Vérifier si le terme de recherche contient un espace
                                         if (strpos($value, ' ') !== false) {
@@ -1423,7 +1342,6 @@ class MembresController extends Controller
                                                 ->where('sections_id', $sections_id)
                                                 ->where('genre', $genre)
                                                 ->where('sympathisant', $sympathisant)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         } else {
                                             // Sinon, rechercher dans les colonnes du nom et du prénom séparément
@@ -1432,7 +1350,6 @@ class MembresController extends Controller
                                                 ->where('sections_id', $sections_id)
                                                 ->where('genre', $genre)
                                                 ->where('sympathisant', $sympathisant)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         }
                                     }
@@ -1442,8 +1359,7 @@ class MembresController extends Controller
                                     if(preg_match('/^\d+$/', $value)){
                                         $membres = Membres::where('numero_carte','like', '%'. $value . '%')
                                             ->where('sections_id', $sections_id)
-                                            ->where('axes_id', $axes_id)
-                                            ->with('users:id,image,pseudo,email')->get();
+                                            ->where('axes_id', $axes_id)->get();
                                     }else{
                                         // Vérifier si le terme de recherche contient un espace
                                         if (strpos($value, ' ') !== false) {
@@ -1451,7 +1367,6 @@ class MembresController extends Controller
                                             $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
                                                 ->where('sections_id', $sections_id)
                                                 ->where('axes_id', $axes_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         } else {
                                             // Sinon, rechercher dans les colonnes du nom et du prénom séparément
@@ -1459,7 +1374,6 @@ class MembresController extends Controller
                                                 ->orWhere('prenom', 'like', '%' . $value . '%')
                                                 ->where('sections_id', $sections_id)
                                                 ->where('axes_id', $axes_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         }
                                     }
@@ -1468,8 +1382,7 @@ class MembresController extends Controller
                                         $membres = Membres::where('numero_carte','like', '%'. $value . '%')
                                             ->where('sections_id', $sections_id)
                                             ->where('axes_id', $axes_id)
-                                            ->where('genre', $genre)
-                                            ->with('users:id,image,pseudo,email')->get();
+                                            ->where('genre', $genre)->get();
                                     }else{
                                         // Vérifier si le terme de recherche contient un espace
                                         if (strpos($value, ' ') !== false) {
@@ -1478,7 +1391,6 @@ class MembresController extends Controller
                                                 ->where('sections_id', $sections_id)
                                                 ->where('axes_id', $axes_id)
                                                 ->where('genre', $genre)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         } else {
                                             // Sinon, rechercher dans les colonnes du nom et du prénom séparément
@@ -1487,7 +1399,6 @@ class MembresController extends Controller
                                                 ->where('sections_id', $sections_id)
                                                 ->where('axes_id', $axes_id)
                                                 ->where('genre', $genre)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         }
                                     }
@@ -1501,8 +1412,7 @@ class MembresController extends Controller
                                     if(preg_match('/^\d+$/', $value)){
                                         $membres = Membres::where('numero_carte','like', '%'. $value . '%')
                                             ->where('sympathisant', $sympathisant)
-                                            ->where('levels_id', $niveau_id)
-                                            ->with('users:id,image,pseudo,email')->get();
+                                            ->where('levels_id', $niveau_id)->get();
                                     }else{
                                         // Vérifier si le terme de recherche contient un espace
                                         if (strpos($value, ' ') !== false) {
@@ -1510,7 +1420,6 @@ class MembresController extends Controller
                                             $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
                                                 ->where('sympathisant', $sympathisant)
                                                 ->where('levels_id', $niveau_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         } else {
                                             // Sinon, rechercher dans les colonnes du nom et du prénom séparément
@@ -1518,7 +1427,6 @@ class MembresController extends Controller
                                                 ->orWhere('prenom', 'like', '%' . $value . '%')
                                                 ->where('sympathisant', $sympathisant)
                                                 ->where('levels_id', $niveau_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         }
                                     }
@@ -1527,8 +1435,7 @@ class MembresController extends Controller
                                         $membres = Membres::where('numero_carte','like', '%'. $value . '%')
                                             ->where('genre', $genre)
                                             ->where('sympathisant', $sympathisant)
-                                            ->where('levels_id', $niveau_id)
-                                            ->with('users:id,image,pseudo,email')->get();
+                                            ->where('levels_id', $niveau_id)->get();
                                     }else{
                                         // Vérifier si le terme de recherche contient un espace
                                         if (strpos($value, ' ') !== false) {
@@ -1537,7 +1444,6 @@ class MembresController extends Controller
                                                 ->where('genre', $genre)
                                                 ->where('sympathisant', $sympathisant)
                                                 ->where('levels_id', $niveau_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         } else {
                                             // Sinon, rechercher dans les colonnes du nom et du prénom séparément
@@ -1546,7 +1452,6 @@ class MembresController extends Controller
                                                 ->where('genre', $genre)
                                                 ->where('sympathisant', $sympathisant)
                                                 ->where('levels_id', $niveau_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         }
                                     }
@@ -1556,8 +1461,7 @@ class MembresController extends Controller
                                     if(preg_match('/^\d+$/', $value)){
                                         $membres = Membres::where('numero_carte','like', '%'. $value . '%')
                                             ->where('axes_id', $axes_id)
-                                            ->where('levels_id', $niveau_id)
-                                            ->with('users:id,image,pseudo,email')->get();
+                                            ->where('levels_id', $niveau_id)->get();
                                     }else{
                                         // Vérifier si le terme de recherche contient un espace
                                         if (strpos($value, ' ') !== false) {
@@ -1565,7 +1469,6 @@ class MembresController extends Controller
                                             $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
                                                 ->where('axes_id', $axes_id)
                                                 ->where('levels_id', $niveau_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         } else {
                                             // Sinon, rechercher dans les colonnes du nom et du prénom séparément
@@ -1573,7 +1476,6 @@ class MembresController extends Controller
                                                 ->orWhere('prenom', 'like', '%' . $value . '%')
                                                 ->where('axes_id', $axes_id)
                                                 ->where('levels_id', $niveau_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         }
                                     }
@@ -1582,8 +1484,7 @@ class MembresController extends Controller
                                         $membres = Membres::where('numero_carte','like', '%'. $value . '%')
                                             ->where('genre', $genre)
                                             ->where('axes_id', $axes_id)
-                                            ->where('levels_id', $niveau_id)
-                                            ->with('users:id,image,pseudo,email')->get();
+                                            ->where('levels_id', $niveau_id)->get();
                                     }else{
                                         // Vérifier si le terme de recherche contient un espace
                                         if (strpos($value, ' ') !== false) {
@@ -1592,7 +1493,6 @@ class MembresController extends Controller
                                                 ->where('genre', $genre)
                                                 ->where('axes_id', $axes_id)
                                                 ->where('levels_id', $niveau_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         } else {
                                             // Sinon, rechercher dans les colonnes du nom et du prénom séparément
@@ -1601,7 +1501,6 @@ class MembresController extends Controller
                                                 ->where('genre', $genre)
                                                 ->where('axes_id', $axes_id)
                                                 ->where('levels_id', $niveau_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         }
                                     }
@@ -1614,8 +1513,7 @@ class MembresController extends Controller
                                         $membres = Membres::where('numero_carte','like', '%'. $value . '%')
                                             ->where('sympathisant', $sympathisant)
                                             ->where('sections_id', $sections_id)
-                                            ->where('levels_id', $niveau_id)
-                                            ->with('users:id,image,pseudo,email')->get();
+                                            ->where('levels_id', $niveau_id)->get();
                                     }else{
                                         // Vérifier si le terme de recherche contient un espace
                                         if (strpos($value, ' ') !== false) {
@@ -1624,7 +1522,6 @@ class MembresController extends Controller
                                                 ->where('sympathisant', $sympathisant)
                                                 ->where('sections_id', $sections_id)
                                                 ->where('levels_id', $niveau_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         } else {
                                             // Sinon, rechercher dans les colonnes du nom et du prénom séparément
@@ -1633,7 +1530,6 @@ class MembresController extends Controller
                                                 ->where('sympathisant', $sympathisant)
                                                 ->where('sections_id', $sections_id)
                                                 ->where('levels_id', $niveau_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         }
                                     }
@@ -1644,8 +1540,7 @@ class MembresController extends Controller
                                             ->where('genre', $genre)
                                             ->where('sympathisant', $sympathisant)
                                             ->where('sections_id', $sections_id)
-                                            ->where('levels_id', $niveau_id)
-                                            ->with('users:id,image,pseudo,email')->get();
+                                            ->where('levels_id', $niveau_id)->get();
                                     }else{
                                         // Vérifier si le terme de recherche contient un espace
                                         if (strpos($value, ' ') !== false) {
@@ -1655,7 +1550,6 @@ class MembresController extends Controller
                                                 ->where('sympathisant', $sympathisant)
                                                 ->where('sections_id', $sections_id)
                                                 ->where('levels_id', $niveau_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         } else {
                                             // Sinon, rechercher dans les colonnes du nom et du prénom séparément
@@ -1665,7 +1559,6 @@ class MembresController extends Controller
                                                 ->where('sympathisant', $sympathisant)
                                                 ->where('sections_id', $sections_id)
                                                 ->where('levels_id', $niveau_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         }
                                     }
@@ -1676,8 +1569,7 @@ class MembresController extends Controller
                                         $membres = Membres::where('numero_carte','like', '%'. $value . '%')
                                             ->where('axes_id', $axes_id)
                                             ->where('sections_id', $sections_id)
-                                            ->where('levels_id', $niveau_id)
-                                            ->with('users:id,image,pseudo,email')->get();
+                                            ->where('levels_id', $niveau_id)->get();
                                     }else{
                                         // Vérifier si le terme de recherche contient un espace
                                         if (strpos($value, ' ') !== false) {
@@ -1686,7 +1578,6 @@ class MembresController extends Controller
                                                 ->where('axes_id', $axes_id)
                                                 ->where('sections_id', $sections_id)
                                                 ->where('levels_id', $niveau_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         } else {
                                             // Sinon, rechercher dans les colonnes du nom et du prénom séparément
@@ -1695,7 +1586,6 @@ class MembresController extends Controller
                                                 ->where('axes_id', $axes_id)
                                                 ->where('sections_id', $sections_id)
                                                 ->where('levels_id', $niveau_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         }
                                     }
@@ -1705,8 +1595,7 @@ class MembresController extends Controller
                                             ->where('axes_id', $axes_id)
                                             ->where('sections_id', $sections_id)
                                             ->where('levels_id', $niveau_id)
-                                            ->where('genre', $genre)
-                                            ->with('users:id,image,pseudo,email')->get();
+                                            ->where('genre', $genre)->get();
                                     }else{
                                         // Vérifier si le terme de recherche contient un espace
                                         if (strpos($value, ' ') !== false) {
@@ -1716,7 +1605,6 @@ class MembresController extends Controller
                                                 ->where('sections_id', $sections_id)
                                                 ->where('levels_id', $niveau_id)
                                                 ->where('genre', $genre)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         } else {
                                             // Sinon, rechercher dans les colonnes du nom et du prénom séparément
@@ -1726,7 +1614,6 @@ class MembresController extends Controller
                                                 ->where('sections_id', $sections_id)
                                                 ->where('levels_id', $niveau_id)
                                                 ->where('genre', $genre)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         }
                                     }
@@ -1742,8 +1629,7 @@ class MembresController extends Controller
                                     if(preg_match('/^\d+$/', $value)){
                                         $membres = Membres::where('numero_carte','like', '%'. $value . '%')
                                             ->where('sympathisant', $sympathisant)
-                                            ->where('filieres_id', $filieres_id)
-                                            ->with('users:id,image,pseudo,email')->get();
+                                            ->where('filieres_id', $filieres_id)->get();
                                     }else{
                                         // Vérifier si le terme de recherche contient un espace
                                         if (strpos($value, ' ') !== false) {
@@ -1751,7 +1637,6 @@ class MembresController extends Controller
                                             $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
                                                 ->where('sympathisant', $sympathisant)
                                                 ->where('filieres_id', $filieres_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         } else {
                                             // Sinon, rechercher dans les colonnes du nom et du prénom séparément
@@ -1759,7 +1644,6 @@ class MembresController extends Controller
                                                 ->orWhere('prenom', 'like', '%' . $value . '%')
                                                 ->where('sympathisant', $sympathisant)
                                                 ->where('filieres_id', $filieres_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         }
                                     }
@@ -1768,8 +1652,7 @@ class MembresController extends Controller
                                         $membres = Membres::where('numero_carte','like', '%'. $value . '%')
                                             ->where('genre', $genre)
                                             ->where('sympathisant', $sympathisant)
-                                            ->where('filieres_id', $filieres_id)
-                                            ->with('users:id,image,pseudo,email')->get();
+                                            ->where('filieres_id', $filieres_id)->get();
                                     }else{
                                         // Vérifier si le terme de recherche contient un espace
                                         if (strpos($value, ' ') !== false) {
@@ -1778,7 +1661,6 @@ class MembresController extends Controller
                                                 ->where('genre', $genre)
                                                 ->where('sympathisant', $sympathisant)
                                                 ->where('filieres_id', $filieres_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         } else {
                                             // Sinon, rechercher dans les colonnes du nom et du prénom séparément
@@ -1787,7 +1669,6 @@ class MembresController extends Controller
                                                 ->where('genre', $genre)
                                                 ->where('sympathisant', $sympathisant)
                                                 ->where('filieres_id', $filieres_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         }
                                     }
@@ -1797,8 +1678,7 @@ class MembresController extends Controller
                                     if(preg_match('/^\d+$/', $value)){
                                         $membres = Membres::where('numero_carte','like', '%'. $value . '%')
                                             ->where('axes_id', $axes_id)
-                                            ->where('filieres_id', $filieres_id)
-                                            ->with('users:id,image,pseudo,email')->get();
+                                            ->where('filieres_id', $filieres_id)->get();
                                     }else{
                                         // Vérifier si le terme de recherche contient un espace
                                         if (strpos($value, ' ') !== false) {
@@ -1806,7 +1686,6 @@ class MembresController extends Controller
                                             $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
                                                 ->where('axes_id', $axes_id)
                                                 ->where('filieres_id', $filieres_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         } else {
                                             // Sinon, rechercher dans les colonnes du nom et du prénom séparément
@@ -1814,7 +1693,6 @@ class MembresController extends Controller
                                                 ->orWhere('prenom', 'like', '%' . $value . '%')
                                                 ->where('axes_id', $axes_id)
                                                 ->where('filieres_id', $filieres_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         }
                                     }
@@ -1823,8 +1701,7 @@ class MembresController extends Controller
                                         $membres = Membres::where('numero_carte','like', '%'. $value . '%')
                                             ->where('genre', $genre)
                                             ->where('axes_id', $axes_id)
-                                            ->where('filieres_id', $filieres_id)
-                                            ->with('users:id,image,pseudo,email')->get();
+                                            ->where('filieres_id', $filieres_id)->get();
                                     }else{
                                         // Vérifier si le terme de recherche contient un espace
                                         if (strpos($value, ' ') !== false) {
@@ -1833,7 +1710,6 @@ class MembresController extends Controller
                                                 ->where('genre', $genre)
                                                 ->where('axes_id', $axes_id)
                                                 ->where('filieres_id', $filieres_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         } else {
                                             // Sinon, rechercher dans les colonnes du nom et du prénom séparément
@@ -1842,7 +1718,6 @@ class MembresController extends Controller
                                                 ->where('genre', $genre)
                                                 ->where('axes_id', $axes_id)
                                                 ->where('filieres_id', $filieres_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         }
                                     }
@@ -1855,8 +1730,7 @@ class MembresController extends Controller
                                         $membres = Membres::where('numero_carte','like', '%'. $value . '%')
                                             ->where('sympathisant', $sympathisant)
                                             ->where('sections_id', $sections_id)
-                                            ->where('filieres_id', $filieres_id)
-                                            ->with('users:id,image,pseudo,email')->get();
+                                            ->where('filieres_id', $filieres_id)->get();
                                     }else{
                                         // Vérifier si le terme de recherche contient un espace
                                         if (strpos($value, ' ') !== false) {
@@ -1865,7 +1739,6 @@ class MembresController extends Controller
                                                 ->where('sympathisant', $sympathisant)
                                                 ->where('sections_id', $sections_id)
                                                 ->where('filieres_id', $filieres_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         } else {
                                             // Sinon, rechercher dans les colonnes du nom et du prénom séparément
@@ -1874,7 +1747,6 @@ class MembresController extends Controller
                                                 ->where('sympathisant', $sympathisant)
                                                 ->where('sections_id', $sections_id)
                                                 ->where('filieres_id', $filieres_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         }
                                     }
@@ -1884,8 +1756,7 @@ class MembresController extends Controller
                                             ->where('sympathisant', $sympathisant)
                                             ->where('sections_id', $sections_id)
                                             ->where('filieres_id', $filieres_id)
-                                            ->where('genre', $genre)
-                                            ->with('users:id,image,pseudo,email')->get();
+                                            ->where('genre', $genre)->get();
                                     }else{
                                         // Vérifier si le terme de recherche contient un espace
                                         if (strpos($value, ' ') !== false) {
@@ -1895,7 +1766,6 @@ class MembresController extends Controller
                                                 ->where('sections_id', $sections_id)
                                                 ->where('filieres_id', $filieres_id)
                                                 ->where('genre', $genre)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         } else {
                                             // Sinon, rechercher dans les colonnes du nom et du prénom séparément
@@ -1905,7 +1775,6 @@ class MembresController extends Controller
                                                 ->where('sections_id', $sections_id)
                                                 ->where('filieres_id', $filieres_id)
                                                 ->where('genre', $genre)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         }
                                     }
@@ -1916,8 +1785,7 @@ class MembresController extends Controller
                                         $membres = Membres::where('numero_carte','like', '%'. $value . '%')
                                             ->where('axes_id', $axes_id)
                                             ->where('sections_id', $sections_id)
-                                            ->where('filieres_id', $filieres_id)
-                                            ->with('users:id,image,pseudo,email')->get();
+                                            ->where('filieres_id', $filieres_id)->get();
                                     }else{
                                         // Vérifier si le terme de recherche contient un espace
                                         if (strpos($value, ' ') !== false) {
@@ -1926,7 +1794,6 @@ class MembresController extends Controller
                                                 ->where('axes_id', $axes_id)
                                                 ->where('sections_id', $sections_id)
                                                 ->where('filieres_id', $filieres_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         } else {
                                             // Sinon, rechercher dans les colonnes du nom et du prénom séparément
@@ -1935,7 +1802,6 @@ class MembresController extends Controller
                                                 ->where('axes_id', $axes_id)
                                                 ->where('sections_id', $sections_id)
                                                 ->where('filieres_id', $filieres_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         }
                                     }
@@ -1945,8 +1811,7 @@ class MembresController extends Controller
                                             ->where('axes_id', $axes_id)
                                             ->where('sections_id', $sections_id)
                                             ->where('filieres_id', $filieres_id)
-                                            ->where('genre', $genre)
-                                            ->with('users:id,image,pseudo,email')->get();
+                                            ->where('genre', $genre)->get();
                                     }else{
                                         // Vérifier si le terme de recherche contient un espace
                                         if (strpos($value, ' ') !== false) {
@@ -1956,7 +1821,6 @@ class MembresController extends Controller
                                                 ->where('sections_id', $sections_id)
                                                 ->where('filieres_id', $filieres_id)
                                                 ->where('genre', $genre)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         } else {
                                             // Sinon, rechercher dans les colonnes du nom et du prénom séparément
@@ -1966,7 +1830,6 @@ class MembresController extends Controller
                                                 ->where('sections_id', $sections_id)
                                                 ->where('filieres_id', $filieres_id)
                                                 ->where('genre', $genre)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         }
                                     }
@@ -1975,7 +1838,6 @@ class MembresController extends Controller
                                         ->where('sections_id', $sections_id)
                                         ->where('axes_id', $axes_id)
                                         ->where('genre', $genre)
-                                        ->with('users:id,image,pseudo,email')
                                         ->get();
                                 }
                             }
@@ -1988,8 +1850,7 @@ class MembresController extends Controller
                                         $membres = Membres::where('numero_carte','like', '%'. $value . '%')
                                             ->where('sympathisant', $sympathisant)
                                             ->where('levels_id', $niveau_id)
-                                            ->where('filieres_id', $filieres_id)
-                                            ->with('users:id,image,pseudo,email')->get();
+                                            ->where('filieres_id', $filieres_id)->get();
                                     }else{
                                         // Vérifier si le terme de recherche contient un espace
                                         if (strpos($value, ' ') !== false) {
@@ -1998,7 +1859,6 @@ class MembresController extends Controller
                                                 ->where('sympathisant', $sympathisant)
                                                 ->where('levels_id', $niveau_id)
                                                 ->where('filieres_id', $filieres_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         } else {
                                             // Sinon, rechercher dans les colonnes du nom et du prénom séparément
@@ -2007,7 +1867,6 @@ class MembresController extends Controller
                                                 ->where('sympathisant', $sympathisant)
                                                 ->where('levels_id', $niveau_id)
                                                 ->where('filieres_id', $filieres_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         }
                                     }
@@ -2017,8 +1876,7 @@ class MembresController extends Controller
                                             ->where('sympathisant', $sympathisant)
                                             ->where('levels_id', $niveau_id)
                                             ->where('filieres_id', $filieres_id)
-                                            ->where('genre', $genre)
-                                            ->with('users:id,image,pseudo,email')->get();
+                                            ->where('genre', $genre)->get();
                                     }else{
                                         // Vérifier si le terme de recherche contient un espace
                                         if (strpos($value, ' ') !== false) {
@@ -2028,7 +1886,6 @@ class MembresController extends Controller
                                                 ->where('levels_id', $niveau_id)
                                                 ->where('filieres_id', $filieres_id)
                                                 ->where('genre', $genre)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         } else {
                                             // Sinon, rechercher dans les colonnes du nom et du prénom séparément
@@ -2038,7 +1895,6 @@ class MembresController extends Controller
                                                 ->where('levels_id', $niveau_id)
                                                 ->where('filieres_id', $filieres_id)
                                                 ->where('genre', $genre)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         }
                                     }
@@ -2049,8 +1905,7 @@ class MembresController extends Controller
                                         $membres = Membres::where('numero_carte','like', '%'. $value . '%')
                                             ->where('axes_id', $axes_id)
                                             ->where('levels_id', $niveau_id)
-                                            ->where('filieres_id', $filieres_id)
-                                            ->with('users:id,image,pseudo,email')->get();
+                                            ->where('filieres_id', $filieres_id)->get();
                                     }else{
                                         // Vérifier si le terme de recherche contient un espace
                                         if (strpos($value, ' ') !== false) {
@@ -2059,7 +1914,6 @@ class MembresController extends Controller
                                                 ->where('axes_id', $axes_id)
                                                 ->where('levels_id', $niveau_id)
                                                 ->where('filieres_id', $filieres_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         } else {
                                             // Sinon, rechercher dans les colonnes du nom et du prénom séparément
@@ -2068,7 +1922,6 @@ class MembresController extends Controller
                                                 ->where('axes_id', $axes_id)
                                                 ->where('levels_id', $niveau_id)
                                                 ->where('filieres_id', $filieres_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         }
                                     }
@@ -2078,8 +1931,7 @@ class MembresController extends Controller
                                             ->where('axes_id', $axes_id)
                                             ->where('levels_id', $niveau_id)
                                             ->where('genre', $genre)
-                                            ->where('filieres_id', $filieres_id)
-                                            ->with('users:id,image,pseudo,email')->get();
+                                            ->where('filieres_id', $filieres_id)->get();
                                     }else{
                                         // Vérifier si le terme de recherche contient un espace
                                         if (strpos($value, ' ') !== false) {
@@ -2089,7 +1941,6 @@ class MembresController extends Controller
                                                 ->where('levels_id', $niveau_id)
                                                 ->where('genre', $genre)
                                                 ->where('filieres_id', $filieres_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         } else {
                                             // Sinon, rechercher dans les colonnes du nom et du prénom séparément
@@ -2099,7 +1950,6 @@ class MembresController extends Controller
                                                 ->where('levels_id', $niveau_id)
                                                 ->where('genre', $genre)
                                                 ->where('filieres_id', $filieres_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         }
                                     }
@@ -2113,8 +1963,7 @@ class MembresController extends Controller
                                             ->where('sympathisant', $sympathisant)
                                             ->where('levels_id', $niveau_id)
                                             ->where('sections_id', $sections_id)
-                                            ->where('filieres_id', $filieres_id)
-                                            ->with('users:id,image,pseudo,email')->get();
+                                            ->where('filieres_id', $filieres_id)->get();
                                     }else{
                                         // Vérifier si le terme de recherche contient un espace
                                         if (strpos($value, ' ') !== false) {
@@ -2124,7 +1973,6 @@ class MembresController extends Controller
                                                 ->where('levels_id', $niveau_id)
                                                 ->where('sections_id', $sections_id)
                                                 ->where('filieres_id', $filieres_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         } else {
                                             // Sinon, rechercher dans les colonnes du nom et du prénom séparément
@@ -2134,7 +1982,6 @@ class MembresController extends Controller
                                                 ->where('levels_id', $niveau_id)
                                                 ->where('sections_id', $sections_id)
                                                 ->where('filieres_id', $filieres_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         }
                                     }
@@ -2145,8 +1992,7 @@ class MembresController extends Controller
                                             ->where('levels_id', $niveau_id)
                                             ->where('sections_id', $sections_id)
                                             ->where('genre', $genre)
-                                            ->where('filieres_id', $filieres_id)
-                                            ->with('users:id,image,pseudo,email')->get();
+                                            ->where('filieres_id', $filieres_id)->get();
                                     }else{
                                         // Vérifier si le terme de recherche contient un espace
                                         if (strpos($value, ' ') !== false) {
@@ -2157,7 +2003,6 @@ class MembresController extends Controller
                                                 ->where('sections_id', $sections_id)
                                                 ->where('genre', $genre)
                                                 ->where('filieres_id', $filieres_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         } else {
                                             // Sinon, rechercher dans les colonnes du nom et du prénom séparément
@@ -2168,7 +2013,6 @@ class MembresController extends Controller
                                                 ->where('sections_id', $sections_id)
                                                 ->where('genre', $genre)
                                                 ->where('filieres_id', $filieres_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         }
                                     }
@@ -2180,8 +2024,7 @@ class MembresController extends Controller
                                             ->where('axes_id', $axes_id)
                                             ->where('levels_id', $niveau_id)
                                             ->where('sections_id', $sections_id)
-                                            ->where('filieres_id', $filieres_id)
-                                            ->with('users:id,image,pseudo,email')->get();
+                                            ->where('filieres_id', $filieres_id)->get();
                                     }else{
                                         // Vérifier si le terme de recherche contient un espace
                                         if (strpos($value, ' ') !== false) {
@@ -2191,7 +2034,6 @@ class MembresController extends Controller
                                                 ->where('levels_id', $niveau_id)
                                                 ->where('sections_id', $sections_id)
                                                 ->where('filieres_id', $filieres_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         } else {
                                             // Sinon, rechercher dans les colonnes du nom et du prénom séparément
@@ -2201,7 +2043,6 @@ class MembresController extends Controller
                                                 ->where('levels_id', $niveau_id)
                                                 ->where('sections_id', $sections_id)
                                                 ->where('filieres_id', $filieres_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         }
                                     }
@@ -2212,8 +2053,7 @@ class MembresController extends Controller
                                             ->where('levels_id', $niveau_id)
                                             ->where('sections_id', $sections_id)
                                             ->where('genre', $genre)
-                                            ->where('filieres_id', $filieres_id)
-                                            ->with('users:id,image,pseudo,email')->get();
+                                            ->where('filieres_id', $filieres_id)->get();
                                     }else{
                                         // Vérifier si le terme de recherche contient un espace
                                         if (strpos($value, ' ') !== false) {
@@ -2224,7 +2064,6 @@ class MembresController extends Controller
                                                 ->where('sections_id', $sections_id)
                                                 ->where('genre', $genre)
                                                 ->where('filieres_id', $filieres_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         } else {
                                             // Sinon, rechercher dans les colonnes du nom et du prénom séparément
@@ -2235,7 +2074,6 @@ class MembresController extends Controller
                                                 ->where('sections_id', $sections_id)
                                                 ->where('genre', $genre)
                                                 ->where('filieres_id', $filieres_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         }
                                     }
@@ -2253,8 +2091,7 @@ class MembresController extends Controller
                                     if(preg_match('/^\d+$/', $value)){
                                         $membres = Membres::where('numero_carte','like', '%'. $value . '%')
                                             ->where('sympathisant', $sympathisant)
-                                            ->where('fonctions_id', $fonctions_id)
-                                            ->with('users:id,image,pseudo,email')->get();
+                                            ->where('fonctions_id', $fonctions_id)->get();
                                     }else{
                                         // Vérifier si le terme de recherche contient un espace
                                         if (strpos($value, ' ') !== false) {
@@ -2262,7 +2099,6 @@ class MembresController extends Controller
                                             $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
                                                 ->where('sympathisant', $sympathisant)
                                                 ->where('fonctions_id', $fonctions_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         } else {
                                             // Sinon, rechercher dans les colonnes du nom et du prénom séparément
@@ -2270,7 +2106,6 @@ class MembresController extends Controller
                                                 ->orWhere('prenom', 'like', '%' . $value . '%')
                                                 ->where('sympathisant', $sympathisant)
                                                 ->where('fonctions_id', $fonctions_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         }
                                     }
@@ -2279,8 +2114,7 @@ class MembresController extends Controller
                                         $membres = Membres::where('numero_carte','like', '%'. $value . '%')
                                             ->where('sympathisant', $sympathisant)
                                             ->where('genre', $genre)
-                                            ->where('fonctions_id', $fonctions_id)
-                                            ->with('users:id,image,pseudo,email')->get();
+                                            ->where('fonctions_id', $fonctions_id)->get();
                                     }else{
                                         // Vérifier si le terme de recherche contient un espace
                                         if (strpos($value, ' ') !== false) {
@@ -2289,7 +2123,6 @@ class MembresController extends Controller
                                                 ->where('sympathisant', $sympathisant)
                                                 ->where('genre', $genre)
                                                 ->where('fonctions_id', $fonctions_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         } else {
                                             // Sinon, rechercher dans les colonnes du nom et du prénom séparément
@@ -2298,7 +2131,6 @@ class MembresController extends Controller
                                                 ->where('sympathisant', $sympathisant)
                                                 ->where('genre', $genre)
                                                 ->where('fonctions_id', $fonctions_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         }
                                     }
@@ -2308,8 +2140,7 @@ class MembresController extends Controller
                                     if(preg_match('/^\d+$/', $value)){
                                         $membres = Membres::where('numero_carte','like', '%'. $value . '%')
                                             ->where('axes_id', $axes_id)
-                                            ->where('fonctions_id', $fonctions_id)
-                                            ->with('users:id,image,pseudo,email')->get();
+                                            ->where('fonctions_id', $fonctions_id)->get();
                                     }else{
                                         // Vérifier si le terme de recherche contient un espace
                                         if (strpos($value, ' ') !== false) {
@@ -2317,7 +2148,6 @@ class MembresController extends Controller
                                             $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
                                                 ->where('axes_id', $axes_id)
                                                 ->where('fonctions_id', $fonctions_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         } else {
                                             // Sinon, rechercher dans les colonnes du nom et du prénom séparément
@@ -2325,7 +2155,6 @@ class MembresController extends Controller
                                                 ->orWhere('prenom', 'like', '%' . $value . '%')
                                                 ->where('axes_id', $axes_id)
                                                 ->where('fonctions_id', $fonctions_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         }
                                     }
@@ -2334,8 +2163,7 @@ class MembresController extends Controller
                                         $membres = Membres::where('numero_carte','like', '%'. $value . '%')
                                             ->where('genre', $genre)
                                             ->where('axes_id', $axes_id)
-                                            ->where('fonctions_id', $fonctions_id)
-                                            ->with('users:id,image,pseudo,email')->get();
+                                            ->where('fonctions_id', $fonctions_id)->get();
                                     }else{
                                         // Vérifier si le terme de recherche contient un espace
                                         if (strpos($value, ' ') !== false) {
@@ -2344,7 +2172,6 @@ class MembresController extends Controller
                                                 ->where('genre', $genre)
                                                 ->where('axes_id', $axes_id)
                                                 ->where('fonctions_id', $fonctions_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         } else {
                                             // Sinon, rechercher dans les colonnes du nom et du prénom séparément
@@ -2353,7 +2180,6 @@ class MembresController extends Controller
                                                 ->where('genre', $genre)
                                                 ->where('axes_id', $axes_id)
                                                 ->where('fonctions_id', $fonctions_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         }
                                     }
@@ -2366,8 +2192,7 @@ class MembresController extends Controller
                                         $membres = Membres::where('numero_carte','like', '%'. $value . '%')
                                             ->where('sympathisant', $sympathisant)
                                             ->where('fonctions_id', $fonctions_id)
-                                            ->where('sections_id', $sections_id)
-                                            ->with('users:id,image,pseudo,email')->get();
+                                            ->where('sections_id', $sections_id)->get();
                                     }else{
                                         // Vérifier si le terme de recherche contient un espace
                                         if (strpos($value, ' ') !== false) {
@@ -2376,7 +2201,6 @@ class MembresController extends Controller
                                                 ->where('sympathisant', $sympathisant)
                                                 ->where('fonctions_id', $fonctions_id)
                                                 ->where('sections_id', $sections_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         } else {
                                             // Sinon, rechercher dans les colonnes du nom et du prénom séparément
@@ -2385,7 +2209,6 @@ class MembresController extends Controller
                                                 ->where('sympathisant', $sympathisant)
                                                 ->where('fonctions_id', $fonctions_id)
                                                 ->where('sections_id', $sections_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         }
                                     }
@@ -2395,8 +2218,7 @@ class MembresController extends Controller
                                             ->where('sympathisant', $sympathisant)
                                             ->where('fonctions_id', $fonctions_id)
                                             ->where('genre', $genre)
-                                            ->where('sections_id', $sections_id)
-                                            ->with('users:id,image,pseudo,email')->get();
+                                            ->where('sections_id', $sections_id)->get();
                                     }else{
                                         // Vérifier si le terme de recherche contient un espace
                                         if (strpos($value, ' ') !== false) {
@@ -2406,7 +2228,6 @@ class MembresController extends Controller
                                                 ->where('fonctions_id', $fonctions_id)
                                                 ->where('genre', $genre)
                                                 ->where('sections_id', $sections_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         } else {
                                             // Sinon, rechercher dans les colonnes du nom et du prénom séparément
@@ -2416,7 +2237,6 @@ class MembresController extends Controller
                                                 ->where('fonctions_id', $fonctions_id)
                                                 ->where('genre', $genre)
                                                 ->where('sections_id', $sections_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         }
                                     }
@@ -2427,8 +2247,7 @@ class MembresController extends Controller
                                         $membres = Membres::where('numero_carte','like', '%'. $value . '%')
                                             ->where('axes_id', $axes_id)
                                             ->where('fonctions_id', $fonctions_id)
-                                            ->where('sections_id', $sections_id)
-                                            ->with('users:id,image,pseudo,email')->get();
+                                            ->where('sections_id', $sections_id)->get();
                                     }else{
                                         // Vérifier si le terme de recherche contient un espace
                                         if (strpos($value, ' ') !== false) {
@@ -2437,7 +2256,6 @@ class MembresController extends Controller
                                                 ->where('axes_id', $axes_id)
                                                 ->where('fonctions_id', $fonctions_id)
                                                 ->where('sections_id', $sections_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         } else {
                                             // Sinon, rechercher dans les colonnes du nom et du prénom séparément
@@ -2446,7 +2264,6 @@ class MembresController extends Controller
                                                 ->where('axes_id', $axes_id)
                                                 ->where('fonctions_id', $fonctions_id)
                                                 ->where('sections_id', $sections_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         }
                                     }
@@ -2456,8 +2273,7 @@ class MembresController extends Controller
                                             ->where('axes_id', $axes_id)
                                             ->where('fonctions_id', $fonctions_id)
                                             ->where('genre', $genre)
-                                            ->where('sections_id', $sections_id)
-                                            ->with('users:id,image,pseudo,email')->get();
+                                            ->where('sections_id', $sections_id)->get();
                                     }else{
                                         // Vérifier si le terme de recherche contient un espace
                                         if (strpos($value, ' ') !== false) {
@@ -2467,7 +2283,6 @@ class MembresController extends Controller
                                                 ->where('fonctions_id', $fonctions_id)
                                                 ->where('genre', $genre)
                                                 ->where('sections_id', $sections_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         } else {
                                             // Sinon, rechercher dans les colonnes du nom et du prénom séparément
@@ -2477,7 +2292,6 @@ class MembresController extends Controller
                                                 ->where('fonctions_id', $fonctions_id)
                                                 ->where('genre', $genre)
                                                 ->where('sections_id', $sections_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         }
                                     }
@@ -2492,8 +2306,7 @@ class MembresController extends Controller
                                         $membres = Membres::where('numero_carte','like', '%'. $value . '%')
                                             ->where('sympathisant', $sympathisant)
                                             ->where('fonctions_id', $fonctions_id)
-                                            ->where('levels_id', $niveau_id)
-                                            ->with('users:id,image,pseudo,email')->get();
+                                            ->where('levels_id', $niveau_id)->get();
                                     }else{
                                         // Vérifier si le terme de recherche contient un espace
                                         if (strpos($value, ' ') !== false) {
@@ -2502,7 +2315,6 @@ class MembresController extends Controller
                                                 ->where('sympathisant', $sympathisant)
                                                 ->where('fonctions_id', $fonctions_id)
                                                 ->where('levels_id', $niveau_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         } else {
                                             // Sinon, rechercher dans les colonnes du nom et du prénom séparément
@@ -2511,7 +2323,6 @@ class MembresController extends Controller
                                                 ->where('sympathisant', $sympathisant)
                                                 ->where('fonctions_id', $fonctions_id)
                                                 ->where('levels_id', $niveau_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         }
                                     }
@@ -2521,8 +2332,7 @@ class MembresController extends Controller
                                             ->where('sympathisant', $sympathisant)
                                             ->where('fonctions_id', $fonctions_id)
                                             ->where('levels_id', $niveau_id)
-                                            ->where('genre', $genre)
-                                            ->with('users:id,image,pseudo,email')->get();
+                                            ->where('genre', $genre)->get();
                                     }else{
                                         // Vérifier si le terme de recherche contient un espace
                                         if (strpos($value, ' ') !== false) {
@@ -2532,7 +2342,6 @@ class MembresController extends Controller
                                                 ->where('fonctions_id', $fonctions_id)
                                                 ->where('levels_id', $niveau_id)
                                                 ->where('genre', $genre)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         } else {
                                             // Sinon, rechercher dans les colonnes du nom et du prénom séparément
@@ -2542,7 +2351,6 @@ class MembresController extends Controller
                                                 ->where('fonctions_id', $fonctions_id)
                                                 ->where('levels_id', $niveau_id)
                                                 ->where('genre', $genre)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         }
                                     }
@@ -2553,8 +2361,7 @@ class MembresController extends Controller
                                         $membres = Membres::where('numero_carte','like', '%'. $value . '%')
                                             ->where('axes_id', $axes_id)
                                             ->where('fonctions_id', $fonctions_id)
-                                            ->where('levels_id', $niveau_id)
-                                            ->with('users:id,image,pseudo,email')->get();
+                                            ->where('levels_id', $niveau_id)->get();
                                     }else{
                                         // Vérifier si le terme de recherche contient un espace
                                         if (strpos($value, ' ') !== false) {
@@ -2563,7 +2370,6 @@ class MembresController extends Controller
                                                 ->where('axes_id', $axes_id)
                                                 ->where('fonctions_id', $fonctions_id)
                                                 ->where('levels_id', $niveau_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         } else {
                                             // Sinon, rechercher dans les colonnes du nom et du prénom séparément
@@ -2572,7 +2378,6 @@ class MembresController extends Controller
                                                 ->where('axes_id', $axes_id)
                                                 ->where('fonctions_id', $fonctions_id)
                                                 ->where('levels_id', $niveau_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         }
                                     }
@@ -2582,8 +2387,7 @@ class MembresController extends Controller
                                             ->where('axes_id', $axes_id)
                                             ->where('fonctions_id', $fonctions_id)
                                             ->where('levels_id', $niveau_id)
-                                            ->where('genre', $genre)
-                                            ->with('users:id,image,pseudo,email')->get();
+                                            ->where('genre', $genre)->get();
                                     }else{
                                         // Vérifier si le terme de recherche contient un espace
                                         if (strpos($value, ' ') !== false) {
@@ -2593,7 +2397,6 @@ class MembresController extends Controller
                                                 ->where('fonctions_id', $fonctions_id)
                                                 ->where('levels_id', $niveau_id)
                                                 ->where('genre', $genre)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         } else {
                                             // Sinon, rechercher dans les colonnes du nom et du prénom séparément
@@ -2603,7 +2406,6 @@ class MembresController extends Controller
                                                 ->where('fonctions_id', $fonctions_id)
                                                 ->where('levels_id', $niveau_id)
                                                 ->where('genre', $genre)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         }
                                     }
@@ -2617,8 +2419,7 @@ class MembresController extends Controller
                                             ->where('sympathisant', $sympathisant)
                                             ->where('fonctions_id', $fonctions_id)
                                             ->where('sections_id', $sections_id)
-                                            ->where('levels_id', $niveau_id)
-                                            ->with('users:id,image,pseudo,email')->get();
+                                            ->where('levels_id', $niveau_id)->get();
                                     }else{
                                         // Vérifier si le terme de recherche contient un espace
                                         if (strpos($value, ' ') !== false) {
@@ -2628,7 +2429,6 @@ class MembresController extends Controller
                                                 ->where('fonctions_id', $fonctions_id)
                                                 ->where('sections_id', $sections_id)
                                                 ->where('levels_id', $niveau_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         } else {
                                             // Sinon, rechercher dans les colonnes du nom et du prénom séparément
@@ -2638,7 +2438,6 @@ class MembresController extends Controller
                                                 ->where('fonctions_id', $fonctions_id)
                                                 ->where('sections_id', $sections_id)
                                                 ->where('levels_id', $niveau_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         }
                                     }
@@ -2649,8 +2448,7 @@ class MembresController extends Controller
                                             ->where('fonctions_id', $fonctions_id)
                                             ->where('sections_id', $sections_id)
                                             ->where('levels_id', $niveau_id)
-                                            ->where('genre', $genre)
-                                            ->with('users:id,image,pseudo,email')->get();
+                                            ->where('genre', $genre)->get();
                                     }else{
                                         // Vérifier si le terme de recherche contient un espace
                                         if (strpos($value, ' ') !== false) {
@@ -2661,7 +2459,6 @@ class MembresController extends Controller
                                                 ->where('sections_id', $sections_id)
                                                 ->where('levels_id', $niveau_id)
                                                 ->where('genre', $genre)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         } else {
                                             // Sinon, rechercher dans les colonnes du nom et du prénom séparément
@@ -2672,7 +2469,6 @@ class MembresController extends Controller
                                                 ->where('sections_id', $sections_id)
                                                 ->where('levels_id', $niveau_id)
                                                 ->where('genre', $genre)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         }
                                     }
@@ -2684,8 +2480,7 @@ class MembresController extends Controller
                                             ->where('axes_id', $axes_id)
                                             ->where('fonctions_id', $fonctions_id)
                                             ->where('sections_id', $sections_id)
-                                            ->where('levels_id', $niveau_id)
-                                            ->with('users:id,image,pseudo,email')->get();
+                                            ->where('levels_id', $niveau_id)->get();
                                     }else{
                                         // Vérifier si le terme de recherche contient un espace
                                         if (strpos($value, ' ') !== false) {
@@ -2695,7 +2490,6 @@ class MembresController extends Controller
                                                 ->where('fonctions_id', $fonctions_id)
                                                 ->where('sections_id', $sections_id)
                                                 ->where('levels_id', $niveau_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         } else {
                                             // Sinon, rechercher dans les colonnes du nom et du prénom séparément
@@ -2705,7 +2499,6 @@ class MembresController extends Controller
                                                 ->where('fonctions_id', $fonctions_id)
                                                 ->where('sections_id', $sections_id)
                                                 ->where('levels_id', $niveau_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         }
                                     }
@@ -2716,8 +2509,7 @@ class MembresController extends Controller
                                             ->where('fonctions_id', $fonctions_id)
                                             ->where('sections_id', $sections_id)
                                             ->where('levels_id', $niveau_id)
-                                            ->where('genre', $genre)
-                                            ->with('users:id,image,pseudo,email')->get();
+                                            ->where('genre', $genre)->get();
                                     }else{
                                         // Vérifier si le terme de recherche contient un espace
                                         if (strpos($value, ' ') !== false) {
@@ -2728,7 +2520,6 @@ class MembresController extends Controller
                                                 ->where('sections_id', $sections_id)
                                                 ->where('levels_id', $niveau_id)
                                                 ->where('genre', $genre)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         } else {
                                             // Sinon, rechercher dans les colonnes du nom et du prénom séparément
@@ -2739,7 +2530,6 @@ class MembresController extends Controller
                                                 ->where('sections_id', $sections_id)
                                                 ->where('levels_id', $niveau_id)
                                                 ->where('genre', $genre)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         }
                                     }
@@ -2756,8 +2546,7 @@ class MembresController extends Controller
                                         $membres = Membres::where('numero_carte','like', '%'. $value . '%')
                                             ->where('sympathisant', $sympathisant)
                                             ->where('fonctions_id', $fonctions_id)
-                                            ->where('filieres_id', $filieres_id)
-                                            ->with('users:id,image,pseudo,email')->get();
+                                            ->where('filieres_id', $filieres_id)->get();
                                     }else{
                                         // Vérifier si le terme de recherche contient un espace
                                         if (strpos($value, ' ') !== false) {
@@ -2766,7 +2555,6 @@ class MembresController extends Controller
                                                 ->where('sympathisant', $sympathisant)
                                                 ->where('fonctions_id', $fonctions_id)
                                                 ->where('filieres_id', $filieres_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         } else {
                                             // Sinon, rechercher dans les colonnes du nom et du prénom séparément
@@ -2775,7 +2563,6 @@ class MembresController extends Controller
                                                 ->where('sympathisant', $sympathisant)
                                                 ->where('fonctions_id', $fonctions_id)
                                                 ->where('filieres_id', $filieres_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         }
                                     }
@@ -2785,8 +2572,7 @@ class MembresController extends Controller
                                             ->where('sympathisant', $sympathisant)
                                             ->where('fonctions_id', $fonctions_id)
                                             ->where('genre', $genre)
-                                            ->where('filieres_id', $filieres_id)
-                                            ->with('users:id,image,pseudo,email')->get();
+                                            ->where('filieres_id', $filieres_id)->get();
                                     }else{
                                         // Vérifier si le terme de recherche contient un espace
                                         if (strpos($value, ' ') !== false) {
@@ -2796,7 +2582,6 @@ class MembresController extends Controller
                                                 ->where('fonctions_id', $fonctions_id)
                                                 ->where('genre', $genre)
                                                 ->where('filieres_id', $filieres_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         } else {
                                             // Sinon, rechercher dans les colonnes du nom et du prénom séparément
@@ -2806,7 +2591,6 @@ class MembresController extends Controller
                                                 ->where('fonctions_id', $fonctions_id)
                                                 ->where('genre', $genre)
                                                 ->where('filieres_id', $filieres_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         }
                                     }
@@ -2817,8 +2601,7 @@ class MembresController extends Controller
                                         $membres = Membres::where('numero_carte','like', '%'. $value . '%')
                                             ->where('axes_id', $axes_id)
                                             ->where('fonctions_id', $fonctions_id)
-                                            ->where('filieres_id', $filieres_id)
-                                            ->with('users:id,image,pseudo,email')->get();
+                                            ->where('filieres_id', $filieres_id)->get();
                                     }else{
                                         // Vérifier si le terme de recherche contient un espace
                                         if (strpos($value, ' ') !== false) {
@@ -2827,7 +2610,6 @@ class MembresController extends Controller
                                                 ->where('axes_id', $axes_id)
                                                 ->where('fonctions_id', $fonctions_id)
                                                 ->where('filieres_id', $filieres_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         } else {
                                             // Sinon, rechercher dans les colonnes du nom et du prénom séparément
@@ -2836,7 +2618,6 @@ class MembresController extends Controller
                                                 ->where('axes_id', $axes_id)
                                                 ->where('fonctions_id', $fonctions_id)
                                                 ->where('filieres_id', $filieres_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         }
                                     }
@@ -2846,8 +2627,7 @@ class MembresController extends Controller
                                             ->where('axes_id', $axes_id)
                                             ->where('fonctions_id', $fonctions_id)
                                             ->where('genre', $genre)
-                                            ->where('filieres_id', $filieres_id)
-                                            ->with('users:id,image,pseudo,email')->get();
+                                            ->where('filieres_id', $filieres_id)->get();
                                     }else{
                                         // Vérifier si le terme de recherche contient un espace
                                         if (strpos($value, ' ') !== false) {
@@ -2857,7 +2637,6 @@ class MembresController extends Controller
                                                 ->where('fonctions_id', $fonctions_id)
                                                 ->where('genre', $genre)
                                                 ->where('filieres_id', $filieres_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         } else {
                                             // Sinon, rechercher dans les colonnes du nom et du prénom séparément
@@ -2867,7 +2646,6 @@ class MembresController extends Controller
                                                 ->where('fonctions_id', $fonctions_id)
                                                 ->where('genre', $genre)
                                                 ->where('filieres_id', $filieres_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         }
                                     }
@@ -2881,8 +2659,7 @@ class MembresController extends Controller
                                             ->where('sympathisant', $sympathisant)
                                             ->where('fonctions_id', $fonctions_id)
                                             ->where('sections_id', $sections_id)
-                                            ->where('filieres_id', $filieres_id)
-                                            ->with('users:id,image,pseudo,email')->get();
+                                            ->where('filieres_id', $filieres_id)->get();
                                     }else{
                                         // Vérifier si le terme de recherche contient un espace
                                         if (strpos($value, ' ') !== false) {
@@ -2892,7 +2669,6 @@ class MembresController extends Controller
                                                 ->where('fonctions_id', $fonctions_id)
                                                 ->where('sections_id', $sections_id)
                                                 ->where('filieres_id', $filieres_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         } else {
                                             // Sinon, rechercher dans les colonnes du nom et du prénom séparément
@@ -2902,7 +2678,6 @@ class MembresController extends Controller
                                                 ->where('fonctions_id', $fonctions_id)
                                                 ->where('sections_id', $sections_id)
                                                 ->where('filieres_id', $filieres_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         }
                                     }
@@ -2913,8 +2688,7 @@ class MembresController extends Controller
                                             ->where('fonctions_id', $fonctions_id)
                                             ->where('sections_id', $sections_id)
                                             ->where('filieres_id', $filieres_id)
-                                            ->where('genre', $genre)
-                                            ->with('users:id,image,pseudo,email')->get();
+                                            ->where('genre', $genre)->get();
                                     }else{
                                         // Vérifier si le terme de recherche contient un espace
                                         if (strpos($value, ' ') !== false) {
@@ -2925,7 +2699,6 @@ class MembresController extends Controller
                                                 ->where('sections_id', $sections_id)
                                                 ->where('filieres_id', $filieres_id)
                                                 ->where('genre', $genre)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         } else {
                                             // Sinon, rechercher dans les colonnes du nom et du prénom séparément
@@ -2936,7 +2709,6 @@ class MembresController extends Controller
                                                 ->where('sections_id', $sections_id)
                                                 ->where('filieres_id', $filieres_id)
                                                 ->where('genre', $genre)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         }
                                     }
@@ -2948,8 +2720,7 @@ class MembresController extends Controller
                                             ->where('axes_id', $axes_id)
                                             ->where('fonctions_id', $fonctions_id)
                                             ->where('sections_id', $sections_id)
-                                            ->where('filieres_id', $filieres_id)
-                                            ->with('users:id,image,pseudo,email')->get();
+                                            ->where('filieres_id', $filieres_id)->get();
                                     }else{
                                         // Vérifier si le terme de recherche contient un espace
                                         if (strpos($value, ' ') !== false) {
@@ -2959,7 +2730,6 @@ class MembresController extends Controller
                                                 ->where('fonctions_id', $fonctions_id)
                                                 ->where('sections_id', $sections_id)
                                                 ->where('filieres_id', $filieres_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         } else {
                                             // Sinon, rechercher dans les colonnes du nom et du prénom séparément
@@ -2969,7 +2739,6 @@ class MembresController extends Controller
                                                 ->where('fonctions_id', $fonctions_id)
                                                 ->where('sections_id', $sections_id)
                                                 ->where('filieres_id', $filieres_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         }
                                     }
@@ -2980,8 +2749,7 @@ class MembresController extends Controller
                                             ->where('fonctions_id', $fonctions_id)
                                             ->where('sections_id', $sections_id)
                                             ->where('filieres_id', $filieres_id)
-                                            ->where('genre', $genre)
-                                            ->with('users:id,image,pseudo,email')->get();
+                                            ->where('genre', $genre)->get();
                                     }else{
                                         // Vérifier si le terme de recherche contient un espace
                                         if (strpos($value, ' ') !== false) {
@@ -2992,7 +2760,6 @@ class MembresController extends Controller
                                                 ->where('sections_id', $sections_id)
                                                 ->where('filieres_id', $filieres_id)
                                                 ->where('genre', $genre)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         } else {
                                             // Sinon, rechercher dans les colonnes du nom et du prénom séparément
@@ -3003,7 +2770,6 @@ class MembresController extends Controller
                                                 ->where('sections_id', $sections_id)
                                                 ->where('filieres_id', $filieres_id)
                                                 ->where('genre', $genre)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         }
                                     }
@@ -3019,8 +2785,7 @@ class MembresController extends Controller
                                             ->where('sympathisant', $sympathisant)
                                             ->where('fonctions_id', $fonctions_id)
                                             ->where('filieres_id', $filieres_id)
-                                            ->where('levels_id', $niveau_id)
-                                            ->with('users:id,image,pseudo,email')->get();
+                                            ->where('levels_id', $niveau_id)->get();
                                     }else{
                                         // Vérifier si le terme de recherche contient un espace
                                         if (strpos($value, ' ') !== false) {
@@ -3030,7 +2795,6 @@ class MembresController extends Controller
                                                 ->where('fonctions_id', $fonctions_id)
                                                 ->where('filieres_id', $filieres_id)
                                                 ->where('levels_id', $niveau_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         } else {
                                             // Sinon, rechercher dans les colonnes du nom et du prénom séparément
@@ -3040,7 +2804,6 @@ class MembresController extends Controller
                                                 ->where('fonctions_id', $fonctions_id)
                                                 ->where('filieres_id', $filieres_id)
                                                 ->where('levels_id', $niveau_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         }
                                     }
@@ -3051,8 +2814,7 @@ class MembresController extends Controller
                                             ->where('fonctions_id', $fonctions_id)
                                             ->where('genre', $genre)
                                             ->where('filieres_id', $filieres_id)
-                                            ->where('levels_id', $niveau_id)
-                                            ->with('users:id,image,pseudo,email')->get();
+                                            ->where('levels_id', $niveau_id)->get();
                                     }else{
                                         // Vérifier si le terme de recherche contient un espace
                                         if (strpos($value, ' ') !== false) {
@@ -3063,7 +2825,6 @@ class MembresController extends Controller
                                                 ->where('genre', $genre)
                                                 ->where('filieres_id', $filieres_id)
                                                 ->where('levels_id', $niveau_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         } else {
                                             // Sinon, rechercher dans les colonnes du nom et du prénom séparément
@@ -3074,7 +2835,6 @@ class MembresController extends Controller
                                                 ->where('genre', $genre)
                                                 ->where('filieres_id', $filieres_id)
                                                 ->where('levels_id', $niveau_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         }
                                     }
@@ -3086,8 +2846,7 @@ class MembresController extends Controller
                                             ->where('axes_id', $axes_id)
                                             ->where('fonctions_id', $fonctions_id)
                                             ->where('filieres_id', $filieres_id)
-                                            ->where('levels_id', $niveau_id)
-                                            ->with('users:id,image,pseudo,email')->get();
+                                            ->where('levels_id', $niveau_id)->get();
                                     }else{
                                         // Vérifier si le terme de recherche contient un espace
                                         if (strpos($value, ' ') !== false) {
@@ -3097,7 +2856,6 @@ class MembresController extends Controller
                                                 ->where('fonctions_id', $fonctions_id)
                                                 ->where('filieres_id', $filieres_id)
                                                 ->where('levels_id', $niveau_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         } else {
                                             // Sinon, rechercher dans les colonnes du nom et du prénom séparément
@@ -3107,7 +2865,6 @@ class MembresController extends Controller
                                                 ->where('fonctions_id', $fonctions_id)
                                                 ->where('filieres_id', $filieres_id)
                                                 ->where('levels_id', $niveau_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         }
                                     }
@@ -3118,8 +2875,7 @@ class MembresController extends Controller
                                             ->where('fonctions_id', $fonctions_id)
                                             ->where('genre', $genre)
                                             ->where('filieres_id', $filieres_id)
-                                            ->where('levels_id', $niveau_id)
-                                            ->with('users:id,image,pseudo,email')->get();
+                                            ->where('levels_id', $niveau_id)->get();
                                     }else{
                                         // Vérifier si le terme de recherche contient un espace
                                         if (strpos($value, ' ') !== false) {
@@ -3130,7 +2886,6 @@ class MembresController extends Controller
                                                 ->where('genre', $genre)
                                                 ->where('filieres_id', $filieres_id)
                                                 ->where('levels_id', $niveau_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         } else {
                                             // Sinon, rechercher dans les colonnes du nom et du prénom séparément
@@ -3141,7 +2896,6 @@ class MembresController extends Controller
                                                 ->where('genre', $genre)
                                                 ->where('filieres_id', $filieres_id)
                                                 ->where('levels_id', $niveau_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         }
                                     }
@@ -3156,8 +2910,7 @@ class MembresController extends Controller
                                             ->where('fonctions_id', $fonctions_id)
                                             ->where('sections_id', $sections_id)
                                             ->where('filieres_id', $filieres_id)
-                                            ->where('levels_id', $niveau_id)
-                                            ->with('users:id,image,pseudo,email')->get();
+                                            ->where('levels_id', $niveau_id)->get();
                                     }else{
                                         // Vérifier si le terme de recherche contient un espace
                                         if (strpos($value, ' ') !== false) {
@@ -3168,7 +2921,6 @@ class MembresController extends Controller
                                                 ->where('sections_id', $sections_id)
                                                 ->where('filieres_id', $filieres_id)
                                                 ->where('levels_id', $niveau_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         } else {
                                             // Sinon, rechercher dans les colonnes du nom et du prénom séparément
@@ -3179,7 +2931,6 @@ class MembresController extends Controller
                                                 ->where('sections_id', $sections_id)
                                                 ->where('filieres_id', $filieres_id)
                                                 ->where('levels_id', $niveau_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         }
                                     }
@@ -3191,8 +2942,7 @@ class MembresController extends Controller
                                             ->where('sections_id', $sections_id)
                                             ->where('filieres_id', $filieres_id)
                                             ->where('genre', $genre)
-                                            ->where('levels_id', $niveau_id)
-                                            ->with('users:id,image,pseudo,email')->get();
+                                            ->where('levels_id', $niveau_id)->get();
                                     }else{
                                         // Vérifier si le terme de recherche contient un espace
                                         if (strpos($value, ' ') !== false) {
@@ -3204,7 +2954,6 @@ class MembresController extends Controller
                                                 ->where('filieres_id', $filieres_id)
                                                 ->where('genre', $genre)
                                                 ->where('levels_id', $niveau_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         } else {
                                             // Sinon, rechercher dans les colonnes du nom et du prénom séparément
@@ -3216,7 +2965,6 @@ class MembresController extends Controller
                                                 ->where('filieres_id', $filieres_id)
                                                 ->where('genre', $genre)
                                                 ->where('levels_id', $niveau_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         }
                                     }
@@ -3229,8 +2977,7 @@ class MembresController extends Controller
                                             ->where('fonctions_id', $fonctions_id)
                                             ->where('sections_id', $sections_id)
                                             ->where('filieres_id', $filieres_id)
-                                            ->where('levels_id', $niveau_id)
-                                            ->with('users:id,image,pseudo,email')->get();
+                                            ->where('levels_id', $niveau_id)->get();
                                     }else{
                                         // Vérifier si le terme de recherche contient un espace
                                         if (strpos($value, ' ') !== false) {
@@ -3241,7 +2988,6 @@ class MembresController extends Controller
                                                 ->where('sections_id', $sections_id)
                                                 ->where('filieres_id', $filieres_id)
                                                 ->where('levels_id', $niveau_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         } else {
                                             // Sinon, rechercher dans les colonnes du nom et du prénom séparément
@@ -3252,7 +2998,6 @@ class MembresController extends Controller
                                                 ->where('sections_id', $sections_id)
                                                 ->where('filieres_id', $filieres_id)
                                                 ->where('levels_id', $niveau_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         }
                                     }
@@ -3264,8 +3009,7 @@ class MembresController extends Controller
                                             ->where('sections_id', $sections_id)
                                             ->where('filieres_id', $filieres_id)
                                             ->where('genre', $genre)
-                                            ->where('levels_id', $niveau_id)
-                                            ->with('users:id,image,pseudo,email')->get();
+                                            ->where('levels_id', $niveau_id)->get();
                                     }else{
                                         // Vérifier si le terme de recherche contient un espace
                                         if (strpos($value, ' ') !== false) {
@@ -3277,7 +3021,6 @@ class MembresController extends Controller
                                                 ->where('filieres_id', $filieres_id)
                                                 ->where('genre', $genre)
                                                 ->where('levels_id', $niveau_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         } else {
                                             // Sinon, rechercher dans les colonnes du nom et du prénom séparément
@@ -3289,7 +3032,6 @@ class MembresController extends Controller
                                                 ->where('filieres_id', $filieres_id)
                                                 ->where('genre', $genre)
                                                 ->where('levels_id', $niveau_id)
-                                                ->with('users:id,image,pseudo,email')
                                                 ->get();
                                         }
                                     }
@@ -3310,24 +3052,23 @@ class MembresController extends Controller
             ], 401);
         }
     }
+    
     public function searchNameOrNumber($value){
         $user = auth()->user();
 
         if($user){
             if(preg_match('/^\d+$/', $value)){
-                $membres = Membres::where('numero_carte','like', '%'. $value . '%')->with('users:id,image,pseudo,email')->get();
+                $membres = Membres::where('numero_carte','like', '%'. $value . '%')->get();
             }else{
                 // Vérifier si le terme de recherche contient un espace
                 if (strpos($value, ' ') !== false) {
                     // Si le terme de recherche contient un espace, rechercher par nom et prénom ensemble
                     $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
-                    ->with('users:id,image,pseudo,email')
                     ->get();
                 } else {
                     // Sinon, rechercher dans les colonnes du nom et du prénom séparément
                     $membres = Membres::where('nom', 'like', '%' . $value . '%')
                                 ->orWhere('prenom', 'like', '%' . $value . '%')
-                                ->with('users:id,image,pseudo,email')
                                 ->get();
                 }
             }
@@ -3349,7 +3090,6 @@ class MembresController extends Controller
             if(preg_match('/^\d+$/', $value)){
                 $membres = Membres::where('numero_carte','like', '%'. $value . '%')
                 ->where('axes_id', $axes_id)    
-                ->with('users:id,image,pseudo,email')
                 ->get();
             }else{
                // Vérifier si le terme de recherche contient un espace
@@ -3357,7 +3097,6 @@ class MembresController extends Controller
                     // Si le terme de recherche contient un espace, rechercher par nom et prénom ensemble
                     $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
                     ->where('axes_id', $axes_id)    
-                    ->with('users:id,image,pseudo,email')
                     ->get();
                 } else {
                     // Sinon, rechercher dans les colonnes du nom et du prénom séparément
@@ -3366,7 +3105,6 @@ class MembresController extends Controller
                         $query->where('nom', 'like', '%' . $value . '%')
                             ->orWhere('prenom', 'like', '%' . $value . '%');
                     })
-                    ->with('users:id,image,pseudo,email')
                     ->get();
                 }
             }
@@ -3389,7 +3127,6 @@ class MembresController extends Controller
             if(preg_match('/^\d+$/', $value)){
                 $membres = Membres::where('numero_carte','like', '%'. $value . '%')
                 ->where('levels_id', $levels_id)    
-                ->with('users:id,image,pseudo,email')
                 ->get();
             }else{
                // Vérifier si le terme de recherche contient un espace
@@ -3397,7 +3134,6 @@ class MembresController extends Controller
                     // Si le terme de recherche contient un espace, rechercher par nom et prénom ensemble
                     $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
                     ->where('levels_id', $levels_id)    
-                    ->with('users:id,image,pseudo,email')
                     ->get();
                 } else {
                     // Sinon, rechercher dans les colonnes du nom et du prénom séparément
@@ -3406,7 +3142,6 @@ class MembresController extends Controller
                         $query->where('nom', 'like', '%' . $value . '%')
                             ->orWhere('prenom', 'like', '%' . $value . '%');
                     })
-                    ->with('users:id,image,pseudo,email')
                     ->get();
                 }
             }
@@ -3427,17 +3162,17 @@ class MembresController extends Controller
 
         if($user){
             if(preg_match('/^\d+$/', $value)){
+                
                 $membres = Membres::where('numero_carte','like', '%'. trim($value). '%')
                 ->where('filieres_id', $filieres_id)    
-                ->with('users:id,image,pseudo,email')
                 ->get();
+
             }else{
                // Vérifier si le terme de recherche contient un espace
                 if (strpos($value, ' ') !== false) {
                     // Si le terme de recherche contient un espace, rechercher par nom et prénom ensemble
                     $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
                     ->where('filieres_id', $filieres_id)    
-                    ->with('users:id,image,pseudo,email')
                     ->get();
                 } else {
                     // Sinon, rechercher dans les colonnes du nom et du prénom séparément
@@ -3446,7 +3181,6 @@ class MembresController extends Controller
                         $query->where('nom', 'like', '%' . $value . '%')
                             ->orWhere('prenom', 'like', '%' . $value . '%');
                     })
-                    ->with('users:id,image,pseudo,email')
                     ->get();
                 }
             }
@@ -3469,7 +3203,6 @@ class MembresController extends Controller
             if(preg_match('/^\d+$/', $value)){
                 $membres = Membres::where('numero_carte','like', '%'. trim($value). '%')
                 ->where('fonctions_id', $fonctions_id)    
-                ->with('users:id,image,pseudo,email')
                 ->get();
             }else{
                // Vérifier si le terme de recherche contient un espace
@@ -3477,7 +3210,6 @@ class MembresController extends Controller
                     // Si le terme de recherche contient un espace, rechercher par nom et prénom ensemble
                     $membres = Membres::whereRaw('CONCAT(nom, " ", prenom) LIKE ?', ['%' . $value . '%'])
                     ->where('fonctions_id', $fonctions_id)    
-                    ->with('users:id,image,pseudo,email')
                     ->get();
                 } else {
                     // Sinon, rechercher dans les colonnes du nom et du prénom séparément
@@ -3486,7 +3218,6 @@ class MembresController extends Controller
                         $query->where('nom', 'like', '%' . $value . '%')
                             ->orWhere('prenom', 'like', '%' . $value . '%');
                     })
-                    ->with('users:id,image,pseudo,email')
                     ->get();
                 }
             }

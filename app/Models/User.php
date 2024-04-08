@@ -56,39 +56,4 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'mot_de_passe' => 'hashed',
     ];
-
-    public function filieres(){
-        return $this->hasMany(Filieres::class);
-    }
-    
-    public function axes(){
-        return $this->hasMany(Axes::class);
-    }
-
-    public function fonctions(){
-        return $this->hasMany(Fonctions::class);
-    }
-    
-    public function levels(){
-        return $this->hasMany(Level::class);
-    }
-
-
-    public function avis(){
-        return $this->hasMany(Avis::class);
-    }
-
-
-    public function posts(){
-        return $this->hasMany(Post::class);
-    }
-   
-    public function messages(){
-        return $this->hasMany(Messages::class);
-    }
-
-
-    public function membres(){
-        return $this->hasOne(Membres::class);
-    }
 }

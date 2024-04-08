@@ -14,8 +14,6 @@ return new class extends Migration
         Schema::create('axes', function (Blueprint $table) {
             $table->id();
             $table->string('nom_axes');
-            $table->unsignedBigInteger('users_id');
-            $table->foreign('users_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });
     }

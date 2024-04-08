@@ -59,14 +59,6 @@ return [
             'visibility' => 'public',
             'throw' => false,
         ],
-        
-        'posts' => [
-            'driver' => 'local',
-            'root' => storage_path('app/public/posts'),
-            'url' => env('APP_URL').'/storage/posts',
-            'visibility' => 'public',
-            'throw' => false,
-        ],
 
         's3' => [
             'driver' => 's3',

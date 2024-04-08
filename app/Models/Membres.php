@@ -23,6 +23,7 @@ class Membres extends Model
         "lieu_de_naissance",
         "cin",
         "genre",
+        "etablissement",
         "contact_personnel",
         "contact_tuteur",
         "sympathisant",
@@ -31,30 +32,8 @@ class Membres extends Model
         "levels_id",
         "sections_id",
         "adresse",
-        "lien_membre_id",
         "date_inscription",
         "facebook",
         "axes_id",
-        "users_id"
     ];
-
-    public function fonctions(){
-        return $this->hasOne(Fonctions::class);
-    }
-
-    public function filieres(){
-        return $this->hasOne(Filieres::class);
-    }
-    
-    public function niveau(){
-        return $this->hasOne(Level::class);
-    }
-
-    public function axes(){
-        return $this->hasOne(Axes::class);
-    }
-
-    public function users(){
-        return $this->belongsTo(User::class);
-    }
 }

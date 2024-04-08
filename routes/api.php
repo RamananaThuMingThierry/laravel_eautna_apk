@@ -40,6 +40,7 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     /** ------------ Sections ------------ */
     Route::get('/sections', [SectionsController::class, "index"]);
     Route::get('/sections/{id}', [SectionsController::class, "show"]);
+    
     /** ------------ Axes ------------ */
     Route::get('/axes', [AxesController::class, "index"]);
     Route::post('/axes', [AxesController::class, "store"]);
@@ -72,39 +73,7 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::get('/niveau_search/{id}', [NiveauController::class, "search"]);
     Route::delete('/niveau/{id}', [NiveauController::class, "delete"]);
     
-    /** ------------ Post ------------ */
-    Route::get('/posts', [PostController::class, "index"]);
-    Route::post('/posts', [PostController::class, "store"]);
-    Route::get('/posts/{id}', [PostController::class, "show"]);
-    Route::put('/posts/{id}', [PostController::class, "update"]);
-    Route::delete('/posts/{id}', [PostController::class, "delete"]);
-    
-    /** ------------ Commentaires ------------ */
-    Route::get('/posts/{id}/commentaires', [CommentairesController::class, "index"]);
-    Route::post('/posts/{id}/commentaires', [CommentairesController::class, "store"]);
-    Route::get('/commentaires/{id}', [CommentairesController::class, "show"]);
-    Route::put('/commentaires/{id}', [CommentairesController::class, "update"]);
-    Route::delete('/commentaires/{id}', [CommentairesController::class, "delete"]);
-    
-    /** ------------ Like or dislike back a post ------------ */
-    Route::post('/posts/{id}/likes', [LikesController::class, "likeOrDislike"]);
-
-    /** ------------ Avis ------------ */
-    Route::get('/avis', [AvisController::class, "index"]);
-    Route::post('/avis', [AvisController::class, "store"]);
-    Route::get('/avis/{id}', [AvisController::class, "show"]);
-    Route::delete('/avis/{id}', [AvisController::class, "delete"]);
-    
-    /** ------------ Messages ------------ */
-    Route::get('/messages', [MessagesController::class, "index"]);
-    Route::post('/messages/{id}', [MessagesController::class, "store"]);
-    Route::get('/messages_show/{id}', [MessagesController::class, "show"]);
-    Route::get('/messages_liste/{id}', [MessagesController::class, "ListeMessages"]);
-    Route::put('/messages/{id}', [MessagesController::class, "update"]);
-    Route::delete('/messages/{id}', [MessagesController::class, "delete"]);
-    
     /** ------------ Membres ------------ */
-
     
     Route::get('/membres_getAllUsersNonPasUtilisateurs', [MembresController::class, "getAllUsersNonPasUtilisateurs"]);
     Route::get('/membres_statistiques', [MembresController::class, "statistiques"]);

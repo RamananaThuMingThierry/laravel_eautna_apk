@@ -15,7 +15,8 @@ class NiveauController extends Controller
        $user = auth()->user();
 
        if($user){
-            $niveau = Level::orderBy('niveau')->with('users:id,pseudo,contact,image,adresse')->get();
+        
+            $niveau = Level::orderBy('nom_niveau')->get();
 
             return Response()->json([
                 'niveau' => $niveau
@@ -33,7 +34,7 @@ class NiveauController extends Controller
 
         if($user){
             
-            $niveau = Level::where('niveau', 'like', "%$value%")->with('users:id,pseudo,image')->get();
+            $niveau = Level::where('nom_niveau', 'like', "%$value%")->get();
 
             return response()->json([
                 'niveau' => $niveau
@@ -47,7 +48,7 @@ class NiveauController extends Controller
 
     public function store(Request $request){
 
-        $niveau = $request->niveau;
+        $nom_niveau = $request->nom_niveau;
         $users = auth()->user();
 
         if($users){
@@ -55,7 +56,7 @@ class NiveauController extends Controller
             if($users->roles == "Administrateurs"){
         
                 $validator = Validator::make($request->all(), [
-                    'niveau' => 'required|string|unique:levels',
+                    'nom_niveau' => 'required|string|unique:levels',
                 ]);        
         
                 if($validator->fails()){
@@ -67,8 +68,7 @@ class NiveauController extends Controller
                 }else{                
                     
                     Level::create([
-                        'niveau' => $niveau,
-                        'users_id' => auth()->user()->id
+                        'nom_niveau' => $nom_niveau,
                     ]);
         
                     return response()->json([
@@ -99,7 +99,7 @@ class NiveauController extends Controller
 
         if($users){
             
-            $niveau = Level::where('id',$niveau_id)->with('users:id,pseudo,contact,adresse,image')->first();
+            $niveau = Level::where('id',$niveau_id)->first();
 
             if($niveau){
                 return response()->json([
@@ -123,7 +123,7 @@ class NiveauController extends Controller
         
         $autorisation = false;
 
-        $niveau = $request->niveau;
+        $nom_niveau = $request->nom_niveau;
 
         $users = auth()->user();
 
@@ -136,7 +136,7 @@ class NiveauController extends Controller
                 if($niveau_update){
     
                     $validator = Validator::make($request->all(), [
-                            'niveau' => 'required|string',
+                            'nom_niveau' => 'required|string',
                         ]);        
                         
                         if($validator->fails()){
@@ -148,12 +148,12 @@ class NiveauController extends Controller
                         }else{
                          
                             $verification_niveau = DB::table('levels')
-                                ->where('niveau', $niveau)
+                                ->where('nom_niveau', $nom_niveau)
                                 ->exists();
             
                             if($verification_niveau){
             
-                                $get_niveau_existe = Level::where('niveau', $niveau)->first();
+                                $get_niveau_existe = Level::where('nom_niveau', $nom_niveau)->first();
                                 
                                 if($niveau_update->id == $get_niveau_existe->id){
                                     return response()->json([
@@ -168,7 +168,7 @@ class NiveauController extends Controller
                             if($autorisation){
 
                                 $niveau_update->update([
-                                    'niveau' => $niveau,
+                                    'nom_niveau' => $nom_niveau,
                                     'users_id' => $users->id
                                 ]);
                                 
@@ -205,7 +205,7 @@ class NiveauController extends Controller
 
         if($users){
             
-            $niveau = Level::where('id',$niveau_id)->with('users:id,pseudo,contact,adresse,image')->first();
+            $niveau = Level::where('id',$niveau_id)->first();
             
             if($users->roles == "Administrateurs"){
                 

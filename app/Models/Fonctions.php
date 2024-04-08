@@ -13,11 +13,6 @@ class Fonctions extends Model
     public $table = "fonctions";
 
     protected $fillable = [
-        "fonctions",
-        "users_id",
+        "nom_fonctions"
     ];
-
-    public function users(){
-        return $this->belongsTo(User::class);
-    }
 }

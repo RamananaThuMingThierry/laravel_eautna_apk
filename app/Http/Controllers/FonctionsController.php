@@ -15,12 +15,14 @@ class FonctionsController extends Controller
       $user = auth()->user();
 
       if($user){
-        $fonctions = Fonctions::orderBy('fonctions')->with('users:id,pseudo,contact,image,adresse')->get();
+        $fonctions = Fonctions::orderBy('nom_fonctions')->get();
 
         return Response()->json([
             'fonctions' => $fonctions
         ], 200);
+
       }else{
+        
         return response()->json([
             'message' => $this->constantes['NonAuthentifier']
         ], 401);
@@ -29,7 +31,7 @@ class FonctionsController extends Controller
 
     public function store(Request $request){
 
-        $fonctions = $request->fonctions;
+        $nom_fonctions = $request->nom_fonctions;
         $users = auth()->user();
 
         if($users){
@@ -37,7 +39,7 @@ class FonctionsController extends Controller
             if($users->roles == "Administrateurs"){
         
                 $validator = Validator::make($request->all(), [
-                    'fonctions' => 'required|string|unique:fonctions',
+                    'nom_fonctions' => 'required|string|unique:fonctions',
                 ]);        
         
                 if($validator->fails()){
@@ -49,8 +51,7 @@ class FonctionsController extends Controller
                 }else{                
                     
                     Fonctions::create([
-                        'fonctions' => $fonctions,
-                        'users_id' => auth()->user()->id
+                        'nom_fonctions' => $nom_fonctions
                     ]);
         
                     return response()->json([
@@ -81,7 +82,7 @@ class FonctionsController extends Controller
 
         if($users){
             
-            $fonctions = Fonctions::where('id',$fonctions_id)->with('users:id,pseudo,contact,adresse,image')->first();
+            $fonctions = Fonctions::where('id',$fonctions_id)->first();
 
             if($fonctions){
                 return response()->json([
@@ -108,7 +109,7 @@ class FonctionsController extends Controller
 
         if($user){
             
-            $fonctions = Fonctions::where('fonctions', 'like', "%$value%")->with('users:id,pseudo,image')->get();
+            $fonctions = Fonctions::where('nom_fonctions', 'like', "%$value%")->get();
 
             return response()->json([
                 'fonctions' => $fonctions
@@ -123,7 +124,7 @@ class FonctionsController extends Controller
     public function update(Request $request, $fonctions_id){
         $autorisation = false;
 
-        $nom_fonctions = $request->fonctions;
+        $nom_fonctions = $request->nom_fonctions;
 
         $users = auth()->user();
         
@@ -136,7 +137,7 @@ class FonctionsController extends Controller
                 if($fonctions_update){
     
                     $validator = Validator::make($request->all(), [
-                            'fonctions' => 'required|string',
+                            'nom_fonctions' => 'required|string',
                         ]);        
                         
                         if($validator->fails()){
@@ -148,12 +149,12 @@ class FonctionsController extends Controller
                         }else{
                          
                             $verification_fonctions = DB::table('fonctions')
-                                ->where('fonctions', $nom_fonctions)
+                                ->where('nom_fonctions', $nom_fonctions)
                                 ->exists();
             
                             if($verification_fonctions){
             
-                                $get_fonctions_existe = Fonctions::where('fonctions', $nom_fonctions)->first();
+                                $get_fonctions_existe = Fonctions::where('nom_fonctions', $nom_fonctions)->first();
                                 
                                 if($fonctions_update->id == $get_fonctions_existe->id){
                                     return response()->json([
@@ -168,8 +169,7 @@ class FonctionsController extends Controller
                             if($autorisation){
 
                                 $fonctions_update->update([
-                                    'fonctions' => $nom_fonctions,
-                                    'users_id' => $users->id
+                                    'nom_fonctions' => $nom_fonctions
                                 ]);
                                 
                                 return response()->json([
@@ -205,7 +205,7 @@ class FonctionsController extends Controller
 
         if($users){
             
-            $fonctions = Fonctions::where('id',$fonctions_id)->with('users:id,pseudo,contact,adresse,image')->first();
+            $fonctions = Fonctions::where('id',$fonctions_id)->first();
 
             if($fonctions){
 
