@@ -1,23 +1,18 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\AvisController;
 use App\Http\Controllers\AxesController;
-use App\Http\Controllers\MoisController;
-use App\Http\Controllers\PostController;
-use App\Http\Controllers\IndexController;
-use App\Http\Controllers\LikesController;
 use App\Http\Controllers\NiveauController;
-use App\Http\Controllers\PortesController;
 use App\Http\Controllers\MembresController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\FilieresController;
-use App\Http\Controllers\MessagesController;
 use App\Http\Controllers\SectionsController;
 use App\Http\Controllers\FonctionsController;
-use App\Http\Controllers\CommentairesController;
+
+Route::post('/forget-password', [AuthController::class, 'mot_de_passe_oublier']);
+Route::post('/comfirmation', [AuthController::class, 'comfirmation']);
+Route::post('/reinitialiser_mot_de_passe', [AuthController::class, 'ReinitialiserMotDePasse']);
 
 /** --------- Public Routes ---------- **/
 Route::post("/register", [AuthController::class, 'register']);

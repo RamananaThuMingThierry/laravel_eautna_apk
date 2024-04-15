@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Membres;
 use App\Models\User;
-use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Validator;
-use Psy\Readline\Hoa\Console;
 
 class AuthController extends Controller
 {  
@@ -377,6 +380,156 @@ class AuthController extends Controller
             return response()->json([
                 'message' => $this->constantes['NonAuthentifier']
             ], 401);
+        }
+    }
+
+    public function ReinitialiserMotDePasse(Request $request){
+      
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email',
+            'mot_de_passe' => 'required|string|min:6',
+            'token' => 'required|string'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $validator->messages(),
+            ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+       $updatePassword = DB::table('password_reset_tokens')
+        ->where([
+            "email" => $request->email,
+            "token" => $request->token
+        ])->first();
+    
+       if(!$updatePassword){
+        return response()->json([
+            'message' => 'Désolé, l\'adresse e-mail que vous avez saisie est incorrecte. Veuillez entrer une adresse e-mail valide.'
+        ], 403);
+       }
+
+       User::where("email", $request->email)->update([
+        'mot_de_passe' => Hash::make($request->mot_de_passe)
+       ]);
+
+       DB::table("password_reset_tokens")->where("email", $request->email)->delete();
+
+       return response()->json([
+        'message' => 'Votre mot de passe à été réinitialiser',
+       ], 200);
+    }
+    
+    private $tokens;
+
+    public function mot_de_passe_oublier(Request $request){
+      
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email', // Cette règle vérifie si le champ est requis et s'il est un adresse email
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $validator->messages(),
+            ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
+        }else{
+
+            // Vérifions s'il l'adresse email existe dans la base de données ou pas
+            $valide = User::where('email', $request->email)->exists();
+
+            if(!$valide){
+                return response()->json([
+                    'message' => 'Votre adresse email n\'est pas valide!'
+                ], 403);
+            }
+        }
+
+        $token = Str::random(64);
+
+        // Vérifiez d'abord si l'adresse e-mail existe déjà dans la table
+        $passwordReset = DB::table('password_reset_tokens')->where('email', $request->email)->first();
+        
+        $this->tokens = Hash::make($token);
+
+        if ($passwordReset) {
+            // L'adresse e-mail existe déjà, mettez à jour le token existant
+            DB::table('password_reset_tokens')
+                ->where('email', $request->email)
+                ->update([
+                    'token' => $this->tokens,
+                    'created_at' => Carbon::now()
+                ]);
+        } else {
+            // L'adresse e-mail n'existe pas encore, insérez un nouveau token
+            DB::table('password_reset_tokens')->insert([
+                'email' => $request->email,
+                'token' => $this->tokens,
+                'created_at' => now()
+            ]);
+        }
+
+        $valeur_de_recuperation = $this->genererNombreAleatoire();
+
+        Mail::send("emails.forget-password", ['token' => $this->tokens, 'valeur_de_recuperation' => $valeur_de_recuperation], function($message) use ($request){
+            $message->to($request->email);
+            $message->subject("Rest Password");
+        });
+
+        return response()->json([
+            'message' => 'Nous avons envoyer une email pour réinitialiser votre mot de passe',
+            'token' => $this->tokens,
+            'valeur_de_recuperation' => $valeur_de_recuperation
+        ], 200);
+    }
+
+    public function comfirmation(Request $request){
+        $validator = Validator::make($request->all(), [
+            'verification' => 'required', // Cette règle vérifie si le champ est requis et s'il est numérique.
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $validator->messages(),
+            ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
+        }else{
+
+            if($this->verifierValiditeNombreAleatoire() == (int)$request->verification){
+                return response()->json([
+                    'message' => 'On vous remerci pour votre comfirmation'
+                ], 200);
+    
+            }else{
+                
+                return response()->json([
+                    'message' => ' La validité du nombre aléatoire a expiré'
+                ], 403);
+    
+            }
+        }
+    }
+
+    public function genererNombreAleatoire()
+    {
+        // Générer un nombre aléatoire à 6 chiffres
+        $nombreAleatoire = rand(100000, 999999);
+        
+        // Stocker le nombre aléatoire en cache avec une durée de validité de 10 minutes
+        Cache::put('nombre_aleatoire', $nombreAleatoire, now()->addMinutes(10));
+        
+        return $nombreAleatoire;
+    }
+
+    public function verifierValiditeNombreAleatoire()
+    {
+        // Récupérer le nombre aléatoire depuis le cache
+        $nombreAleatoire = Cache::get('nombre_aleatoire');
+
+        if ($nombreAleatoire !== null) {
+            // Vérifier si le nombre aléatoire est toujours valide (moins de 10 minutes écoulées)
+            return $nombreAleatoire;
+        } else {
+            // La validité du nombre aléatoire a expiré
+            return null;
         }
     }
 }
