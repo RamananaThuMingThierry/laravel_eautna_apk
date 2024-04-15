@@ -156,17 +156,24 @@ class MembresController extends Controller
         $user = auth()->user();
         
         if($user){
-            if($debutNumero == "034" || $debutNumero == "038"){
-                $membre = Membres::select('contact_personnel')
-                ->where('contact_personnel', 'like', '038%')
-                ->orWhere('contact_personnel', 'like', '034%')
-                ->get();
-                return response()->json([
-                    'membres' => $membre
-                ], 200);
+            if($debutNumero != "tout"){
+                if($debutNumero == "034" || $debutNumero == "038"){
+                    $membre = Membres::select('contact_personnel')
+                    ->where('contact_personnel', 'like', '038%')
+                    ->orWhere('contact_personnel', 'like', '034%')
+                    ->get();
+                    return response()->json([
+                        'membres' => $membre
+                    ], 200);
+                }else{
+                    $membre = Membres::select('contact_personnel')->where('contact_personnel', 'like', $debutNumero."%")
+                    ->get();
+                    return response()->json([
+                        'membres' => $membre
+                    ], 200);
+                }
             }else{
-                $membre = Membres::select('contact_personnel')->where('contact_personnel', 'like', $debutNumero."%")
-                ->get();
+                $membre = Membres::select('contact_personnel')->get();
                 return response()->json([
                     'membres' => $membre
                 ], 200);
@@ -254,6 +261,7 @@ class MembresController extends Controller
                     ],
                     'lieu_de_naissance' => 'string',
                     'cin' => 'nullable|string|max:12',
+                    'etablissement' => 'nullable|string',
                     'genre' => 'required|string',
                     'contact_personnel' => 'required|max:10|min:10|string|unique:membres',
                     'contact_tuteur' => 'max:10|min:10|string',
@@ -3237,7 +3245,7 @@ class MembresController extends Controller
         $user = auth()->user();
 
         if($user){
-            $membres = Membres::where('id', $membres_id)->with('users:id,pseudo,image')->first();
+            $membres = Membres::where('id', $membres_id)->first();
 
             if($membres){
     

@@ -1,22 +1,23 @@
 <?php
 
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AvisController;
 use App\Http\Controllers\AxesController;
-use App\Http\Controllers\CommentairesController;
-use App\Http\Controllers\FilieresController;
-use App\Http\Controllers\FonctionsController;
+use App\Http\Controllers\MoisController;
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\IndexController;
 use App\Http\Controllers\LikesController;
-use App\Http\Controllers\MembresController;
-use App\Http\Controllers\MessagesController;
-use App\Http\Controllers\MoisController;
 use App\Http\Controllers\NiveauController;
 use App\Http\Controllers\PortesController;
-use App\Http\Controllers\PostController;
+use App\Http\Controllers\MembresController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\FilieresController;
+use App\Http\Controllers\MessagesController;
 use App\Http\Controllers\SectionsController;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\FonctionsController;
+use App\Http\Controllers\CommentairesController;
 
 /** --------- Public Routes ---------- **/
 Route::post("/register", [AuthController::class, 'register']);
@@ -25,13 +26,17 @@ Route::post("/login", [AuthController::class, 'login']);
 /** --------- Protected Routes --------- **/
 Route::group(['middleware' => ['auth:sanctum']], function(){
 
+    /**----------------- Profiles ------------------------- **/
+    Route::put('/profiles/changer_mot_de_passe', [ProfileController::class, 'changer_mot_de_passe']);
+
     /** ---------- Users ---------- */
     Route::get('/users_all', [AuthController::class, "index"]);
     Route::get('/users_en_attente', [AuthController::class, "utilisateurs_en_attente"]);
     Route::get('/users_valide', [AuthController::class, "utilisateurs"]);
     Route::put('/users/{id}', [AuthController::class, "update_profile"]);
     Route::put('/users_role_user/{id}', [AuthController::class, "update_role_user"]);
-    Route::put('/users_valide/{userId}/{membreId}', [AuthController::class, "valideUsers"]);
+    Route::put('/users_valide/{userId}', [AuthController::class, "valideUsers"]);
+    Route::get('/users_valide_search/{valeur}', [AuthController::class, "seachUsersValide"]);
     Route::get('/users', [AuthController::class, "profiles"]);
     Route::get('/users/{id}', [AuthController::class, "show"]);
     Route::delete('/users/{id}', [AuthController::class, "delete"]);

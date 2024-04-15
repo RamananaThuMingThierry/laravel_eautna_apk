@@ -13,6 +13,27 @@ use Psy\Readline\Hoa\Console;
 class AuthController extends Controller
 {  
 
+    public function seachUsersValide($valeur){
+
+        $user_auth = auth()->user();
+
+        if($user_auth){
+            
+            $user = User::where('pseudo','like', "%$valeur%")->where('status', 1)->where('id', '<>', $user_auth->id)->get();
+
+            return response()->json([
+                'user' => $user
+            ], 200);
+
+        }else{
+
+            return response()->json([
+                'message' => $this->constantes['NonAuthentifier']
+            ], 401);
+
+        }
+    }
+
     public function login(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -98,40 +119,29 @@ class AuthController extends Controller
         }
     }
  
-    public function valideUsers($users_id, $membre_id)
+    public function valideUsers($users_id)
     {
         $user = auth()->user();
 
         if($user){
                 
+                // Vérifions s'il l'utilisateur existe dans la base de données
                 $verifier_users_id = User::where('id', $users_id)->exists();
-                if($verifier_users_id){
-                    $users_update = User::find($users_id);
-                    $verifier_id_membre = Membres::where('id', $membre_id)->exists();
-                if($verifier_id_membre){
-                    $get_membre = Membres::find($membre_id);
-                    if($users_update->status == 0){
-                        $users_update->update([
-                            'status' => 1
-                        ]);
 
-                        $get_membre->update([
-                            'lien_membre_id' => $users_update->id
-                        ]);
-                       
-                        return response()->json([
-                            'message' => $this->constantes['Modification']
-                        ], 200);
-                    }else{
-                        return response()->json([
-                            'message' => 'Cet utilisateur est déjà validé!'
-                        ], 403);
-                    }
-                }else{
+                if($verifier_users_id){
+                
+                    // Récupérer l'utilisateur
+                    $get_user = User::where('id', $users_id)->first();
+
+                    // Valide l'utilisateur en attente
+                    $get_user->update([
+                        'status' => 1
+                    ]);
+
                     return response()->json([
-                        'message' => 'Ce personne '. $this->constantes['NExistePasDansBD']
-                    ], 404);
-                }
+                        'message' => "L'utilisateur a été bien approuver!"
+                    ], 200);
+
                 }else{
                     return response()->json([
                         'message' => 'Cet utilateur '. $this->constantes['NExistePasDansBD']
