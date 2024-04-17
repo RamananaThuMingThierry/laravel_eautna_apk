@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le : lun. 15 avr. 2024 à 13:07
+-- Généré le : mer. 17 avr. 2024 à 07:53
 -- Version du serveur : 8.0.31
 -- Version de PHP : 8.0.26
 
@@ -210,7 +210,7 @@ CREATE TABLE IF NOT EXISTS `membres` (
   KEY `membres_filieres_id_foreign` (`filieres_id`),
   KEY `membres_levels_id_foreign` (`levels_id`),
   KEY `membres_axes_id_foreign` (`axes_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Déchargement des données de la table `membres`
@@ -237,7 +237,16 @@ INSERT INTO `membres` (`id`, `image`, `numero_carte`, `nom`, `prenom`, `date_de_
 (18, 'http://192.168.1.107:8000/storage/membres/1713182093.png', 36, 'JAOTIANA', 'Jocylin', '1996-03-03', 'Antalaha', '710011054190', 'Masculin', 'Université Privée Hay à 67h', '0320427008', '0328944466', 0, '2024-04-15', 2, 1, 21, 5, 5, 'Ambohipo Andohaniato', 'Jocy Jaotiana', '2024-04-15 08:54:53', '2024-04-15 08:54:53'),
 (19, 'http://192.168.1.107:8000/storage/membres/1713182812.png', 44, 'BEVOAVY', 'Cecilio', '2002-04-27', 'Antalaha', '710011066030', 'Masculin', 'Ankatso', '0327170458', '0328669144', 0, '2024-04-15', 6, 1, 6, 1, 6, 'Lot VS 54 Ambolikandrina', 'Cecilio Froste Harden', '2024-04-15 09:06:52', '2024-04-15 09:06:52'),
 (20, 'http://192.168.1.107:8000/storage/membres/1713183182.png', 46, 'RAVAO', 'NANDRASANA Angelinah', '2004-05-18', 'Mahafidinaha', 'null', 'Feminin', 'IMGAM', '0321804986', '0321804986', 0, '2024-04-15', 1, 1, 3, 1, 4, '67h Nord', 'Angelinah Ashley', '2024-04-15 09:13:02', '2024-04-15 09:13:02'),
-(21, 'http://192.168.1.107:8000/storage/membres/1713184020.png', 47, 'DIMASY', 'Patanau Joëlot', '2006-05-15', 'Antalaha', 'null', 'Masculin', 'ACEEM', '0326953475', '0324089593', 0, '2024-04-15', 3, 1, 3, 1, 4, 'VT 85 Andohanimandroseza', 'Patanau Roi', '2024-04-15 09:27:00', '2024-04-15 09:27:00');
+(21, 'http://192.168.1.107:8000/storage/membres/1713184020.png', 47, 'DIMASY', 'Patanau Joëlot', '2006-05-15', 'Antalaha', 'null', 'Masculin', 'ACEEM', '0326953475', '0324089593', 0, '2024-04-15', 3, 1, 3, 1, 4, 'VT 85 Andohanimandroseza', 'Patanau Roi', '2024-04-15 09:27:00', '2024-04-15 09:27:00'),
+(22, 'http://192.168.1.107:8000/storage/membres/1713199341.png', 50, 'MEZILINE', 'Françia', '2000-10-24', 'Andapa', '712012021368', 'Feminin', 'Ankatso', '0327992617', '0327992617', 0, '2024-04-15', 4, 1, 3, 1, 3, 'CU Ankatso II Bloc Fanantenana', 'null', '2024-04-15 13:42:24', '2024-04-15 13:42:24'),
+(23, 'http://192.168.1.107:8000/storage/membres/1713334283.png', 50, 'RIZIKY', 'Jeremie', '1999-08-27', 'Antalaha', '710011060990', 'Masculin', 'EGS', '0327983386', '0327983386', 0, '2024-04-17', 3, 1, 6, 1, 3, 'CU Ankatso I Bloc Paradasse Porte 389', 'IAKOV de Boissieu', '2024-04-17 03:11:24', '2024-04-17 03:11:24'),
+(24, 'http://192.168.1.107:8000/storage/membres/1713334526.png', 61, 'RAZAFINDRANAMBO', 'Jean Maxelin', '1997-09-29', 'Antalaha', '710011057503', 'Masculin', 'ESPIC', '0322215327', '0325297940', 0, '2024-04-17', 4, 1, 2, 3, 2, 'CU Ankatso II Bloc 42 Porte 6C', 'Jean Maxelin', '2024-04-17 03:15:26', '2024-04-17 03:15:26'),
+(25, 'http://192.168.1.107:8000/storage/membres/1713334755.png', 63, 'RAKOTOVAO', 'Kellerman', '2006-08-19', 'Antalaha', 'null', 'Masculin', 'ACEEM', '0328068194', '0347636887', 0, '2024-04-17', 4, 1, 3, 1, 4, 'CU Ankatso II Bloc 47 Porte 7A', 'Kêllër Màn', '2024-04-17 03:19:16', '2024-04-17 03:19:16'),
+(26, 'http://192.168.1.107:8000/storage/membres/1713334907.png', 67, 'CHAUVIN', 'Silasy Biton', '2000-12-25', 'Antalaha', 'null', 'Masculin', 'null', '0325600576', '0325600576', 0, '2024-04-17', 4, 1, 13, 1, 4, 'Ankatso II', 'Biton Chauvin', '2024-04-17 03:21:47', '2024-04-17 03:21:47'),
+(27, 'http://192.168.1.107:8000/storage/membres/1713335158.png', 79, 'TSIMIAVA', 'Dalvino', '2000-12-22', 'Antalaha', '710011063017', 'Masculin', 'INSPMAD', '0328911011', '0323539844', 0, '2024-04-17', 3, 1, 11, 3, 5, 'Ankatso I Porte 134 C', 'Tsimiava Dalvino Jr', '2024-04-17 03:25:58', '2024-04-17 03:25:58'),
+(28, 'http://192.168.1.107:8000/storage/membres/1713335389.png', 80, 'Priva', 'Mallardo', '1997-05-08', 'Antalaha', '710011055222', 'Masculin', 'IFT', '0327988829', '0324250110', 0, '2024-04-17', 4, 1, 1, 5, 6, 'Andohaniato', 'Ray Mallar', '2024-04-17 03:29:49', '2024-04-17 03:29:49'),
+(29, 'http://192.168.1.107:8000/storage/membres/1713335587.png', 87, 'Danny', 'Zarapaoly', '2002-02-20', 'Antalaha', '710011067558', 'Masculin', 'Ankatso', '0327863624', '0327863624', 0, '2024-04-17', 4, 1, 13, 1, 5, 'Ambohipo Andohaniato', 'Danny Emnire', '2024-04-17 03:33:07', '2024-04-17 03:33:07'),
+(30, 'http://192.168.1.107:8000/storage/membres/1713339052.png', 88, 'RARINDRINA', 'Marie Cynthia', '2001-08-05', 'Antalaha', '710012065329', 'Feminin', 'Ankatso', '0328952477', '0320229679', 0, '2024-04-17', 4, 1, 28, 5, 4, 'Ambolikandrina', 'Cynthia Rarindrina', '2024-04-17 04:30:52', '2024-04-17 04:30:52');
 
 -- --------------------------------------------------------
 
@@ -324,7 +333,7 @@ INSERT INTO `personal_access_tokens` (`id`, `tokenable_type`, `tokenable_id`, `n
 (11, 'App\\Models\\User', 1, 'ramananathumingthierry@gmail.com_Token', 'c3779d4e97019d43282907ce64974254bca43c81c02ac66c2cc39e6d6128efbf', '[\"*\"]', '2024-04-15 06:55:39', NULL, '2024-04-15 06:37:07', '2024-04-15 06:55:39'),
 (12, 'App\\Models\\User', 1, 'ramananathumingthierry@gmail.com_Token', '0ffc76bd030595fa3ad45718e54b04badfae4883e5fe47b1c107c312d16a104c', '[\"*\"]', '2024-04-15 08:26:02', NULL, '2024-04-15 08:25:32', '2024-04-15 08:26:02'),
 (13, 'App\\Models\\User', 1, 'ramananathumingthierry@gmail.com_Token', 'b66a2fc6a9df94ca86bea25b9183b0aaa95968581e2b24c3b9d6478f81e610ff', '[\"*\"]', '2024-04-15 09:48:04', NULL, '2024-04-15 08:30:05', '2024-04-15 09:48:04'),
-(14, 'App\\Models\\User', 1, 'ramananathumingthierry@gmail.com_Token', 'f3e9c8e8e8f7b64f0821f031e9722a6d9a7c6dbd15e8c7b2fd210978e65f47c9', '[\"*\"]', NULL, NULL, '2024-04-15 10:00:52', '2024-04-15 10:00:52');
+(14, 'App\\Models\\User', 1, 'ramananathumingthierry@gmail.com_Token', 'f3e9c8e8e8f7b64f0821f031e9722a6d9a7c6dbd15e8c7b2fd210978e65f47c9', '[\"*\"]', '2024-04-17 04:34:06', NULL, '2024-04-15 10:00:52', '2024-04-17 04:34:06');
 
 -- --------------------------------------------------------
 
