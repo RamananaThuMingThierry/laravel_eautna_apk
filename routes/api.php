@@ -20,23 +20,36 @@ Route::post("/login", [AuthController::class, 'login']);
 
 /** --------- Protected Routes --------- **/
 Route::group(['middleware' => ['auth:sanctum']], function(){
+    /** ======================= Authentification =================== **/ 
+    Route::post('/logout', [AuthController::class, "logout"]);
 
     /**----------------- Profiles ------------------------- **/
     Route::put('/profiles/changer_mot_de_passe', [ProfileController::class, 'changer_mot_de_passe']);
 
     /** ---------- Users ---------- */
-    Route::get('/users_all', [AuthController::class, "index"]);
-    Route::get('/users_en_attente', [AuthController::class, "utilisateurs_en_attente"]);
-    Route::get('/users_valide', [AuthController::class, "utilisateurs"]);
-    Route::put('/users/{id}', [AuthController::class, "update_profile"]);
-    Route::put('/users_role_user/{id}', [AuthController::class, "update_role_user"]);
-    Route::put('/users_valide/{userId}', [AuthController::class, "valideUsers"]);
-    Route::get('/users_valide_search/{valeur}', [AuthController::class, "seachUsersValide"]);
-    Route::get('/users', [AuthController::class, "profiles"]);
-    Route::get('/users/{id}', [AuthController::class, "show"]);
-    Route::delete('/users/{id}', [AuthController::class, "delete"]);
-    Route::post('/logout', [AuthController::class, "logout"]);
+    Route::prefix('/users')->controller(AuthController::class)->group(function(){
+        // Récupérer toutes les utilisateurs
+        Route::get('/all', "index");
+        // Récupérer toutes les utilisateurs en attente de confirmation
+        Route::get('/en_attente', [AuthController::class, "liste_des_utilisateurs_en_attente"]);
+        // Récupérer toutes les utisateurs déjà valide
+        Route::get('/valide', [AuthController::class, "liste_des_utilisateurs_valide"]);
+        // Modifier un profile
+        Route::put('/{id}', [AuthController::class, "modifier_un_profile"]);
+        // Modifier le rôle d'un utilisateur
+        Route::put('/{id}/role', [AuthController::class, "update_role_user"]);
+        // Valide un utilisateur en attente
+        Route::put('/{id}/valide', [AuthController::class, "valide_un_utilisateur"]);
+        Route::get('/users_valide_search/{valeur}', [AuthController::class, "seachUsersValide"]);
+        // Récupérer un profile
+        Route::get('/', [AuthController::class, "profiles"]);
+        // Afficher un utilisateur ou un profile
+        Route::get('/{id}', [AuthController::class, "show"]);
+        // Supprimer un utilisateur
+        Route::delete('/{id}', [AuthController::class, "delete"]);        
+    });
 
+    
     /** ------------ Sections ------------ */
     Route::get('/sections', [SectionsController::class, "index"]);
     Route::get('/sections/{id}', [SectionsController::class, "show"]);

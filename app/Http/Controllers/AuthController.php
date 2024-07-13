@@ -122,7 +122,8 @@ class AuthController extends Controller
         }
     }
  
-    public function valideUsers($users_id)
+    // Méthode permettant de valide un utilisateur en atttente
+    public function valide_un_utilisateur($users_id)
     {
         $user = auth()->user();
 
@@ -157,7 +158,8 @@ class AuthController extends Controller
         }
     }
 
-    public function update_profile(Request $request, $userIdUpdate)
+    // Méthode permettant de modifier un profile
+    public function modifier_un_profile(Request $request, $userIdUpdate)
     {
         $user = auth()->user();
 
@@ -298,7 +300,8 @@ class AuthController extends Controller
         }
     }
 
-    public function utilisateurs(){
+    // Méthode permettant de récupérer toutes les utilisateurs valide
+    public function liste_des_utilisateurs_valide(){
         $user = auth()->user();
         
         if($user){
@@ -313,7 +316,8 @@ class AuthController extends Controller
         }
     }
 
-    public function utilisateurs_en_attente(){
+    // Méthode permettant de récupérer toutes les utilisateurs en attente de validation
+    public function liste_des_utilisateurs_en_attente(){
         $user = auth()->user();
         
         if($user){
