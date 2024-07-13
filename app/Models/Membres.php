@@ -6,11 +6,12 @@ use App\Models\Level;
 use App\Models\Filieres;
 use App\Models\Fonctions;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Membres extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     public $table = "membres";
 
@@ -35,5 +36,24 @@ class Membres extends Model
         "date_inscription",
         "facebook",
         "axes_id",
+    ];
+
+    // La colonne qui enregistrera la date de suppression
+    protected $dates = ['deleted_at'];
+
+    public function filiere(){
+        return $this->belongsTo(Filieres::class, 'filieres_id');
+    }
+    
+    public function fonction(){
+        return $this->belongsTo(Fonctions::class, 'fonctions_id');
+    }
+
+    public function level(){
+        return $this->belongsTo(Level::class, 'levels_id');
+    }
+
+    protected $casts = [
+        'sympathisant' => 'boolean'
     ];
 }

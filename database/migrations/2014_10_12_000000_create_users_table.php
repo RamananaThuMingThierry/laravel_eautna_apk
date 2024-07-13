@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('mot_de_passe');
             $table->string('roles')->default('Utilisateurs');
             $table->boolean('status')->default(false)->comment('1: valide (True)  & 0 : Non autorisé (False)');
+            $table->softDeletes();
             $table->rememberToken();
             $table->timestamps();
         });

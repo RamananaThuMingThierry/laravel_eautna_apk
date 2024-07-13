@@ -27,7 +27,7 @@ class FilieresRequest extends FormRequest
                 'required',
                 'string',
                 'max:100',
-                Rule::unique('filieres')->ignore($this->route('filiere'))
+                Rule::unique('filieres')->ignore($this->route('filiere'))->whereNull('deleted_at')
             ]
         ];
     }

@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('fonctions', function (Blueprint $table) {
             $table->id();
             $table->string('nom_fonctions');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

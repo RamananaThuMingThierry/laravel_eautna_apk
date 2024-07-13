@@ -39,6 +39,7 @@ return new class extends Migration
             $table->foreign('axes_id')->references('id')->on('axes')->onUpdate('cascade');
             $table->string('adresse')->nullable();
             $table->string('facebook')->nullable();
+            $table->softDeletes();
             $table->timestamps();
             
         });
