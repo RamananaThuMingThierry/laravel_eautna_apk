@@ -19,11 +19,11 @@
               <div class="sb-nav-link-icon"><i class="fas fa-calendar"></i></div>
               Fonctions
           </a>
-          <a class="nav-link" href="#">
+          <a class="nav-link" href="{{ route('admin.niveaux.index') }}">
               <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
               Niveaux
           </a>
-          <a class="nav-link" href="#">
+          <a class="nav-link" href="{{ route('admin.membres.index') }}">
               <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
               Membres
           </a>
