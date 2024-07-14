@@ -52,26 +52,43 @@
         '<"row mt-2"<"col-sm-6"l><"col-sm-6"f>>' +
         '<"row mt-2"<"col-sm-12"t>>' +
         '<"row ps-3 pe-3"<"col-sm-12 col-md-5 pt-2 p-0"i><"d-flex justify-content-center justify-content-md-end col-sm-12 col-md-7 p-0 pt-2"p>>',
-      buttons: [
-        {
-          extend: 'csv',
-          exportOptions: {
-            columns: ':not(:last-child)'
-          }
-        },
-        {
-          extend: 'pdf',
-          exportOptions: {
-            columns: ':not(:last-child)'
-          }
-        },
-        {
-          extend: 'print',
-          exportOptions: {
-            columns: ':not(:last-child)'
+        buttons: [
+          {
+            extend: 'csv',
+            exportOptions: {
+              columns: ':not(:last-child)'
+            },
+            text: '<i class="fas fa-file-csv" title="Exporter en CSV"></i>'
           },
-        }
-      ],
+          {
+            extend: 'pdfHtml5',
+            exportOptions: {
+              columns: ':not(:last-child)'
+            },
+            text: '<i class="fas fa-file-pdf" title="Exporter en PDF"></i>',
+            customize: function(doc) {
+              if (doc.content[1].table.body[0].length === 1) {
+                doc.content[1].table.widths = ['*'];
+              }
+            }
+          },
+          {
+            extend: 'print',
+            exportOptions: {
+              columns: ':not(:last-child)'
+            },
+            text: '<i class="fas fa-print" title="Imprimer"></i>'
+          },
+          {
+            text: '<i class="fas fa-sync-alt" title="Actualiser"></i>',
+            action: function (e, dt, node, config) {
+              location.reload(); // Recharge la page entière
+            }
+          }
+        ],
+        columnDefs: [
+          { targets: -1, orderable: false }
+        ],
       columnDefs: [
         { targets: -1, orderable: false }
       ],
@@ -92,7 +109,30 @@
           "sortAscending": ": activer pour trier la colonne par ordre croissant",
           "sortDescending": ": activer pour trier la colonne par ordre décroissant"
         }
+      }, initComplete: function() {
+        // Function to generate a random color
+        function getRandomColor() {
+          var letters = '0123456789ABCDEF';
+          var color = '#';
+          for (var i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
+          }
+          return color;
+        }
+
+        // Apply random colors to buttons
+        $('.dt-buttons button').each(function() {
+          $(this).css('background-color', getRandomColor());
+        });
       }
+    });
+
+    // Ajouter le bouton "Actualiser" au DOM
+    $('<button id="btn-refresh" class="btn btn-secondary ml-2">Actualiser</button>').appendTo('div.RefreshButton');
+
+    // Recharger le tableau lorsque le bouton "Actualiser" est cliqué
+    $('#btn-refresh').click(function() {
+      table.ajax.reload(null, false); // Reload the data without resetting pagination
     });
 
     $.ajaxSetup({
@@ -106,7 +146,7 @@
       $('#btn-save-filiere-form-modal').dasabled = false;
       console.log("Le modal est ouvert");
       $('#titre-filiere-form-modal').html('Nouveau filière');
-      $('#btn-save-filiere-form-modal').html('Enregistre');
+      $('#btn-save-filiere-form-modal').html('Enregistrer');
       $('#nom_filieres').val("");
       $('.error-message').html(''); 
     });

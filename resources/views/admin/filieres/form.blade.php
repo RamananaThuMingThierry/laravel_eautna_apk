@@ -3,9 +3,9 @@
     <div class="modal-dialog">
       <div class="modal-content rounded-0">
         <div class="modal-header">
-          <h5 class="modal-title" id="titre-filiere-form-modal">Formulaire Filière</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
+          <h5 class="modal-title text-warning" id="titre-filiere-form-modal">Formulaire du Filière</h5>
+          <button type="button" class="close text-danger" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true" class="h3">&times;</span>
           </button>
         </div>
         <div class="modal-body">

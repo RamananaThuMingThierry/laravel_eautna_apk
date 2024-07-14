@@ -38,7 +38,7 @@ class FilieresRequest extends FormRequest
             'nom_filieres.required' => 'Le champ nom des filières est obligatoire.',
             'nom_filieres.string' => 'Le champ nom des filières doit être une chaîne de caractères.',
             'nom_filieres.max' => 'Le champ nom des filières ne peut pas dépasser 100 caractères.',
-            'nom_filieres.unique' => 'Le nom de la filière doit être unique.'
+            'nom_filieres.unique' => 'Ce nom de filière est déjà utilisé. Veuillez choisir un autre nom unique.'
         ];
     }
 }
