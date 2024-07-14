@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class FonctionsRequest extends FormRequest
@@ -11,7 +12,7 @@ class FonctionsRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +23,22 @@ class FonctionsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'nom_fonctions' => [
+                'required',
+                'string',
+                'max:100',
+                Rule::unique('fonctions')->ignore($this->route('fonctions'))->whereNull('deleted_at')
+            ]
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'nom_fonctions.required' => 'Le champ nom du fonction est obligatoire.',
+            'nom_fonctions.string' => 'Le champ nom du fonction doit être une chaîne de caractères.',
+            'nom_fonctions.max' => 'Le champ nom du fonction ne peut pas dépasser 100 caractères.',
+            'nom_fonctions.unique' => 'Ce nom de fonction est déjà utilisé. Veuillez choisir un autre nom unique.'
         ];
     }
 }

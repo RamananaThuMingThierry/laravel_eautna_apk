@@ -15,7 +15,7 @@
               <div class="sb-nav-link-icon"><i class="fas fa-clipboard-list"></i></div>
               Filières
           </a>
-          <a class="nav-link" href="#">
+          <a class="nav-link" href="{{ route('admin.fonctions.index') }}">
               <div class="sb-nav-link-icon"><i class="fas fa-calendar"></i></div>
               Fonctions
           </a>
