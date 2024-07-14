@@ -7,7 +7,7 @@
               Tableau de bord
           </a>
           <div class="sb-sidenav-menu-heading">Interface</div>
-          <a class="nav-link" href="#">
+          <a class="nav-link" href="{{ route('admin.axes.index') }}">
               <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
               Axes
           </a>

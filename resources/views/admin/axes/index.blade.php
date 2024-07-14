@@ -1,19 +1,19 @@
 @extends('admin.admin')
 
-@section('titre', 'Filières')
+@section('titre', 'Axes')
     
 @section('styles')
 <link rel="stylesheet" href="https://cdn.datatables.net/v/bs5/jq-3.7.0/dt-2.0.8/b-3.0.2/b-html5-3.0.2/b-print-3.0.2/r-3.0.2/datatables.min.css" />
 @endsection
 
 @section('contenu')
-    @include('admin.filieres.form')
+    @include('admin.axes.form')
     <div class="row mt-2">
       <div class="col-12 d-flex align-items-center justify-content-between mb-4">
         <h1 class="text-warning">@yield('titre')</h1>
-        <button class="btn btn-sm btn-success shadow-sm d-flex align-items-center" id="btn-create-filiere-form-modal">
+        <button class="btn btn-sm btn-success shadow-sm d-flex align-items-center" id="btn-create-axes-form-modal">
           <i class="fas fa-plus p-1 text-white-50"></i>
-          <span class="d-none d-sm-inline">&nbsp;Nouvelle filière</span>
+          <span class="d-none d-sm-inline">&nbsp;Nouvelle axes</span>
         </button>
       </div>
     </div>
@@ -41,11 +41,11 @@
 <script type="text/javascript">
   $(document).ready(function(){
     var table = $('#datatables').DataTable({
-      ajax: "{{ route('admin.filieres.index') }}",
+      ajax: "{{ route('admin.axes.index') }}",
       processing: false,
       serverSide: false,
       columns: [
-          { data: 'nom_filieres' },
+          { data: 'nom_axes' },
           { data: 'action', name: 'action', orderable: false, searchable: false }
       ],
       dom: '<"row"<"col-sm-6"B><"col-sm-6">>' +
@@ -141,31 +141,31 @@
         }
     });
 
-    $('#btn-create-filiere-form-modal').click(function(){
-      $('.filiere-form-modal').modal('show');
-      $('#btn-save-filiere-form-modal').dasabled = false;
+    $('#btn-create-axes-form-modal').click(function(){
+      $('.axes-form-modal').modal('show');
+      $('#btn-save-axes-form-modal').dasabled = false;
       console.log("Le modal est ouvert");
-      $('#titre-filiere-form-modal').html('Nouveau filière');
-      $('#btn-save-filiere-form-modal').html('Enregistrer');
-      $('#nom_filieres').val("");
+      $('#titre-axes-form-modal').html('Nouvelle axes');
+      $('#btn-save-axes-form-modal').html('Enregistrer');
+      $('#nom_axes').val("");
       $('.error-message').html(''); 
     });
 
     // Modifier une filière
-    $('body').on('click', '#btn-edit-filiere-form-modal', function() {
-        var filiere_id = $(this).data('id');
-        var url = '{{ route("admin.filieres.edit", ":id") }}';
-        url = url.replace(':id', filiere_id);
+    $('body').on('click', '#btn-edit-axes-form-modal', function() {
+        var axes_id = $(this).data('id');
+        var url = '{{ route("admin.axes.edit", ":id") }}';
+        url = url.replace(':id', axes_id);
         $.ajax({
             url: url,
             method: 'GET',
             success: function(response) {
-              console.log(response.filiere.nom_filieres);
-              $('.filiere-form-modal').modal('show');
-              $('#titre-filiere-form-modal').html('Modifier une filière');
-              $('#btn-save-filiere-form-modal').html('Modifier');
-              $('#filiere_id').val(response.filiere.id);
-              $('#nom_filieres').val(response.filiere.nom_filieres);
+              console.log(response.axes.nom_axes);
+              $('.axes-form-modal').modal('show');
+              $('#titre-axes-form-modal').html('Modifier une filière');
+              $('#btn-save-axes-form-modal').html('Modifier');
+              $('#axes_id').val(response.axes.id);
+              $('#nom_axes').val(response.axes.nom_axes);
               $('.error-message').html('');
             },
             error: function(error) {
@@ -174,10 +174,10 @@
         });
     });
 
-    $('body').on('click', '#btn-delete-filiere-form-modal', function() {
-        var filiere_id = $(this).data('id');
-        var url = '{{ route("admin.filieres.destroy", ":id") }}';
-        url = url.replace(':id', filiere_id);
+    $('body').on('click', '#btn-delete-axes-form-modal', function() {
+        var axes_id = $(this).data('id');
+        var url = '{{ route("admin.axes.destroy", ":id") }}';
+        url = url.replace(':id', axes_id);
 
         Swal.fire({
           title: 'Êtes-vous sûr?',
@@ -218,8 +218,8 @@
         });
     });
 
-    $('#btn-save-filiere-form-modal').click(function() {
-        var form = $('#ajaxFiliereForm')[0];
+    $('#btn-save-axes-form-modal').click(function() {
+        var form = $('#ajaxAxesForm')[0];
         var formData = new FormData(form);
         $('.error-message').html('');
 
@@ -230,11 +230,11 @@
         // Change the button content to show the spinner
         button.innerHTML = loadingContent;
         button.disabled = true;
-        var filiere_id = $('#filiere_id').val();
+        var axes_id = $('#axes_id').val();
 
-        if (filiere_id) {
-            var url = '{{ route("admin.filieres.update", ":id") }}';
-            url = url.replace(':id', filiere_id);
+        if (axes_id) {
+            var url = '{{ route("admin.axes.update", ":id") }}';
+            url = url.replace(':id', axes_id);
             $.ajax({
               url: url,
               method: 'POST',
@@ -247,7 +247,7 @@
               },
               success: function(response) {
                   if (response) {
-                      $('.filiere-form-modal').modal('hide');
+                      $('.axes-form-modal').modal('hide');
                       Swal.fire({
                           position: "top",
                           title: 'Réussi!',
@@ -262,7 +262,7 @@
               },
               error: function(error) {
                   if (error) {
-                      $('#ErreurNomFiliere').html(error.responseJSON.errors.nom_filieres);
+                      $('#ErreurNomaxes').html(error.responseJSON.errors.nom_axes);
                       button.innerHTML = originalContent;
                       button.disabled = false;
                   }
@@ -270,14 +270,14 @@
             });
         } else {
             $.ajax({
-                url: "{{ route('admin.filieres.store') }}",
+                url: "{{ route('admin.axes.store') }}",
                 method: 'POST',
                 processData: false,
                 contentType: false,
                 data: formData,
                 success: function(response) {
                     if (response) {
-                        $('.filiere-form-modal').modal('hide');
+                        $('.axes-form-modal').modal('hide');
                         Swal.fire({
                             position: "top",
                             title: 'Réussi!',
@@ -292,7 +292,7 @@
                 },
                 error: function(error) {
                     if (error) {
-                        $('#ErreurNomFiliere').html(error.responseJSON.errors.nom_filieres);
+                        $('#ErreurNomaxes').html(error.responseJSON.errors.nom_axes);
                         button.innerHTML = originalContent;
                         button.disabled = false;
                     }
@@ -303,11 +303,11 @@
 
 
     $('#btnAnnuler').click(function(){
-      $('.filiere-form-modal').modal('hide');
+      $('.axes-form-modal').modal('hide');
     });
 
     $('.close').click(function(){
-      $('.filiere-form-modal').modal('hide');
+      $('.axes-form-modal').modal('hide');
     });
   });
 </script> 

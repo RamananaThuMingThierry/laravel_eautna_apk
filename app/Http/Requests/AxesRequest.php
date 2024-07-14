@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class FilieresRequest extends FormRequest
+class AxesRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,22 +23,24 @@ class FilieresRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nom_filieres' => [
+            'nom_axes' => [
                 'required',
                 'string',
                 'max:100',
-                Rule::unique('filieres')->ignore($this->route('filiere'))->whereNull('deleted_at')
+                Rule::unique('axes')->ignore($this->route('axes'))->whereNull('deleted_at')
             ]
         ];
     }
-
+    
     public function messages()
     {
         return [
-            'nom_filieres.required' => 'Le champ nom du filière est obligatoire.',
-            'nom_filieres.string' => 'Le champ nom du filière doit être une chaîne de caractères.',
-            'nom_filieres.max' => 'Le champ nom du filière ne peut pas dépasser 100 caractères.',
-            'nom_filieres.unique' => 'Ce nom de filière est déjà utilisé. Veuillez choisir un autre nom unique.'
+            'nom_axes.required' => 'Le champ nom axes est obligatoire.',
+            'nom_axes.string' => 'Le champ nom axes doit être une chaîne de caractères.',
+            'nom_axes.max' => 'Le champ nom axes ne peut pas dépasser 100 caractères.',
+            'nom_axes.unique' => 'Ce nom est déjà utilisé. Veuillez choisir un autre nom unique.'
         ];
     }
+
+
 }
