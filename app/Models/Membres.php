@@ -24,6 +24,7 @@ class Membres extends Model
         "lieu_de_naissance",
         "cin",
         "genre",
+        'email',
         "etablissement",
         "contact_personnel",
         "contact_tuteur",
@@ -51,6 +52,14 @@ class Membres extends Model
 
     public function level(){
         return $this->belongsTo(Level::class, 'levels_id');
+    }
+
+    public function axes(){
+        return $this->belongsTo(Axes::class, 'axes_id');
+    }
+
+    public function section(){
+        return $this->belongsTo(Sections::class, 'sections_id');
     }
 
     protected $casts = [

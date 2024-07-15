@@ -18,7 +18,7 @@
             <div id="layoutSidenav_nav">
                 @include('admin.layouts.sidebar')
             </div>
-            <div id="layoutSidenav_content">
+            <div id="layoutSidenav_content" class="bg-secondary">
                 <main>
                     <div class="container-fluid px-4">
                       @yield('contenu')

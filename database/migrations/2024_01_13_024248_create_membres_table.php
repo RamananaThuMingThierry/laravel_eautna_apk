@@ -21,6 +21,7 @@ return new class extends Migration
             $table->date('date_de_naissance')->nallable();
             $table->string('lieu_de_naissance')->nullable();
             $table->string("cin", 12)->nullable();
+            $table->string('email')->nullable();
             $table->string('genre');
             $table->string('etablissement')->nullable();
             $table->string('contact_personnel');

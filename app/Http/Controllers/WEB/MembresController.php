@@ -3,10 +3,16 @@
 namespace App\Http\Controllers\WEB;
 
 use Exception;
+use App\Models\Level;
 use App\Models\Membres;
+use App\Models\Filieres;
+use App\Models\Fonctions;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\MembresRquest;
+use App\Models\Axes;
+use App\Models\Sections;
+use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
 
 class MembresController extends Controller
@@ -34,6 +40,9 @@ class MembresController extends Controller
                     ->rawColumns(['action'])
                     ->make(true);
             }
+            
+           
+    
             return view('admin.membres.index');
         } catch (Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
@@ -45,7 +54,18 @@ class MembresController extends Controller
      */
     public function create()
     {
-        return View("admin.membres.form");
+        $axes = Axes::pluck('nom_axes', 'id')->toArray();
+        $sections = Sections::pluck('nom_sections', 'id')->toArray();
+        $filieres = Filieres::pluck('nom_filieres', 'id')->toArray();
+        $fonctions = Fonctions::pluck('nom_fonctions', 'id')->toArray();
+        $levels = Level::pluck('nom_niveau', 'id')->toArray();
+        return View("admin.membres.form", [
+            'axes' => $axes,
+            'sections' => $sections,
+            'filieres' => $filieres,
+            'fonctions' => $fonctions,
+            'levels' => $levels,
+        ]);
     }
 
     /**
@@ -54,12 +74,22 @@ class MembresController extends Controller
     public function store(MembresRquest $request)
     {
         $data = $request->validated();
-        
+
         $membre = Membres::withTrashed()
             ->where('numero_carte', $data['numero_carte'])
             ->where('nom', $data['nom'])
             ->where('prenom', $data['prenom'])
             ->first();
+    
+        if ($request->hasFile('image')) {
+            if ($membre->image) {
+                Storage::delete('public/images/'.$membre->image);
+            }
+            $imageName = time().'.'.$request->image->extension();
+            $request->image->storeAs('public/images', $imageName);
+            $data['image'] = $imageName;
+        }
+
         if ($membre) {
             $membre->restore();
             $membre->update($data);
