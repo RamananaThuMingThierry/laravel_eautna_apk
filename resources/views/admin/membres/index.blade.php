@@ -7,31 +7,36 @@
 @endsection
 
 @section('contenu')
-    <div class="row mt-2">
-      <div class="col-12 d-flex align-items-center justify-content-between mb-4">
-        <h1 class="text-warning">@yield('titre')</h1>
-        <a type="button" href="{{ route('admin.membres.create') }}" class="btn btn-sm btn-success shadow-sm d-flex align-items-center" id="btn-create-niveau-form-modal">
-          <i class="fas fa-plus p-1 text-white-50"></i>
-          <span class="d-none d-sm-inline">&nbsp;Nouveau membres</span>
-        </a>
+    <div class="row my-2">
+      <div class="card rounded-0 shadow-sm">
+        <div class="col-12 d-flex align-items-center justify-content-between">
+          <h1 class="text-warning">@yield('titre')</h1>
+          <a type="button" href="{{ route('admin.membres.create') }}" class="btn btn-sm btn-success shadow-sm d-flex align-items-center" id="btn-create-niveau-form-modal">
+            <i class="fas fa-plus p-2 text-white-50"></i>
+            <span class="d-none d-sm-inline">&nbsp;Nouveau membres</span>
+          </a>
+        </div>
       </div>
     </div>
 
     <div class="row">
-      <div class="col-12">
-        <div class="tabel-responsive">
-          <table id="datatables" class="table table-striped table-bordered display w-100">
-            <thead class="table-dark">
-              <th scope="col">Numéro Carte</th>
-              <th scope="col">Nom</th>
-              <th scope="col">Prénom</th>
-              <th scope="col">Contact</th>
-              <th scope="col" class="text-center">Actions</th>
-            </thead>
-            <tbody>
-            </tbody>
-          </table>
-        </div></div>
+      <div class="card rounded-0 py-3 shadow-sm">
+        <div class="col-12">
+          <div class="table-responsive">
+            <table id="datatables" class="table table-striped table-bordered display w-100">
+              <thead class="table-dark">
+                <th scope="col">Numéro Carte</th>
+                <th scope="col">Nom</th>
+                <th scope="col">Prénom</th>
+                <th scope="col">Contact</th>
+                <th scope="col" class="text-center">Actions</th>
+              </thead>
+              <tbody>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
     </div>
 @endsection
 

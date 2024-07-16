@@ -33,18 +33,18 @@
 
 @section('contenu')
   <div class="card my-3 rounded-0">
-    <div class="card-header rounded-0 bg-white">
-      <h2 class="text-center text-warning">@yield('titre')</h2>
-    </div>
-    <div class="card-body bg-white">
-      <form id="ajaxMembreForm" method="POST" enctype="multipart/form-data">
+    <form id="ajaxMembreForm" method="POST" enctype="multipart/form-data">
+      <div class="card-header rounded-0 bg-white">
+        <h2 class="text-center text-warning">@yield('titre')</h2>
+      </div>
+      <div class="card-body bg-white">
         @csrf
         <input type="hidden" name="membre_id" id="membre_id">
         <div class="row mb-2">
           <div class="col-lg-4">
             <div class="d-flex flex-column justify-content-center align-items-center">
               <img src="{{ asset('images/img.png') }}" alt="Pas d'image" class="custom-img" id="previewImage">
-              <input type="file" id="uploadPhoto" name="image" class="form-control rounded-0"/>
+              <input type="file" id="uploadPhoto" name="photo" class="form-control rounded-0"/>
               <span class="text-danger error-message" id="ImageMembreError"></span>
             </div>
           </div>            
@@ -141,6 +141,7 @@
             'label' => 'Filières',
             'collection' => $filieres,
             'error' => 'FiliereMembreError',
+            'nullable' => true
           ])
           @include('widget.select', [
             'column' => 'col-md-4',
@@ -148,6 +149,7 @@
             'label' => 'Niveau',
             'collection' => $levels,
             'error' => 'NiveauMembreError',
+            'nullable' => true
           ])
         </div>
           {{-- Adresse, contact personnel et tuteur --}}
@@ -214,14 +216,14 @@
           ])
           <div class="col-md-4"></div>
         </div>
-      </form>
-    </div>
-    <div class="card-footer bg-white">
-      <div class="d-flex justify-content-end">
-        <a href="{{ route('admin.membres.index') }}" type="button" class="btn btn-danger me-2"><i class="fas fa-sign-out-alt fw-bold"></i>&nbsp;Annuler</a>
-        <a href="#" type="button" id="btn-save-membre-form-modal" class="btn btn-primary"><i class="fas fa-save fw-bold"></i>&nbsp;Enregistrer</a>
       </div>
-    </div>
+      <div class="card-footer bg-white">
+        <div class="d-flex justify-content-end">
+          <a href="{{ route('admin.membres.index') }}" type="button" class="btn btn-danger me-2"><i class="fas fa-sign-out-alt fw-bold"></i>&nbsp;Annuler</a>
+          <a href="#" type="button" id="btn-save-membre-form-modal" class="btn btn-primary"><i class="fas fa-save fw-bold"></i>&nbsp;Enregistrer</a>
+        </div>
+      </div>
+    </form>
   </div>
 @endsection
 
@@ -263,7 +265,9 @@
         }
       });
 
-      $('#btn-save-membre-form-modal').click(function() {
+    $('#btn-save-membre-form-modal').click(function(e) {
+        e.preventDefault(); // Empêche le comportement par défaut du bouton
+
         var form = $('#ajaxMembreForm')[0];
         var formData = new FormData(form);
         $('.error-message').html('');
@@ -275,16 +279,14 @@
         // Change the button content to show the spinner
         button.innerHTML = loadingContent;
         button.disabled = true;
-        var membre_id = $('#membre_id').val();
 
         $.ajax({
-          url: "{{ route('admin.membres.store') }}",
-          method: 'POST',
-          processData: false,
-          contentType: false,
-          data: formData,
-          success: function(response) {
-              if (response) {
+            url: "{{ route('admin.membres.store') }}",
+            method: 'POST',
+            processData: false,
+            contentType: false,
+            data: formData,
+            success: function(response) {
                 Swal.fire({
                     position: "top",
                     title: 'Réussi!',
@@ -292,33 +294,50 @@
                     icon: 'success',
                     confirmButtonText: 'OK'
                 });
-                table.ajax.reload(null, false);
+                // Clear the form fields
+                $('#ajaxMembreForm')[0].reset();
+
+                // Reset the image preview
+                $('#previewImage').attr("src", "{{ asset('images/img.png') }}");
+                // Recharge la table ou autre action après le succès
+                location.reload();
                 button.innerHTML = originalContent;
                 button.disabled = false;
-              }
-          },
-          error: function(error) {
-              if (error) {
-                 console.log(error);
-                  $('#ImageMembreError').html(error.responseJSON.errors.image);
-                  $('#NumeroCarteMembreError').html(error.responseJSON.errors.numero_carte);
-                  $('#NomMembreError').html(error.responseJSON.errors.nom);
-                  $('#PrenomMembreError').html(error.responseJSON.errors.prenom);
-                  $('#CinMembreError').html(error.responseJSON.errors.cin);
-                  $('#DdnMembreError').html(error.responseJSON.errors.date_de_naissance);
-                  $('#LdnMembreError').html(error.responseJSON.errors.lieu_de_naissance);
-                  $('#EmailMembreError').html(error.responseJSON.errors.email);
-                  $('#AdresseMembreError').html(error.responseJSON.errors.adresse);
-                  $('#ContactPersonnelMembreError').html(error.responseJSON.errors.contact_personnel);
-                  $('#ProfessionMembreError').html(error.responseJSON.errors.profession);
-                  $('#FacebookMembreError').html(error.responseJSON.errors.facebook);
-                  $('#DateIncriptionMembreError').html(error.responseJSON.errors.date_inscription);
-                  button.innerHTML = originalContent;
-                  button.disabled = false;
-              }
-          }
-        });   
-      });
+            },
+            error: function(xhr) {
+                if (xhr.responseJSON && xhr.responseJSON.errors) {
+                    const errors = xhr.responseJSON.errors;
+                    $('#ImageMembreError').html(errors.photo ? errors.photo[0] : '');
+                    $('#NumeroCarteMembreError').html(errors.numero_carte ? errors.numero_carte[0] : '');
+                    $('#NomMembreError').html(errors.nom ? errors.nom[0] : '');
+                    $('#PrenomMembreError').html(errors.prenom ? errors.prenom[0] : '');
+                    $('#CinMembreError').html(errors.cin ? errors.cin[0] : '');
+                    $('#DdnMembreError').html(errors.date_de_naissance ? errors.date_de_naissance[0] : '');
+                    $('#LdnMembreError').html(errors.lieu_de_naissance ? errors.lieu_de_naissance[0] : '');
+                    $('#EmailMembreError').html(errors.email ? errors.email[0] : '');
+                    $('#GenreMembreError').html(errors.genre ? errors.genre[0] : '');
+                    $('#AdresseMembreError').html(errors.adresse ? errors.adresse[0] : '');
+                    $('#ContactPersonnelMembreError').html(errors.contact_personnel ? errors.contact_personnel[0] : '');
+                    $('#ContactTuteurMembreError').html(errors.contact_tuteur ? errors.contact_tuteur[0] : '');
+                    $('#ProfessionMembreError').html(errors.profession ? errors.profession[0] : '');
+                    $('#FacebookMembreError').html(errors.facebook ? errors.facebook[0] : '');
+                    $('#EtablissementMembreError').html(errors.etablissement ? errors.etablissement[0] : '');
+                    $('#AxesMembreError').html(errors.axes_id ? errors.axes_id[0] : '');
+                    $('#SectionMembreError').html(errors.sections_id ? errors.sections_id[0] : '');
+                    $('#FonctionMembreError').html(errors.fonctions_id ? errors.fonctions_id[0] : '');
+                    $('#FiliereMembreError').html(errors.filieres_id ? errors.filieres_id[0] : '');
+                    $('#NiveauMembreError').html(errors.levels_id ? errors.levels_id[0] : '');
+                    $('#DateIncriptionMembreError').html(errors.date_inscription ? errors.date_inscription[0] : '');
+                } else {
+                    console.log("Une erreur inconnue s'est produite.");
+                }
+                button.innerHTML = originalContent;
+                button.disabled = false;
+            }
+        });
+    });
+
+
     });
   </script>
 @endsection

@@ -85,17 +85,31 @@ class AxesController extends Controller
                 'message' => 'Axes non trouvée'
             ], 404);
         }
-
+    
         $data = $request->validated();
-
+    
+        // Vérifiez si le champ nom_axes est inclus dans les données validées
+        if (array_key_exists('nom_axes', $data)) {
+            // Récupérez l'instance actuelle de l'axe
+            $currentNomAxes = $axes->nom_axes;
+    
+            // Vérifiez si le nom_axes reste le même que l'actuel
+            if ($data['nom_axes'] === $currentNomAxes) {
+                // Si le nom_axes n'a pas changé, supprimez cette clé du tableau $data
+                unset($data['nom_axes']);
+            }
+        }
+    
+        // Mettez à jour l'axe avec les données validées (y compris le cas où nom_axes peut être exclu)
         $axes->update($data);
-
+    
         return response()->json([
             'success' => true,
             'message' => 'Axes mise à jour avec succès',
             'axes' => $axes
         ]);
     }
+    
 
     /**
      * Remove the specified resource from storage.

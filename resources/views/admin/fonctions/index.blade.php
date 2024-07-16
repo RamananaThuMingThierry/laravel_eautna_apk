@@ -7,31 +7,24 @@
 @endsection
 
 @section('contenu')
-    @include('admin.fonctions.form')
+    @include('widget.form_modal',[
+      'nom_form_modal' => 'fonction-form-modal',
+      'ids' => 'fonctions',
+      'formData' => 'ajaxFonctionForm',
+      'titre_formulaire' => 'titre-fonction-form-modal',
+      'input_id' => 'fonction_id',
+      'label_name' => 'Nom du fonction',
+      'input_name' => 'nom_fonctions',
+      'input_error_name' => 'ErreurNomFonction',
+      'btn_save' => 'btn-save-fonction-form-modal'
+    ])
 
-    <div class="row mt-2">
-      <div class="col-12 d-flex align-items-center justify-content-between mb-4">
-        <h1 class="text-warning">@yield('titre')</h1>
-        <button class="btn btn-sm btn-success shadow-sm d-flex align-items-center" id="btn-create-fonction-form-modal">
-          <i class="fas fa-plus p-1 text-white-50"></i>
-          <span class="d-none d-sm-inline">&nbsp;Nouvelle fonctions</span>
-        </button>
-      </div>
-    </div>
+    @include('widget.header_page', [
+      'titre' => 'Nouvelle fonctions',
+      'ids' => 'btn-create-fonction-form-modal'
+    ])
 
-    <div class="row">
-      <div class="col-12">
-        <div class="tabel-responsive">
-          <table id="datatables" class="table table-striped table-bordered display w-100">
-            <thead class="table-dark">
-              <th scope="col">Nom</th>
-              <th scope="col" class="text-center">Actions</th>
-            </thead>
-            <tbody>
-            </tbody>
-          </table>
-        </div></div>
-    </div>
+    @include('widget.body_page')
 @endsection
 
 @section('script')
@@ -147,7 +140,6 @@
       $('#btn-save-fonction-form-modal').dasabled = false;
       console.log("Le modal est ouvert");
       $('#titre-fonction-form-modal').html('Nouveau fonction');
-      $('#btn-save-fonction-form-modal').html('Enregistrer');
       $('#nom_fonctions').val("");
       $('.error-message').html(''); 
     });

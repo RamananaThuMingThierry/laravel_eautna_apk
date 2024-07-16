@@ -7,30 +7,24 @@
 @endsection
 
 @section('contenu')
-    @include('admin.filieres.form')
-    <div class="row mt-2">
-      <div class="col-12 d-flex align-items-center justify-content-between mb-4">
-        <h1 class="text-warning">@yield('titre')</h1>
-        <button class="btn btn-sm btn-success shadow-sm d-flex align-items-center" id="btn-create-filiere-form-modal">
-          <i class="fas fa-plus p-1 text-white-50"></i>
-          <span class="d-none d-sm-inline">&nbsp;Nouvelle filière</span>
-        </button>
-      </div>
-    </div>
+    @include('widget.form_modal',[
+      'nom_form_modal' => 'filiere-form-modal',
+      'ids' => 'filieres',
+      'formData' => 'ajaxFiliereForm',
+      'titre_formulaire' => 'titre-filiere-form-modal',
+      'input_id' => 'filiere_id',
+      'label_name' => 'Nom du filière',
+      'input_name' => 'nom_filieres',
+      'input_error_name' => 'ErreurNomFiliere',
+      'btn_save' => 'btn-save-filiere-form-modal'
+    ])
 
-    <div class="row">
-      <div class="col-12">
-        <div class="tabel-responsive">
-          <table id="datatables" class="table table-striped table-bordered display w-100">
-            <thead class="table-dark">
-              <th scope="col">Nom</th>
-              <th scope="col" class="text-center">Actions</th>
-            </thead>
-            <tbody>
-            </tbody>
-          </table>
-        </div></div>
-    </div>
+    @include('widget.header_page', [
+      'titre' => 'Nouvelle filière',
+      'ids' => 'btn-create-filiere-form-modal'
+    ])
+
+    @include('widget.body_page')
 @endsection
 
 @section('script')
@@ -146,7 +140,6 @@
       $('#btn-save-filiere-form-modal').dasabled = false;
       console.log("Le modal est ouvert");
       $('#titre-filiere-form-modal').html('Nouveau filière');
-      $('#btn-save-filiere-form-modal').html('Enregistrer');
       $('#nom_filieres').val("");
       $('.error-message').html(''); 
     });

@@ -7,31 +7,24 @@
 @endsection
 
 @section('contenu')
-    @include('admin.niveaux.form')
+    @include('widget.form_modal',[
+      'nom_form_modal' => 'niveau-form-modal',
+      'ids' => 'niveau',
+      'formData' => 'ajaxNiveauForm',
+      'titre_formulaire' => 'titre-niveau-form-modal',
+      'input_id' => 'niveau_id',
+      'label_name' => 'Nom du niveau',
+      'input_name' => 'nom_niveau',
+      'input_error_name' => 'ErreurNomNiveau',
+      'btn_save' => 'btn-save-niveau-form-modal'
+    ])
+    
+    @include('widget.header_page', [
+      'titre' => 'Nouveau niveau',
+      'ids' => 'btn-create-niveau-form-modal'
+    ])
 
-    <div class="row mt-2">
-      <div class="col-12 d-flex align-items-center justify-content-between mb-4">
-        <h1 class="text-warning">@yield('titre')</h1>
-        <button class="btn btn-sm btn-success shadow-sm d-flex align-items-center" id="btn-create-niveau-form-modal">
-          <i class="fas fa-plus p-1 text-white-50"></i>
-          <span class="d-none d-sm-inline">&nbsp;Nouveau niveau</span>
-        </button>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col-12">
-        <div class="tabel-responsive">
-          <table id="datatables" class="table table-striped table-bordered display w-100">
-            <thead class="table-dark">
-              <th scope="col">Nom</th>
-              <th scope="col" class="text-center">Actions</th>
-            </thead>
-            <tbody>
-            </tbody>
-          </table>
-        </div></div>
-    </div>
+    @include('widget.body_page')
 @endsection
 
 @section('script')
@@ -139,7 +132,6 @@
       $('#btn-save-niveau-form-modal').dasabled = false;
       console.log("Le modal est ouvert");
       $('#titre-niveau-form-modal').html('Nouveau niveau');
-      $('#btn-save-niveau-form-modal').html('Enregistrer');
       $('#nom_niveau').val("");
       $('.error-message').html(''); 
     });

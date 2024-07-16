@@ -4,16 +4,24 @@
   $error ??= '';
   $column ??= 'col-md-6';
   $collection ??= [];
+  $nullable ??= false;
 ?>
 
 <div class="{{ $column }}">
   <div class="form-group">
-    <label for="{{ $nom}}" class="fw-bold text-muted">{{ $label }}</label>
-    <select name="{{ $nom }}" id="{{ $nom }}" class="rounded-0 form-control">
-      @foreach ($collection as $key => $valeur)
-          <option value="{{ $key }}">{{ $valeur }}</option>
-      @endforeach
-    </select>
-    <span class="text-danger error-message" id="{{ $error }}"></span>
+      <label for="{{ $nom }}">{{ $label }}</label>
+      <select name="{{ $nom }}" id="{{ $nom }}" class="form-control">
+          @if(isset($nullable) && $nullable)
+              <option value="">-- Aucun(e) --</option>
+          @endif
+          @foreach($collection as $key => $value)
+              <option value="{{ $key }}" {{ old($nom) == $key ? 'selected' : '' }}>
+                  {{ $value }}
+              </option>
+          @endforeach
+      </select>
+      @if ($errors->has($nom))
+          <span class="text-danger error-message">{{ $errors->first($nom) }}</span>
+      @endif
   </div>
 </div>

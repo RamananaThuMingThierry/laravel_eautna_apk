@@ -3,15 +3,16 @@
 namespace App\Http\Controllers\WEB;
 
 use Exception;
+use App\Models\Axes;
 use App\Models\Level;
 use App\Models\Membres;
 use App\Models\Filieres;
+use App\Models\Sections;
 use App\Models\Fonctions;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\MembresRquest;
-use App\Models\Axes;
-use App\Models\Sections;
+use Illuminate\Support\Facades\File;
+use App\Http\Requests\MembresRequest;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -71,35 +72,41 @@ class MembresController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(MembresRquest $request)
+    public function store(MembresRequest $request)
     {
         $data = $request->validated();
-
+    
         $membre = Membres::withTrashed()
             ->where('numero_carte', $data['numero_carte'])
             ->where('nom', $data['nom'])
             ->where('prenom', $data['prenom'])
             ->first();
     
-        if ($request->hasFile('image')) {
-            if ($membre->image) {
-                Storage::delete('public/images/'.$membre->image);
+            if ($request->hasFile('photo')) {
+                if ($membre && $membre->image) {
+                    $imagePath = public_path('images/' . $membre->image);
+                    if (File::exists($imagePath)) {
+                        File::delete($imagePath);
+                    }
+                }
+                $image = $request->file('photo');
+                $imageName = time() . '.' . $image->getClientOriginalExtension();
+                $image->move(public_path('images'), $imageName);
+                $data['image'] = $imageName;
             }
-            $imageName = time().'.'.$request->image->extension();
-            $request->image->storeAs('public/images', $imageName);
-            $data['image'] = $imageName;
-        }
-
+    
         if ($membre) {
             $membre->restore();
             $membre->update($data);
         } else {
             Membres::create($data);
         }
+    
         return response()->json([
-            'message' => 'Création réuissi!'
+            'message' => 'Création réussie!'
         ], 200);
     }
+    
 
     /**
      * Display the specified resource.

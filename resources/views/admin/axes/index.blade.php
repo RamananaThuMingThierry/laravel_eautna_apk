@@ -7,30 +7,24 @@
 @endsection
 
 @section('contenu')
-    @include('admin.axes.form')
-    <div class="row mt-2">
-      <div class="col-12 d-flex align-items-center justify-content-between mb-4">
-        <h1 class="text-warning">@yield('titre')</h1>
-        <button class="btn btn-sm btn-success shadow-sm d-flex align-items-center" id="btn-create-axes-form-modal">
-          <i class="fas fa-plus p-1 text-white-50"></i>
-          <span class="d-none d-sm-inline">&nbsp;Nouvelle axes</span>
-        </button>
-      </div>
-    </div>
+    @include('widget.form_modal',[
+      'nom_form_modal' => 'axes-form-modal',
+      'ids' => 'axes',
+      'formData' => 'ajaxAxesForm',
+      'titre_formulaire' => 'titre-axes-form-modal',
+      'input_id' => 'axes_id',
+      'label_name' => 'Nom axes',
+      'input_name' => 'nom_axes',
+      'input_error_name' => 'ErreurNomaxes',
+      'btn_save' => 'btn-save-axes-form-modal'
+    ])
+    
+    @include('widget.header_page', [
+      'titre' => 'Nouvelle axes',
+      'ids' => 'btn-create-axes-form-modal'
+    ])
 
-    <div class="row">
-      <div class="col-12">
-        <div class="tabel-responsive">
-          <table id="datatables" class="table table-striped table-bordered display w-100">
-            <thead class="table-dark">
-              <th scope="col">Nom</th>
-              <th scope="col" class="text-center">Actions</th>
-            </thead>
-            <tbody>
-            </tbody>
-          </table>
-        </div></div>
-    </div>
+    @include('widget.body_page')
 @endsection
 
 @section('script')
@@ -146,7 +140,6 @@
       $('#btn-save-axes-form-modal').dasabled = false;
       console.log("Le modal est ouvert");
       $('#titre-axes-form-modal').html('Nouvelle axes');
-      $('#btn-save-axes-form-modal').html('Enregistrer');
       $('#nom_axes').val("");
       $('.error-message').html(''); 
     });
@@ -163,7 +156,7 @@
               console.log(response.axes.nom_axes);
               $('.axes-form-modal').modal('show');
               $('#titre-axes-form-modal').html('Modifier une filière');
-              $('#btn-save-axes-form-modal').html('Modifier');
+              $('#btn-save-axes-form-modal').html('<i class="fas fa-edit"></i>&nbsp;Modifier');
               $('#axes_id').val(response.axes.id);
               $('#nom_axes').val(response.axes.nom_axes);
               $('.error-message').html('');
@@ -300,7 +293,6 @@
             });
         }
     });
-
 
     $('#btnAnnuler').click(function(){
       $('.axes-form-modal').modal('hide');

@@ -22,15 +22,18 @@ class AxesRequest extends FormRequest
      */
     public function rules(): array
     {
+        $axisId = $this->route('axes'); // Récupère l'ID de l'axe de la route
+
         return [
             'nom_axes' => [
                 'required',
                 'string',
                 'max:100',
-                Rule::unique('axes')->ignore($this->route('axes'))->whereNull('deleted_at')
+                Rule::unique('axes')->ignore($axisId)->whereNull('deleted_at')
             ]
         ];
     }
+
     
     public function messages()
     {
