@@ -89,6 +89,15 @@ class NiveauController extends Controller
 
         $data = $request->validated();
 
+        // Vérifier si le nom_niveau a changé
+        if ($data['nom_niveau'] === $niveau->nom_niveau) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Aucune modification apportée',
+                'niveau' => $niveau
+            ]);
+        }
+
         $niveau->update($data);
 
         return response()->json([

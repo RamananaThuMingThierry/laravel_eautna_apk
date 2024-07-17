@@ -5,8 +5,9 @@ namespace App\Http\Controllers\WEB;
 use Exception;
 use App\Models\Axes;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use App\Http\Requests\AxesRequest;
+use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
 use Yajra\DataTables\Facades\DataTables;
 
 class AxesController extends Controller
@@ -87,20 +88,16 @@ class AxesController extends Controller
         }
     
         $data = $request->validated();
-    
-        // Vérifiez si le champ nom_axes est inclus dans les données validées
-        if (array_key_exists('nom_axes', $data)) {
-            // Récupérez l'instance actuelle de l'axe
-            $currentNomAxes = $axes->nom_axes;
-    
-            // Vérifiez si le nom_axes reste le même que l'actuel
-            if ($data['nom_axes'] === $currentNomAxes) {
-                // Si le nom_axes n'a pas changé, supprimez cette clé du tableau $data
-                unset($data['nom_axes']);
-            }
+
+         // Vérifier si le nom_axes a changé
+        if ($data['nom_axes'] === $axes->nom_axes) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Aucune modification apportée',
+                'axes' => $axes
+            ]);
         }
-    
-        // Mettez à jour l'axe avec les données validées (y compris le cas où nom_axes peut être exclu)
+        
         $axes->update($data);
     
         return response()->json([

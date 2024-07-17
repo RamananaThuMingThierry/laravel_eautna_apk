@@ -88,6 +88,15 @@ class FilieresController extends Controller
 
         $data = $request->validated();
 
+        // Vérifier si le nom_filieres a changé
+        if ($data['nom_filieres'] === $filiere->nom_filieres) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Aucune modification apportée',
+                'filiere' => $filiere
+            ]);
+        }
+
         $filiere->update($data);
 
         return response()->json([

@@ -82,18 +82,18 @@ class MembresController extends Controller
             ->where('prenom', $data['prenom'])
             ->first();
     
-            if ($request->hasFile('photo')) {
-                if ($membre && $membre->image) {
-                    $imagePath = public_path('images/' . $membre->image);
-                    if (File::exists($imagePath)) {
-                        File::delete($imagePath);
-                    }
+        if ($request->hasFile('photo')) {
+            if ($membre && $membre->image) {
+                $imagePath = public_path('images/' . $membre->image);
+                if (File::exists($imagePath)) {
+                    File::delete($imagePath);
                 }
-                $image = $request->file('photo');
-                $imageName = time() . '.' . $image->getClientOriginalExtension();
-                $image->move(public_path('images'), $imageName);
-                $data['image'] = $imageName;
             }
+            $image = $request->file('photo');
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('images'), $imageName);
+            $data['image'] = $imageName;
+        }
     
         if ($membre) {
             $membre->restore();

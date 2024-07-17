@@ -144,7 +144,7 @@
       $('.error-message').html(''); 
     });
 
-    // Modifier une filière
+    // Modifier un axes
     $('body').on('click', '#btn-edit-axes-form-modal', function() {
         var axes_id = $(this).data('id');
         var url = '{{ route("admin.axes.edit", ":id") }}';
@@ -155,7 +155,7 @@
             success: function(response) {
               console.log(response.axes.nom_axes);
               $('.axes-form-modal').modal('show');
-              $('#titre-axes-form-modal').html('Modifier une filière');
+              $('#titre-axes-form-modal').html('Modifier un axe');
               $('#btn-save-axes-form-modal').html('<i class="fas fa-edit"></i>&nbsp;Modifier');
               $('#axes_id').val(response.axes.id);
               $('#nom_axes').val(response.axes.nom_axes);
@@ -224,8 +224,11 @@
         button.innerHTML = loadingContent;
         button.disabled = true;
         var axes_id = $('#axes_id').val();
+        
+        console.log("Identifiant : " + axes_id);
 
         if (axes_id) {
+            console.log("Je suis dans la modification");
             var url = '{{ route("admin.axes.update", ":id") }}';
             url = url.replace(':id', axes_id);
             $.ajax({

@@ -121,7 +121,7 @@
                 'nom' => 'sections_id',
                 'label' => 'Section',
                 'collection' => $sections,
-                'error' => 'SectionMembreError',
+                'error' => 'SectionMembreError'
               ])
             </div>
           </div>

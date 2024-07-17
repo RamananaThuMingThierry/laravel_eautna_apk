@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Foundation\Http\FormRequest;
 
 class AxesRequest extends FormRequest
@@ -22,18 +23,17 @@ class AxesRequest extends FormRequest
      */
     public function rules(): array
     {
-        $axisId = $this->route('axes'); // Récupère l'ID de l'axe de la route
+        $id = $this->route('axe'); // Récupère l'ID de l'axe de la route
 
         return [
             'nom_axes' => [
                 'required',
                 'string',
                 'max:100',
-                Rule::unique('axes')->ignore($axisId)->whereNull('deleted_at')
+                Rule::unique('axes')->ignore($id, 'id')->whereNull('deleted_at')
             ]
         ];
     }
-
     
     public function messages()
     {

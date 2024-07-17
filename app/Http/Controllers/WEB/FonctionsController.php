@@ -89,6 +89,15 @@ class FonctionsController extends Controller
 
         $data = $request->validated();
 
+        // Vérifier si le nom_fonctions a changé
+        if ($data['nom_fonctions'] === $fonction->nom_fonctions) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Aucune modification apportée',
+                'fonction' => $fonction
+            ]);
+        }
+
         $fonction->update($data);
 
         return response()->json([
