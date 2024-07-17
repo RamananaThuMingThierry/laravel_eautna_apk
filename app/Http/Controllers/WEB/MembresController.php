@@ -23,32 +23,33 @@ class MembresController extends Controller
      */
     public function index(Request $request)
     {
-        try{
+        try {
             if ($request->ajax()) {
-                $membres = Membres::select(['id','numero_carte','nom', 'prenom','contact_personnel']);
+                $membres = Membres::select(['id', 'image', 'numero_carte', 'nom', 'prenom', 'contact_personnel']);
                 return DataTables::of($membres)
-                    ->addColumn('action', function($row){
+                    ->addColumn('action', function ($row) {
                         return '<div class="d-flex justify-content-center">
-                            <a href="javascript:void(0)" class="btn btn-primary btn-sm btn-inline" title="Modifier" id="btn-edit-niveau-form-modal" data-id="'.$row->id.'">
+                            <a href="/admin/membres/'.$row->id.'" class="btn btn-warning btn-sm btn-inline" title="Voir" data-id="' . $row->id . '">
+                                <i class="fa fa-eye"></i>
+                            </a>
+                            <a href="javascript:void(0)" class="btn btn-primary btn-sm btn-inline ms-1" title="Modifier" id="btn-edit-membre-form-modal" data-id="' . $row->id . '">
                                 <i class="fa fa-edit"></i>
                             </a>
-                            <a href="javascript:void(0)" class="btn btn-danger btn-sm btn-inline ms-1" title="Supprimer" id="btn-delete-niveau-form-modal" data-id="'.$row->id.'">
+                            <a href="javascript:void(0)" class="btn btn-danger btn-sm btn-inline ms-1" title="Supprimer" id="btn-delete-membre-form-modal" data-id="' . $row->id . '">
                                 <i class="fa fa-trash"></i>
                             </a>
-                        </div>
-                        ';
+                        </div>';
                     })
                     ->rawColumns(['action'])
                     ->make(true);
             }
-            
-           
     
             return view('admin.membres.index');
         } catch (Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
+    
 
     /**
      * Show the form for creating a new resource.
@@ -111,10 +112,16 @@ class MembresController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
-        //
+        try {
+            $membre = Membres::findOrFail($id);
+            return view('admin.membres.show', compact('membre'));
+        } catch (Exception $e) {
+            return redirect()->route('admin.membres.index')->with('error', $e->getMessage());
+        }
     }
+    
 
     /**
      * Show the form for editing the specified resource.
