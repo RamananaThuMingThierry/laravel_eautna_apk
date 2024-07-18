@@ -431,7 +431,6 @@
         }
     });
 
-
     });
   </script>
 @endsection

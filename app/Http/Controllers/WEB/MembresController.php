@@ -30,13 +30,13 @@ class MembresController extends Controller
                 return DataTables::of($membres)
                     ->addColumn('action', function ($row) {
                         return '<div class="d-flex justify-content-center">
-                            <a href="/admin/membres/'.$row->id.'" class="btn btn-warning btn-sm btn-inline" title="Voir" data-id="' . $row->id . '">
+                            <a href="/admin/membres/'.$row->id.'" class="btn btn-warning btn-sm btn-inline" title="Voir un membre">
                                 <i class="fa fa-eye"></i>
                             </a>
-                            <a href="/admin/membres/'.$row->id.'/edit" class="btn btn-primary btn-sm btn-inline ms-1" title="Modifier" data-id="' . $row->id . '">
+                            <a href="/admin/membres/'.$row->id.'/edit" class="btn btn-primary btn-sm btn-inline ms-1" title="Modifier un membre">
                                 <i class="fa fa-edit"></i>
                             </a>
-                            <a href="javascript:void(0)" class="btn btn-danger btn-sm btn-inline ms-1" title="Supprimer" id="btn-delete-membre-form-modal" data-id="' . $row->id . '">
+                            <a href="javascript:void(0)" type="button" class="btn btn-danger btn-sm btn-inline ms-1" title="Supprimer un membre" id="btn-delete-membre-form-modal" data-id="'.$row->id.'">
                                 <i class="fa fa-trash"></i>
                             </a>
                         </div>';
@@ -200,6 +200,20 @@ class MembresController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $membre = Membres::find($id);
+
+        if (!$membre) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Membre non trouvée'
+            ], 404);
+        }
+
+        $membre->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Membre supprimée avec succès'
+        ]);
     }
 }

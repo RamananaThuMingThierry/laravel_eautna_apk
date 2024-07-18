@@ -141,6 +141,50 @@ $(document).ready(function(){
       });
     }
   });
+
+  $('body').on('click', '#btn-delete-membre-form-modal', function() {
+        var membre_id = $(this).data('id');
+        var url = '{{ route("admin.membres.destroy", ":id") }}';
+        url = url.replace(':id', membre_id);
+
+        Swal.fire({
+          title: 'Êtes-vous sûr?',
+          text: "Voulez-vous vraiment supprimer ce membre?",
+          icon: 'error',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          cancelButtonText: 'Annuler',
+          confirmButtonText: 'Oui, supprimer!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+              $.ajax({
+                  url: url,
+                  method: 'DELETE',
+                  headers: {
+                      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                  },
+                  success: function(response) {
+                      if (response.success) {
+                          Swal.fire(
+                              'Supprimé!',
+                              response.message,
+                              'success'
+                          );
+                          table.ajax.reload(null, false);
+                      }
+                  },
+                  error: function(error) {
+                      Swal.fire(
+                          'Erreur!',
+                          'Une erreur s\'est produite lors de la suppression.',
+                          'error'
+                      );
+                  }
+              });
+            }
+        });
+    });
 });
 
 </script> 
