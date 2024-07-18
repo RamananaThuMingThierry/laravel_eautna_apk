@@ -28,7 +28,7 @@
               Membres
           </a>
           <div class="sb-sidenav-menu-heading">ADMIN</div>
-          <a class="nav-link" href="charts.html">
+          <a class="nav-link" href="{{ route('admin.utilisateurs.index') }}">
               <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
               Utilisateurs
           </a>
