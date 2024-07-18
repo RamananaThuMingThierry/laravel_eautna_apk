@@ -5,6 +5,7 @@
   $column ??= 'col-md-6';
   $collection ??= [];
   $nullable ??= false;
+  $valeur ??= '';
 ?>
 
 <div class="{{ $column }}">
@@ -15,7 +16,7 @@
               <option value="">-- Aucun(e) --</option>
           @endif
           @foreach($collection as $key => $value)
-              <option value="{{ $key }}" {{ old($nom) == $key ? 'selected' : '' }}>
+              <option value="{{ $key }}" {{ $valeur == $key ? 'selected' : '' }}>
                   {{ $value }}
               </option>
           @endforeach

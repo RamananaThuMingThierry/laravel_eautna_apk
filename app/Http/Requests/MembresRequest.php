@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Validation\Rule;
 use App\Rules\UniqueNomEtPrenom;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -24,24 +25,26 @@ class MembresRequest extends FormRequest
      */
     public function rules(): array
     {
-        $encryptedId = $this->route('membre');
-        $membreId = $encryptedId == null ? null : Crypt::decryptString($encryptedId);
+        $id = $this->route('membre');
+        Log::info("Identifiant membre : ". $id);
+        
+        // $membreId = $encryptedId == null ? null : Crypt::decryptString($encryptedId);
 
         return [
             'photo' => ['nullable', 'image','mimes:jpeg,png,jpg','max:4096'],
             'numero_carte' => ['required', 'numeric','min:1'],
             'nom' => ['required', 'string'],
-            'prenom' => ['nullable', new UniqueNomEtPrenom($this->input('prenom'), $this->input('nom'), $membreId)],
+            'prenom' => ['nullable', new UniqueNomEtPrenom($this->input('prenom'), $this->input('nom'), $id)],
             'date_de_naissance' => ['required', 'date', 'after_or_equal:1900-01-01', 'before_or_equal:today'],
             'lieu_de_naissance' => ['required', 'string'],
             'genre' => ['required'],
-            'cin' => ['nullable', 'string', 'size:12', Rule::unique('membres')->ignore($membreId)], 
+            'cin' => ['nullable', 'string', 'size:12', Rule::unique('membres')->ignore($id)], 
             'adresse' => ['required', 'string'],
             'profession' => ['required','string'],
             'etablissement' => ['nullable','string'],
-            'email' => ['nullable', 'email', Rule::unique('membres')->ignore($membreId)],
-            'contact_personnel' => ['required', 'size:10', 'regex:/^0(32|33|34|38)\d{7}$/'],
-            'contact_tuteur' => ['nullable', 'size:10', 'regex:/^0(32|33|34|38)\d{7}$/'],
+            'email' => ['nullable', 'email', Rule::unique('membres')->ignore($id)],
+            'contact_personnel' => ['required', 'size:10', 'regex:/^0(32|33|34|37|38)\d{7}$/'],
+            'contact_tuteur' => ['nullable', 'size:10', 'regex:/^0(32|33|34|37|38)\d{7}$/'],
             'facebook' => ['nullable', 'string'],
             'date_inscription' => ['required', 'date','after_or_equal:2013-01-01', 'before_or_equal:today'],
             'axes_id' => ['nullable', 'integer'],
@@ -87,10 +90,10 @@ class MembresRequest extends FormRequest
             'email.unique' => 'Cette adresse email est déjà utilisée.',
             'contact_personnel.required' => 'Le contact personnel est obligatoire.',
             'contact_personnel.size' => 'Le contact personnel doit être de 10 caractères.',
-            'contact_personnel.regex' => 'Le contact personnel doit commencer par 032, 033, 034 ou 038 suivi de 7 chiffres.',
+            'contact_personnel.regex' => 'Le contact personnel doit commencer par 032, 033, 034, 037 ou 038 suivi de 7 chiffres.',
             'contact_tuteur.nullable' => 'Le contact tuteur est facultatif.',
             'contact_tuteur.size' => 'Le contact tuteur doit être de 10 caractères.',
-            'contact_tuteur.regex' => 'Le contact tuteur doit commencer par 032, 033, 034 ou 038 suivi de 7 chiffres.',
+            'contact_tuteur.regex' => 'Le contact tuteur doit commencer par 032, 033, 034, 037 ou 038 suivi de 7 chiffres.',
             'facebook.nullable' => 'Le Facebook est facultatif.',
             'facebook.string' => 'Le Facebook doit être une chaîne de caractères.',
             'date_inscription.required' => 'La date d\'inscription est obligatoire.',

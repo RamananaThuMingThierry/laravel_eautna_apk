@@ -10,6 +10,7 @@ use App\Models\Filieres;
 use App\Models\Sections;
 use App\Models\Fonctions;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
 use App\Http\Requests\MembresRequest;
@@ -32,7 +33,7 @@ class MembresController extends Controller
                             <a href="/admin/membres/'.$row->id.'" class="btn btn-warning btn-sm btn-inline" title="Voir" data-id="' . $row->id . '">
                                 <i class="fa fa-eye"></i>
                             </a>
-                            <a href="javascript:void(0)" class="btn btn-primary btn-sm btn-inline ms-1" title="Modifier" id="btn-edit-membre-form-modal" data-id="' . $row->id . '">
+                            <a href="/admin/membres/'.$row->id.'/edit" class="btn btn-primary btn-sm btn-inline ms-1" title="Modifier" data-id="' . $row->id . '">
                                 <i class="fa fa-edit"></i>
                             </a>
                             <a href="javascript:void(0)" class="btn btn-danger btn-sm btn-inline ms-1" title="Supprimer" id="btn-delete-membre-form-modal" data-id="' . $row->id . '">
@@ -56,12 +57,14 @@ class MembresController extends Controller
      */
     public function create()
     {
+        $membre = new Membres();
         $axes = Axes::pluck('nom_axes', 'id')->toArray();
         $sections = Sections::pluck('nom_sections', 'id')->toArray();
         $filieres = Filieres::pluck('nom_filieres', 'id')->toArray();
         $fonctions = Fonctions::pluck('nom_fonctions', 'id')->toArray();
         $levels = Level::pluck('nom_niveau', 'id')->toArray();
         return View("admin.membres.form", [
+            'membre' => $membre,
             'axes' => $axes,
             'sections' => $sections,
             'filieres' => $filieres,
@@ -116,6 +119,9 @@ class MembresController extends Controller
     {
         try {
             $membre = Membres::findOrFail($id);
+            if(!$membre){
+                abort(404);
+            }
             return view('admin.membres.show', compact('membre'));
         } catch (Exception $e) {
             return redirect()->route('admin.membres.index')->with('error', $e->getMessage());
@@ -128,15 +134,65 @@ class MembresController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $axes = Axes::pluck('nom_axes', 'id')->toArray();
+        $sections = Sections::pluck('nom_sections', 'id')->toArray();
+        $filieres = Filieres::pluck('nom_filieres', 'id')->toArray();
+        $fonctions = Fonctions::pluck('nom_fonctions', 'id')->toArray();
+        $levels = Level::pluck('nom_niveau', 'id')->toArray();
+
+        try {
+            $membre = Membres::findOrFail($id);
+            if(!$membre){
+                abort(404);
+            }
+            return View("admin.membres.form", [
+                'axes' => $axes,
+                'sections' => $sections,
+                'filieres' => $filieres,
+                'fonctions' => $fonctions,
+                'levels' => $levels,
+                'membre' => $membre
+            ]);
+        } catch (Exception $e) {
+            return redirect()->route('admin.membres.index')->with('error', $e->getMessage());
+        }
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(MembresRequest $request, string $id)
     {
-        //
+        try {
+            $membre = Membres::findOrFail($id);
+            if(!$membre){
+                abort(404);
+            }
+            
+            $data = $request->all();
+
+            if ($request->hasFile('photo')) {
+                if ($membre && $membre->image) {
+                    $imagePath = public_path('images/' . $membre->image);
+                    if (File::exists($imagePath)) {
+                        File::delete($imagePath);
+                    }
+                }
+                $image = $request->file('photo');
+                $imageName = time() . '.' . $image->getClientOriginalExtension();
+                $image->move(public_path('images'), $imageName);
+                $data['image'] = $imageName;
+            }
+        
+            $membre->update($data);
+        
+            return response()->json([
+                'success' => true,
+                'message' => 'Modification réussie!'
+            ], 200);
+        } catch (Exception $e) {
+            return redirect()->route('admin.membres.index')->with('error', $e->getMessage());
+        }
     }
 
     /**

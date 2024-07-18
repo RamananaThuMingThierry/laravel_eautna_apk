@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('email')->nullable();
             $table->string('genre');
             $table->string('etablissement')->nullable();
+            $table->string('profession');
             $table->string('contact_personnel');
             $table->string('contact_tuteur')->nullable();
             $table->boolean("sympathisant");

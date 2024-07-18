@@ -25,6 +25,7 @@ class Membres extends Model
         "cin",
         "genre",
         'email',
+        "profession",
         "etablissement",
         "contact_personnel",
         "contact_tuteur",
