@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Yajra\DataTables\Facades\DataTables;
+use App\Models\Fonctions;
 
 class UserController extends Controller
 {
@@ -21,7 +22,7 @@ class UserController extends Controller
                 return DataTables::of($utilisateurs)
                     ->addColumn('action', function ($row) {
                         return '<div class="d-flex justify-content-center">
-                            <a href="/admin/utilisateurs/'.$row->id.'" class="btn btn-warning btn-sm btn-inline" title="Voir un utilisateur">
+                            <a href="javascript:void(0)" class="btn btn-warning btn-sm btn-inline" id="btn-show-utilisateur-modal" data-id="'.$row->id.'" title="Voir un utilisateur">
                                 <i class="fa fa-eye"></i>
                             </a>
                             <a href="/admin/utilisateurs/'.$row->id.'/edit" class="btn btn-primary btn-sm btn-inline ms-1" title="Modifier un utilisateur">
@@ -63,7 +64,14 @@ class UserController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $user = User::find($id);
+        if(!$user){
+            abort(404);
+        }
+        return response()->json([
+            'success' => true,
+            'user' => $user
+        ]);
     }
 
     /**

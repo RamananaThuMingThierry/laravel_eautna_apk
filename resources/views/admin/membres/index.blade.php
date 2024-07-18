@@ -59,11 +59,11 @@
           },
           className: 'text-center' // Centrer cette colonne
         },
-        { data: 'numero_carte', className: 'text-center' }, // Centrer cette colonne
-        { data: 'nom', className: 'text-center' }, // Centrer cette colonne
-        { data: 'prenom', className: 'text-center' }, // Centrer cette colonne
-        { data: 'contact_personnel', className: 'text-center' }, // Centrer cette colonne
-        { data: 'action', name: 'action', orderable: false, searchable: false, className: 'text-center' } // Centrer cette colonne
+        { data: 'numero_carte', className: 'text-center pt-4' }, // Centrer cette colonne
+        { data: 'nom', className: 'text-center pt-4' }, // Centrer cette colonne
+        { data: 'prenom', className: 'text-center pt-4' }, // Centrer cette colonne
+        { data: 'contact_personnel', className: 'text-center pt-4' }, // Centrer cette colonne
+        { data: 'action', name: 'action', orderable: false, searchable: false, className: 'text-center pt-4' } // Centrer cette colonne
       ],
       dom: '<"row"<"col-sm-6"B><"col-sm-6">>' +
         '<"row mt-2"<"col-sm-6"l><"col-sm-6"f>>' +
