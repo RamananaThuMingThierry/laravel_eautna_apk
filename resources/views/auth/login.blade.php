@@ -36,7 +36,7 @@
                  <input type="checkbox" id="remember" name="remember">
                  <label for="remember">Souvient de moi</label>
                </div>
-               <a href="#" type="button" class="text-decoration-none">Mot de passe oublier</a>
+               <a href="{{ route('password.request') }}" type="button" class="text-decoration-none">Mot de passe oublier</a>
               </div>
             </div>
             <div class="form-group">
