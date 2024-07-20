@@ -29,5 +29,31 @@
         </div>
         @include('admin.layouts.script')
         @yield('script')
+        <script>
+            document.getElementById('logout-link').addEventListener('click', function(event) {
+                event.preventDefault();
+          
+                Swal.fire({
+                    title: 'Êtes-vous sûr ?',
+                    text: "Vous allez être déconnecté.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Oui, déconnectez-moi!',
+                    cancelButtonText: 'Annuler'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        var logoutForm = document.createElement('form');
+                        logoutForm.action = "{{ route('admin.logout') }}";
+                        logoutForm.method = 'POST';
+                        logoutForm.style.display = 'none';
+                        logoutForm.innerHTML = '@csrf';
+                        document.body.appendChild(logoutForm);
+                        logoutForm.submit();
+                    }
+                });
+            });
+          </script> 
     </body>
 </html>

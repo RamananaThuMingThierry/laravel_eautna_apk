@@ -4,10 +4,11 @@ namespace App\Http\Controllers\WEB;
 
 use Exception;
 use App\Models\User;
+use App\Models\Fonctions;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
-use App\Models\Fonctions;
 
 class UserController extends Controller
 {
@@ -42,23 +43,6 @@ class UserController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
     /**
      * Display the specified resource.
      */
@@ -77,9 +61,15 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function waiting()
     {
-        //
+        if(Auth::check()){
+            if(Auth::user()->status == false){
+                return View('auth.waiting');
+            }
+        }else{
+            return redirect(route('login'))->with('error', 'Veuillez vous connecter, s\'il vous plaît!');
+        }
     }
 
     /**
@@ -96,5 +86,12 @@ class UserController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function logout(Request $request){
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return redirect('/');
     }
 }

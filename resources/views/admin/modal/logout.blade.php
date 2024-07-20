@@ -13,7 +13,7 @@ aria-hidden="true">
         </div>
         <div class="modal-footer">
             <button class="btn btn-danger rounded-0" type="button" data-dismiss="modal">Annuler</button>
-            <form action="{{ route('logout') }}" method="post" class="d-inline">
+            <form action="{{ route('admin.logout') }}" method="post" class="d-inline">
                 @csrf
                 @method('POST')
                 <button type="submit" class="btn btn-primary rounded-0">Se déconnecter</button>

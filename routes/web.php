@@ -12,17 +12,31 @@ use App\Http\Controllers\WEB\FonctionsController;
 use App\Http\Controllers\WEB\ResetPasswordController;
 use App\Http\Controllers\WEB\ForgetPasswordController;
 
-Route::get('/', [LoginController::class, 'login'])->name('login');
-Route::get('/inscription', [RegisterController::class, 'showRegistrationForm'])->name('inscription');
-Route::post('/inscription', [RegisterController::class, 'register'])->name('register.post');
+Route::group(['middleware' => 'guest'], function () {
+    Route::get('/', [LoginController::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [LoginController::class, 'login'])->name('login.post');
+    Route::get('/inscription', [RegisterController::class, 'showRegistrationForm'])->name('inscription');
+    Route::post('/inscription', [RegisterController::class, 'register'])->name('inscription.post');
 
-Route::get('/mot-de-passe-oublie', [ForgetPasswordController::class, 'showLinkRequestForm'])->name('password.request');
-Route::get('reset-password', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
-Route::prefix('admin')->name('admin.')->group(function () {
+    Route::get('/mot-de-passe-oublie', [ForgetPasswordController::class, 'showLinkRequestForm'])->name('password.request');
+    Route::get('reset-password', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
+});
+
+
+Route::middleware('auth')->group(function () {
+    Route::get('/utilisateur-en-attente', [UserController::class, 'waiting'])->name('status.not.approuved');
+});
+
+Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () {
+    Route::post('/se-deconnecter', [UserController::class, 'logout'])->name('logout');
     Route::resource('utilisateurs', UserController::class);
     Route::resource('axes', AxesController::class);
     Route::resource('filieres', FilieresController::class);
     Route::resource('fonctions', FonctionsController::class);
     Route::resource('niveaux', NiveauController::class);
     Route::resource('membres', MembresController::class);
+});
+
+Route::fallback(function () {
+    return response()->view('errors.404', [], 404);
 });

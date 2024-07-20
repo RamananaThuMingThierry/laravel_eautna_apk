@@ -188,7 +188,7 @@
             'column' => 'col-md-4',
             'type' => 'number',
             'nom' => 'contact_tuteur',
-            'label' => 'Contact Tuteur (Parent)',
+            'label' => 'Contact en cas d\'urgence',
             'valeur' => $membre->contact_tuteur,
             'error' => 'ContactTuteurMembreError',
           ])

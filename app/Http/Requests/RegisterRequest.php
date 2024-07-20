@@ -26,7 +26,7 @@ class RegisterRequest extends FormRequest
             'email' => ['required','email','string','max:255','unique:users'],
             'contact' =>  ['required','size:10','regex:/^0(32|33|34|37|38)\d{7}$/'],
             'adresse' => ['required','string'],
-            'password' => ['required','string','min:8','confirmed']
+            'password' => ['required','string','min:8']
         ];
     }
 
@@ -48,8 +48,7 @@ class RegisterRequest extends FormRequest
             'adresse.string' => 'L\'adresse doit être une chaîne de caractères.',
             'password.required' => 'Le mot de passe est obligatoire.',
             'password.string' => 'Le mot de passe doit être une chaîne de caractères.',
-            'password.min' => 'Le mot de passe doit contenir au moins 8 caractères.',
-            'password.confirmed' => 'La confirmation du mot de passe ne correspond pas.',
+            'password.min' => 'Le mot de passe doit contenir au moins 8 caractères.'
         ];
     }
 }

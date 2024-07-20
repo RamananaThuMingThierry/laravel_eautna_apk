@@ -35,7 +35,7 @@ class User extends Authenticatable
         "roles",
         "status",
         'email',
-        'mot_de_passe',
+        'password',
     ];
 
     /**
@@ -44,7 +44,7 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $hidden = [
-        'mot_de_passe',
+        'password',
         'remember_token',
     ];
 
@@ -55,6 +55,7 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'mot_de_passe' => 'hashed',
+        'password' => 'hashed',
+        'status' => 'bool'
     ];
 }

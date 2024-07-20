@@ -20,13 +20,9 @@ class RegisterController extends Controller
     {
         $data = $request->validated();
 
-        $user = User::create([
-            'pseudo' => $request->pseudo,
-            'contact' => $request->contact,
-            'adresse' => $request->adresse,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+        $data['password'] = Hash::make($data['password']);
+
+        $user = User::create($data);
 
         Auth::login($user);
 
