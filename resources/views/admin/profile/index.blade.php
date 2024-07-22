@@ -10,26 +10,22 @@
   <div class="row my-2">
       <div class="col-lg-4">
         <div class="card p-3 rounded-0">
-            <form action="" class="vstack gap-3" method="POST" encType="multipart/form-data">
-                @csrf
-                @method('PUT')
-                <div class="d-flex flex-column justify-content-center align-items-center">
-                <img id="previewImage" class="img img-thumbnail fixed-size" name="photo" src="{{ asset($user->image ? $user->image : 'images/img.png') }}" height="355px" width="355px" alt="Image"/> 
+          <form id="UpdatePhotoProfile" class="vstack gap-3" method="POST" enctype="multipart/form-data">
+            @csrf
+            @method('PUT')
+            <div class="d-flex flex-column justify-content-center align-items-center">
+                <img id="previewImage" class="img img-thumbnail img-fluid" width="325px" name="photo" src="{{ asset($user->image ? 'images/'.$user->image : 'images/img.png') }}" alt="Image"/> 
                 <div class="input-group d-flex justify-content-center mt-3">
                     <div class="custom-file">
-                        <input type="file"  id="uploadPhoto" name="photo" class="form-control rounded-0 @error('photo') is-invalid @enderror"/> 
-                        @error('photo')
-                        <div class="invalid-feedback">
-                          <span class="text-danger">{{ $message }}</span>
-                        </div>
-                      @enderror
+                        <input type="file" id="image" name="image" class="form-control rounded-0"/> 
+                        <span class="text-danger error-message" id="PhotoProfileError"></span>
                     </div>
                     <div class="input-group-append">
-                        <button class="btn btn-primary rounded-0" type="submit">Modifier</button>
-                    </div>
+                        <button id="btn-update-photo-profile" class="btn btn-primary rounded-0" type="submit">Modifier</button>
                     </div>
                 </div>
-              </form>    
+            </div>
+        </form>            
         </div>
       </div>
       <div class="col-lg-8">
@@ -87,7 +83,7 @@
               </div>
             </div>
             <div class="card-footer d-flex justify-content-end bg-white">
-              <button type="submit" class="btn btn-primary mt-2" id="btn-update-information-profile"><i class="fas fa-edit"></i>&nbsp;Modifier</button>
+              <button type="submit" class="btn btn-primary  mt-2" id="btn-update-information-profile"><i class="fas fa-edit"></i>&nbsp;Modifier</button>
             </div>
           </form>
         </div>
@@ -127,8 +123,8 @@
             </div>
           </div>
           <div class="card-footer d-flex justify-content-end bg-white pt-3">
-            <a href="{{ route('admin.membres.index') }}" class="btn btn-danger" type="button">Retour</a>
-            <button id="btn-update-password-profile" class="btn btn-primary ms-2" type="submit">Modifier</button>
+            <a href="{{ route('admin.membres.index') }}" class="btn btn-danger" type="button"><i class="fas fa-sign-out-alt fw-bold"></i>&nbsp;Retour</a>
+            <button id="btn-update-password-profile" class="btn btn-primary ms-2" type="submit"><i class="fas fa-edit"></i>&nbsp;Modifier</button>
           </div>
         </form>
       </div>
@@ -139,6 +135,17 @@
 @section('script')
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script type="text/javascript">
+    document.getElementById('image').addEventListener('change', function(event) {
+        var reader = new FileReader();
+        reader.onload = function() {
+            var output = document.getElementById('previewImage');
+            output.src = reader.result;
+        };
+        if (event.target.files[0]) {
+            reader.readAsDataURL(event.target.files[0]);
+        }
+    });
+
     $(document).ready(function() {
         $('#UpdateInformationProfile').on('submit', function(e) {
             e.preventDefault();
@@ -163,21 +170,21 @@
                           response.message,
                           'success'
                       );
+                      button.html(originalContent);
+                      button.prop('disabled', false);
                     }
                 },
                 error: function(error) {
                   console.log(error);
                     if (error) {
-                        $('#PseudoUserError').html(error.responseJSON.errors.pseudo);
-                        $('#EmailUserError').html(error.responseJSON.errors.email);
-                        $('#ContactUserError').html(error.responseJSON.errors.contact);
-                        $('#AdresseUserError').html(error.responseJSON.errors.adresse);
+                        $('#PhotoProfileError').html(error.responseJSON.errors.image);
                     }
                     button.html(originalContent);
                     button.prop('disabled', false);
                 }
             });
         });
+
         $('#UpdatePasswordProfile').on('submit', function(e) {
             e.preventDefault();
             var button = $('#btn-update-password-profile');
@@ -215,6 +222,47 @@
                 }
             });
         });
+
+        $('#UpdatePhotoProfile').on('submit', function(e) {
+        e.preventDefault();
+        var button = $('#btn-update-photo-profile');
+        var originalContent = button.html();
+        var loadingContent = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> patientez...';
+
+        // Change the button content to show the spinner
+        button.html(loadingContent);
+        button.prop('disabled', true);
+
+        var formData = new FormData(this);
+
+        $.ajax({
+            url: "{{ route('admin.update.photo.profile') }}",
+            method: 'POST', // Change to POST for FormData
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function(response) {
+                console.log(response);
+                if(response.success) {
+                    Swal.fire(
+                        'Réussi!',
+                        response.message,
+                        'success'
+                    );
+                }
+                button.html(originalContent);
+                button.prop('disabled', false);
+            },
+            error: function(error) {
+                console.log(error);
+                if (error.responseJSON && error.responseJSON.errors && error.responseJSON.errors.image) {
+                    $('#PhotoProfileError').html(error.responseJSON.errors.image[0]);
+                }
+                button.html(originalContent);
+                button.prop('disabled', false);
+            }
+        });
     });
+  });
   </script> 
 @endsection
