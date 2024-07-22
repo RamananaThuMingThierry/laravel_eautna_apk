@@ -34,11 +34,12 @@
       </div>
       <div class="col-lg-8">
         <div class="card rounded-0 shadow-sm p-2">
-          <form action="" class="vstack gap-3">
+          <form id="UpdateInformationProfile" class="vstack gap-3">
             <div class="card-header bg-white">
               <h1 class="text-center mt-1 text-info bg">@yield('titre')</h1>
             </div>
             <div class="card-body">
+              @csrf
               <div class="row">
                 @include('widget.input',[
                   'nom' => 'pseudo',
@@ -51,7 +52,7 @@
                   'type' => 'email',
                   'label' => 'Adresse e-mail',
                   'valeur' => $user->email,
-                  'error' => 'PseudoUserError',
+                  'error' => 'EmailUserError',
                 ])
               </div>
               <div class="row mt-3">
@@ -86,7 +87,7 @@
               </div>
             </div>
             <div class="card-footer d-flex justify-content-end bg-white">
-              <a href="javascript:void(0)" type="button" class="btn btn-primary mt-2">Modifier</a>
+              <button type="submit" class="btn btn-primary mt-2" id="btn-update-information-profile"><i class="fas fa-edit"></i>&nbsp;Modifier</button>
             </div>
           </form>
         </div>
@@ -95,16 +96,17 @@
   <div class="row">
     <div class="container">
       <div class="card shadow-sm rounded-0 my-2 p-2">
-        <form action="" class="vstack gap-3">
+        <form id="UpdatePasswordProfile" class="vstack gap-3">
           <div class="card-header bg-white">
             <h3 class="text-muted">Changer votre mote de passe</h3>
           </div>
           <div class="card-body">
+            @csrf
             <div class="row">
               @include('widget.input',[
                 'column' => 'col-md-4',
                 'type' => 'password',
-                'nom' => 'password_current',
+                'nom' => 'current_password',
                 'label' => 'Ancien mot de passe',
                 'error' => 'PasswordCurrentUserError'
               ])
@@ -125,8 +127,8 @@
             </div>
           </div>
           <div class="card-footer d-flex justify-content-end bg-white pt-3">
-            <a href="" class="btn btn-danger" type="button">Retour</a>
-            <button  class="btn btn-primary ms-2" type="submit">Modifier</button>
+            <a href="{{ route('admin.membres.index') }}" class="btn btn-danger" type="button">Retour</a>
+            <button id="btn-update-password-profile" class="btn btn-primary ms-2" type="submit">Modifier</button>
           </div>
         </form>
       </div>
@@ -137,6 +139,82 @@
 @section('script')
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script type="text/javascript">
+    $(document).ready(function() {
+        $('#UpdateInformationProfile').on('submit', function(e) {
+            e.preventDefault();
+            var button = $('#btn-update-information-profile');
+            var originalContent = button.html();
+            var loadingContent = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> patientez...';
 
+            // Change the button content to show the spinner
+            button.html(loadingContent);
+            button.prop('disabled', true);
+            
+            $.ajax({
+                url: "{{ route('admin.update.information.profile') }}",
+                method: 'PUT',
+                data: $(this).serialize(),
+                success: function(response) {
+                    console.log(response);
+                    if(response.success) {
+                      window.location.href="{{ route('admin.profile') }}";
+                      Swal.fire(
+                          'Réuissi!',
+                          response.message,
+                          'success'
+                      );
+                    }
+                },
+                error: function(error) {
+                  console.log(error);
+                    if (error) {
+                        $('#PseudoUserError').html(error.responseJSON.errors.pseudo);
+                        $('#EmailUserError').html(error.responseJSON.errors.email);
+                        $('#ContactUserError').html(error.responseJSON.errors.contact);
+                        $('#AdresseUserError').html(error.responseJSON.errors.adresse);
+                    }
+                    button.html(originalContent);
+                    button.prop('disabled', false);
+                }
+            });
+        });
+        $('#UpdatePasswordProfile').on('submit', function(e) {
+            e.preventDefault();
+            var button = $('#btn-update-password-profile');
+            var originalContent = button.html();
+            var loadingContent = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> patientez...';
+
+            // Change the button content to show the spinner
+            button.html(loadingContent);
+            button.prop('disabled', true);
+            
+            $.ajax({
+                url: "{{ route('admin.update.password.profile') }}",
+                method: 'PUT',
+                data: $(this).serialize(),
+                success: function(response) {
+                    console.log(response);
+                    if(response.success) {
+                      window.location.href="{{ route('login') }}";
+                      Swal.fire(
+                        'Réuissi!',
+                        response.message,
+                        'success'
+                      );
+                    }
+                },
+                error: function(error) {
+                  console.log(error);
+                    if (error) {
+                        $('#PasswordCurrentUserError').html(error.responseJSON.errors.current_password);
+                        $('#PasswordUserError').html(error.responseJSON.errors.password);
+                        $('#PasswordConfirmationUserError').html(error.responseJSON.errors.password_confirmation);
+                    }
+                    button.html(originalContent);
+                    button.prop('disabled', false);
+                }
+            });
+        });
+    });
   </script> 
 @endsection

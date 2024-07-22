@@ -66,6 +66,8 @@ class MembresController extends Controller
     {
         if(Auth::check()){
             if(Auth::check() && Auth::user()->status == false){
+                return redirect()->route('status.not.approuved');
+            }else{
                 $membre = new Membres();
                 $axes = Axes::pluck('nom_axes', 'id')->toArray();
                 $sections = Sections::pluck('nom_sections', 'id')->toArray();

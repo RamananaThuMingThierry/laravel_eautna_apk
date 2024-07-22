@@ -29,6 +29,8 @@ Route::middleware('auth')->group(function () {
 
 Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () {
     Route::get('/profile',[ProfileController::class, 'index'])->name('profile');
+    Route::put('/modifier-votre-information',[ProfileController::class, 'updateInformation'])->name('update.information.profile');
+    Route::put('/modifier-votre-mot-de-passe',[ProfileController::class, 'updatePasswordProfile'])->name('update.password.profile');
     Route::resource('utilisateurs', UserController::class);
     Route::resource('axes', AxesController::class);
     Route::resource('filieres', FilieresController::class);
