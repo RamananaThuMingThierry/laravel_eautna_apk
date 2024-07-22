@@ -5,7 +5,7 @@
       <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
           <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-              <li><a class="dropdown-item" href="#"><i class="fas fa-user text-gray-400 fa-fw mr-2 text-warning"></i>&nbsp;Profile</a></li>
+              <li><a class="dropdown-item" href="{{ route('admin.profile') }}"><i class="fas fa-user text-gray-400 fa-fw mr-2 text-warning"></i>&nbsp;Profile</a></li>
               <li><a class="dropdown-item" href="#"><i class="fas fa-headphones text-gray-400 fa-fw mr-2 text-warning"></i>&nbsp;Contactez-Nous</a></li>
               <li><hr class="dropdown-divider" /></li>
               <li><a class="dropdown-item" href="javascript:void(0)" id="logout-link"><i class="fas fa-sign-out-alt text-gray-400 fa-fw mr-2 text-warning"></i>&nbsp;Se déconnecter</a></li>

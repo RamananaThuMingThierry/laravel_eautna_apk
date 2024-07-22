@@ -74,11 +74,14 @@
                 method: 'POST',
                 data: $(this).serialize(),
                 success: function(response) {
-                    
                   console.log(response);
-
                     if(response.success) {
-                        window.location.href = response.redirect_url;
+                      window.location.href="{{ route('admin.membres.index') }}";
+                      Swal.fire(
+                          'Réuissi!',
+                          response.message,
+                          'success'
+                      );
                     }else{
                       Swal.fire(
                           'Attention!',

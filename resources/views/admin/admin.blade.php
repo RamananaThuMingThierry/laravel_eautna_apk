@@ -6,6 +6,8 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="AEUTNA"/>
+        <link rel="icon" href="{{ asset('images/logo.jpeg') }}" type="image/x-icon">
+        <link rel="shortcut icon" href="{{ asset('images/logo.jpeg') }}" type="image/x-icon">
         <meta name="author" content="RAMANANA Thu Ming Thierry" />
         <title>@yield('titre', "A.E.U.T.N.A") | AntaTech Solutions</title>
         @yield('styles')
@@ -45,7 +47,7 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         var logoutForm = document.createElement('form');
-                        logoutForm.action = "{{ route('admin.logout') }}";
+                        logoutForm.action = "{{ route('logout') }}";
                         logoutForm.method = 'POST';
                         logoutForm.style.display = 'none';
                         logoutForm.innerHTML = '@csrf';

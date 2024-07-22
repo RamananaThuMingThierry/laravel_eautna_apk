@@ -12,6 +12,7 @@ use App\Models\Fonctions;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use App\Http\Requests\MembresRequest;
 use Illuminate\Support\Facades\Storage;
@@ -24,53 +25,65 @@ class MembresController extends Controller
      */
     public function index(Request $request)
     {
-        try {
-            if ($request->ajax()) {
-                $membres = Membres::select(['id', 'image', 'numero_carte', 'nom', 'prenom', 'contact_personnel']);
-                return DataTables::of($membres)
-                    ->addColumn('action', function ($row) {
-                        return '<div class="d-flex justify-content-center">
-                            <a href="/admin/membres/'.$row->id.'" class="btn btn-warning btn-sm btn-inline" title="Voir un membre">
-                                <i class="fa fa-eye"></i>
-                            </a>
-                            <a href="/admin/membres/'.$row->id.'/edit" class="btn btn-primary btn-sm btn-inline ms-1" title="Modifier un membre">
-                                <i class="fa fa-edit"></i>
-                            </a>
-                            <a href="javascript:void(0)" type="button" class="btn btn-danger btn-sm btn-inline ms-1" title="Supprimer un membre" id="btn-delete-membre-form-modal" data-id="'.$row->id.'">
-                                <i class="fa fa-trash"></i>
-                            </a>
-                        </div>';
-                    })
-                    ->rawColumns(['action'])
-                    ->make(true);
+        if(Auth::check()){
+            if(Auth::check() && Auth::user()->status == false){
+                return redirect()->route('status.not.approuved');
+            }else{
+                try {
+                    if ($request->ajax()) {
+                        $membres = Membres::select(['id', 'image', 'numero_carte', 'nom', 'prenom', 'contact_personnel']);
+                        return DataTables::of($membres)
+                            ->addColumn('action', function ($row) {
+                                return '<div class="d-flex justify-content-center">
+                                    <a href="/admin/membres/'.$row->id.'" class="btn btn-warning btn-sm btn-inline" title="Voir un membre">
+                                        <i class="fa fa-eye"></i>
+                                    </a>
+                                    <a href="/admin/membres/'.$row->id.'/edit" class="btn btn-primary btn-sm btn-inline ms-1" title="Modifier un membre">
+                                        <i class="fa fa-edit"></i>
+                                    </a>
+                                    <a href="javascript:void(0)" type="button" class="btn btn-danger btn-sm btn-inline ms-1" title="Supprimer un membre" id="btn-delete-membre-form-modal" data-id="'.$row->id.'">
+                                        <i class="fa fa-trash"></i>
+                                    </a>
+                                </div>';
+                            })
+                            ->rawColumns(['action'])
+                            ->make(true);
+                    }
+                    return view('admin.membres.index');
+                } catch (Exception $e) {
+                    return response()->json(['error' => $e->getMessage()], 500);
+                }
             }
-    
-            return view('admin.membres.index');
-        } catch (Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
+        }else{
+            return redirect()->route('login');
         }
     }
-    
 
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
-        $membre = new Membres();
-        $axes = Axes::pluck('nom_axes', 'id')->toArray();
-        $sections = Sections::pluck('nom_sections', 'id')->toArray();
-        $filieres = Filieres::pluck('nom_filieres', 'id')->toArray();
-        $fonctions = Fonctions::pluck('nom_fonctions', 'id')->toArray();
-        $levels = Level::pluck('nom_niveau', 'id')->toArray();
-        return View("admin.membres.form", [
-            'membre' => $membre,
-            'axes' => $axes,
-            'sections' => $sections,
-            'filieres' => $filieres,
-            'fonctions' => $fonctions,
-            'levels' => $levels,
-        ]);
+        if(Auth::check()){
+            if(Auth::check() && Auth::user()->status == false){
+                $membre = new Membres();
+                $axes = Axes::pluck('nom_axes', 'id')->toArray();
+                $sections = Sections::pluck('nom_sections', 'id')->toArray();
+                $filieres = Filieres::pluck('nom_filieres', 'id')->toArray();
+                $fonctions = Fonctions::pluck('nom_fonctions', 'id')->toArray();
+                $levels = Level::pluck('nom_niveau', 'id')->toArray();
+                return View("admin.membres.form", [
+                    'membre' => $membre,
+                    'axes' => $axes,
+                    'sections' => $sections,
+                    'filieres' => $filieres,
+                    'fonctions' => $fonctions,
+                    'levels' => $levels,
+                ]);
+            }
+        }else{
+            return redirect()->route('login');
+        }
     }
 
     /**

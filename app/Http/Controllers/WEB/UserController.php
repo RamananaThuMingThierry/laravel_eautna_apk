@@ -63,13 +63,7 @@ class UserController extends Controller
      */
     public function waiting()
     {
-        if(Auth::check()){
-            if(Auth::user()->status == false){
-                return View('auth.waiting');
-            }
-        }else{
-            return redirect(route('login'))->with('error', 'Veuillez vous connecter, s\'il vous plaît!');
-        }
+        return view('auth.waiting');
     }
 
     /**
@@ -88,10 +82,11 @@ class UserController extends Controller
         //
     }
 
-    public function logout(Request $request){
+    public function logout(Request $request)
+    {
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect('/');
+        return redirect()->route('login');
     }
 }

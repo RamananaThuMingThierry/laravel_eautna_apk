@@ -18,7 +18,6 @@
         </div>
       </div>
     </div>
-   @dump(Auth::user()->status == true)
     <div class="row">
       <div class="card rounded-0 py-3 shadow-sm">
         <div class="col-12">

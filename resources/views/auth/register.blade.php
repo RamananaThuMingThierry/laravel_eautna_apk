@@ -92,7 +92,7 @@
                   success: function(response) {
                       window.location.href="{{ route('admin.membres.index') }}";
                       Swal.fire(
-                          'Supprimé!',
+                          'Réuissi!',
                           response.message,
                           'success'
                       );

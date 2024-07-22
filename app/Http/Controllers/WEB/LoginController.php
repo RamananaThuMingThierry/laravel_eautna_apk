@@ -9,7 +9,15 @@ use Illuminate\Support\Facades\Auth;
 class LoginController extends Controller
 {
     public function showLoginForm(){
-        return View('auth.login');
+        if(Auth::check()){
+            if(Auth::check() && Auth::user()->status == false){
+                return redirect()->route('status.not.approuved');
+            }else{
+                return redirect()->route('admin.membres.index');
+            }
+        }else{
+            return View('auth.login');
+        }
     }
 
     public function login(LoginRequest $request)
@@ -17,13 +25,10 @@ class LoginController extends Controller
         $data = $request->only('email', 'password');
         
         if (Auth::attempt($data)) {
-            $user = Auth::user();
-            $request->session()->regenerate();
-            if($user->status == false){
-                return response()->json(['success' => true, 'redirect_url' => route('status.not.approuved')]);
-            }else{
-                return response()->json(['success' => true, 'redirect_url' => route('admin.membres.index')]);
-            }
+            return response()->json([
+                'success' => true, 
+                'message' => 'Connection avec succès!'   
+            ]);
         } else {
             return response()->json([
                 'success' => false,

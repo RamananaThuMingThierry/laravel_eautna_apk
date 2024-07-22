@@ -63,8 +63,8 @@
             {
               data: 'roles',
               render: function(data, type, row){
-                var badgeClass = data == 'utilisateurs' ? 'info' : 'success';
-                return '<span class="badge bg-' + badgeClass + ' p-2">' + data + '</span>';
+                var badgeClass = data == 'Utilisateurs' ? 'info' : 'success';
+                return '<span class="badge bg-' + badgeClass + ' p-2 w-75">' + data + '</span>';
               },
               className: 'text-center pt-4'
             },
@@ -73,7 +73,7 @@
               render: function(data, type, row){
                 var nom = data == '0' ? 'En attente' : 'Active';
                 var badgeClass = data == '0' ? 'danger' : 'success';
-                return '<span class="badge bg-' + badgeClass + ' p-2">' + nom + '</span>';
+                return '<span class="badge bg-' + badgeClass + ' p-2 w-75">' + nom + '</span>';
               },
               className: 'text-center pt-4' 
             },
@@ -172,8 +172,8 @@
                 $('#email_user').html(response.user.email);
                 $('#contact_user').html(response.user.contact);
                 $('#adresse_user').html(response.user.adresse);
-                $('#roles_user').html(response.user.roles == 'utilisateurs' ? '<span class="badge bg-info p-2">'+ response.user.roles +'</span>' : '<span class="badge bg-success p-2">'+ response.user.roles +'</span>');
-                $('#status_user').html(response.user.status ? '<span class="badge bg-success p-2 w-25">Active</span>' : '<span class="badge bg-secondary p-2 w-25">En attente</span>');
+                $('#roles_user').html(response.user.roles == 'Utilisateurs' ? '<span class="badge bg-info p-2 w-50">'+ response.user.roles +'</span>' : '<span class="badge bg-success p-2 w-50">'+ response.user.roles +'</span>');
+                $('#status_user').html(response.user.status ? '<span class="badge bg-success p-2 w-50">Active</span>' : '<span class="badge bg-danger p-2 w-50">En attente</span>');
               },
               error: function(error) {
                   console.log(error);
