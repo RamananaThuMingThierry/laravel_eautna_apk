@@ -9,6 +9,7 @@
 @section('contenu')
 
   @include('admin.utilisateurs.show')
+  @include('admin.utilisateurs.update')
 
   <div class="row my-2">
     <div class="card rounded-0 shadow-sm">
@@ -167,6 +168,32 @@
               success: function(response) {
                 $('#ShowUserModal').modal('show');
                 $('#ShowUserModalLabel').html('Détail d\'un utilisateur');
+                $('#btn-save-niveau-form-modal').html('Modifier');
+                $('#pseudo_user').html(response.user.pseudo);
+                $('#email_user').html(response.user.email);
+                $('#contact_user').html(response.user.contact);
+                $('#adresse_user').html(response.user.adresse);
+                $('#roles_user').html(response.user.roles == 'Utilisateurs' ? '<span class="badge bg-info p-2 w-50">'+ response.user.roles +'</span>' : '<span class="badge bg-success p-2 w-50">'+ response.user.roles +'</span>');
+                $('#status_user').html(response.user.status ? '<span class="badge bg-success p-2 w-50">Active</span>' : '<span class="badge bg-danger p-2 w-50">En attente</span>');
+              },
+              error: function(error) {
+                  console.log(error);
+              }
+          });
+      });
+ 
+      // Afficher un utilisateur à modifier
+      $('body').on('click', '#btn-update-utilisateur-form-modal', function() {
+          var user_id = $(this).data('id');
+          var url = '{{ route("admin.utilisateurs.edit", ":id") }}';
+          url = url.replace(':id', user_id);
+          $.ajax({
+              url: url,
+              method: 'GET',
+              success: function(response) {
+                console.log(response);
+                $('#UpdateUserModal').modal('show');
+                $('#UpdateUserModalLabel').html('Modifier un utilisateur');
                 $('#btn-save-niveau-form-modal').html('Modifier');
                 $('#pseudo_user').html(response.user.pseudo);
                 $('#email_user').html(response.user.email);

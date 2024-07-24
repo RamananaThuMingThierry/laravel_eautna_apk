@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Fonctions;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UpdateUserRequest;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -26,10 +27,10 @@ class UserController extends Controller
                             <a href="javascript:void(0)" class="btn btn-warning btn-sm btn-inline" id="btn-show-utilisateur-modal" data-id="'.$row->id.'" title="Voir un utilisateur">
                                 <i class="fa fa-eye"></i>
                             </a>
-                            <a href="/admin/utilisateurs/'.$row->id.'/edit" class="btn btn-primary btn-sm btn-inline ms-1" title="Modifier un utilisateur">
+                            <a href="javascript:void(0)" class="btn btn-primary btn-sm btn-inline ms-1" title="Modifier un utilisateur" id="btn-update-utilisateur-form-modal" data-id="'.$row->id.'">
                                 <i class="fa fa-edit"></i>
                             </a>
-                            <a href="javascript:void(0)" type="button" class="btn btn-danger btn-sm btn-inline ms-1" title="Supprimer un utilisateur" id="btn-delete-utilisateur-form-modal" data-id="'.$row->id.'">
+                            <a href="javascript:void(0)" type="button" class="btn btn-danger btn-sm btn-inline ms-1" title="Supprimer un utilisateur" id="btn-update-utilisateur-form-modal" data-id="'.$row->id.'">
                                 <i class="fa fa-trash"></i>
                             </a>
                         </div>';
@@ -57,6 +58,18 @@ class UserController extends Controller
             'user' => $user
         ]);
     }
+    
+    public function edit(string $id)
+    {
+        $user = User::find($id);
+        if(!$user){
+            abort(404);
+        }
+        return response()->json([
+            'success' => true,
+            'user' => $user
+        ]);
+    }
 
     /**
      * Show the form for editing the specified resource.
@@ -69,9 +82,34 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateUserRequest $request, string $id)
     {
-        //
+        if(Auth::check()){
+            if(Auth::check() && Auth::user()->status == false){
+                return redirect()->route('status.not.approuved');
+            }else{
+                $user = User::find($id);
+
+                if (!$user) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Utilisateur non trouvée'
+                    ], 404);
+                }
+
+                $data = $request->validated();
+                
+                dd($data); 
+                // $user->delete();
+        
+                // return response()->json([
+                //     'success' => true,
+                //     'message' => 'Utilisateur supprimée avec succès'
+                // ]);
+            }
+        }else{
+            return redirect()->route('login');
+        }
     }
 
     /**
@@ -79,7 +117,29 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        if(Auth::check()){
+            if(Auth::check() && Auth::user()->status == false){
+                return redirect()->route('status.not.approuved');
+            }else{
+                $user = User::find($id);
+
+                if (!$user) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Utilisateur non trouvée'
+                    ], 404);
+                }
+        
+                $user->delete();
+        
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Utilisateur supprimée avec succès'
+                ]);
+            }
+        }else{
+            return redirect()->route('login');
+        }
     }
 
     public function logout(Request $request)
