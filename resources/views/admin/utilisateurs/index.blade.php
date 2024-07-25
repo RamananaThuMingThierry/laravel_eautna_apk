@@ -9,7 +9,7 @@
 @section('contenu')
 
   @include('admin.utilisateurs.show')
-  @include('admin.utilisateurs.update')
+  @include('admin.utilisateurs.approuved')
 
   <div class="row my-2">
     <div class="card rounded-0 shadow-sm">
@@ -193,19 +193,81 @@
               success: function(response) {
                 console.log(response);
                 $('#UpdateUserModal').modal('show');
-                $('#UpdateUserModalLabel').html('Modifier un utilisateur');
+                $('#UpdateUserModalLabel').html('Aprouver un utilisateur');
                 $('#btn-save-niveau-form-modal').html('Modifier');
-                $('#pseudo_user').html(response.user.pseudo);
-                $('#email_user').html(response.user.email);
-                $('#contact_user').html(response.user.contact);
-                $('#adresse_user').html(response.user.adresse);
-                $('#roles_user').html(response.user.roles == 'Utilisateurs' ? '<span class="badge bg-info p-2 w-50">'+ response.user.roles +'</span>' : '<span class="badge bg-success p-2 w-50">'+ response.user.roles +'</span>');
-                $('#status_user').html(response.user.status ? '<span class="badge bg-success p-2 w-50">Active</span>' : '<span class="badge bg-danger p-2 w-50">En attente</span>');
+                $('#user_id').val(response.user.id);
+                $('#pseudo').val(response.user.pseudo);
+                $('#email').val(response.user.email);
+                $('#contact').val(response.user.contact);
+                $('#adresse').val(response.user.adresse);
+                $('#roles').val(response.user.roles)
+                $('#status').html(response.user.status ? '<span class="badge bg-success p-2 w-50">Active</span>' : '<span class="badge bg-danger p-2 w-50">En attente</span>');
+                if(response.user.status) {
+                  $('#approveButton').hide();
+                  $('#updateRoleButton').show();
+                } else {
+                  $('#updateRoleButton').hide();
+                  $('#approveButton').show();
+
+                }
               },
               error: function(error) {
                   console.log(error);
               }
           });
+      });
+
+      $('body').on('click', '.btn-approuved-user-form', function(){
+        var form = $('#ApprouvedUserForm')[0];
+        var formData = new FormData(form);
+        $('.error-message').html('');
+
+        var button = this;
+        var originalContent = button.innerHTML;
+        var loadingContent = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> patientez...';
+
+        // Change the button content to show the spinner
+        button.innerHTML = loadingContent;
+        button.disabled = true;
+        var user_id = $('#user_id').val();
+        
+        var url = '{{ route("admin.utilisateurs.update", ":id") }}';
+            url = url.replace(':id', user_id);
+
+            $.ajax({
+              url: url,
+              method: 'POST',
+              processData: false,
+              contentType: false,
+              data: formData,
+              headers: {
+                  'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                  'X-HTTP-Method-Override': 'PUT'
+              },
+              success: function(response) {
+                  if (response) {
+                      $('#UpdateUserModal').modal('hide');
+                      Swal.fire({
+                          position: "top",
+                          title: 'Réussi!',
+                          text: response.message,
+                          icon: 'success',
+                          confirmButtonText: 'OK'
+                      });
+                      table.ajax.reload(null, false);
+                      button.innerHTML = originalContent;
+                      button.disabled = false;
+                  }
+              },
+              error: function(error) {
+                  if (error) {
+                    console.log(error);
+                      // $('#RolesUserError').html(error.responseJSON.errors.roles);
+                      button.innerHTML = originalContent;
+                      button.disabled = false;
+                  }
+              }
+            });
       });
 
       $('body').on('click', '#btn-delete-utilisateur-form-modal', function() {

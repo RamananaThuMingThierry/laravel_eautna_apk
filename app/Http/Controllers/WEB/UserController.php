@@ -82,7 +82,7 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateUserRequest $request, string $id)
+    public function update(Request $request, string $id)
     {
         if(Auth::check()){
             if(Auth::check() && Auth::user()->status == false){
@@ -96,16 +96,18 @@ class UserController extends Controller
                         'message' => 'Utilisateur non trouvée'
                     ], 404);
                 }
-
-                $data = $request->validated();
+                 
+                if($user->status == false){
+                    $data['status'] = true;
+                }
+                $data['roles'] = $request->roles;
                 
-                dd($data); 
-                // $user->delete();
+                $user->update($data);
         
-                // return response()->json([
-                //     'success' => true,
-                //     'message' => 'Utilisateur supprimée avec succès'
-                // ]);
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Mise à jour effectuée'
+                ]);
             }
         }else{
             return redirect()->route('login');

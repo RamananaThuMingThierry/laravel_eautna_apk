@@ -11,7 +11,7 @@
 <div class="{{ $column }}">
   <div class="form-group">
     <label for="{{ $nom}}" class="fw-bold text-muted">{{ $label }}</label>
-    <input type="{{ $type }}" name="{{ $nom}}" id="{{ $nom}}" value="{{ old($nom) ?? $valeur }}" class="rounded-0 form-control" {{ $disabled ? 'disabled' : '' }}>
+    <input type="{{ $type }}" name="{{ $nom}}" id="{{ $nom}}" value="{{ old($nom) ?? $valeur }}" class="bg-white rounded-0 form-control" {{ $disabled ? 'disabled' : '' }}>
     <span class="text-danger error-message" id="{{ $error }}"></span>
   </div>
 </div>

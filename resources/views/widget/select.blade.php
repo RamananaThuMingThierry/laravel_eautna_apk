@@ -10,7 +10,7 @@
 
 <div class="{{ $column }}">
   <div class="form-group">
-      <label for="{{ $nom }}">{{ $label }}</label>
+      <label for="{{ $nom }}" class="fw-bold text-muted">{{ $label }}</label>
       <select name="{{ $nom }}" id="{{ $nom }}" class="form-control">
           @if(isset($nullable) && $nullable)
               <option value="">-- Aucun(e) --</option>
